@@ -611,6 +611,43 @@ function guessCategory(subjects = []) {
   return null;
 }
 
+function renderSearchResultItem(doc, idx) {
+  const item = document.createElement('div');
+  item.className = 'search-result-item';
+  item.dataset.idx = String(idx);
+
+  if (doc.cover_i) {
+    const img = document.createElement('img');
+    img.className = 'sr-cover';
+    img.src = `https://covers.openlibrary.org/b/id/${doc.cover_i}-S.jpg`;
+    img.alt = '';
+    img.loading = 'lazy';
+    item.appendChild(img);
+  } else {
+    const placeholder = document.createElement('div');
+    placeholder.className = 'sr-cover sr-cover-placeholder';
+    placeholder.textContent = (doc.title || 'U').charAt(0);
+    item.appendChild(placeholder);
+  }
+
+  const info = document.createElement('div');
+  info.className = 'sr-info';
+
+  const title = document.createElement('div');
+  title.className = 'sr-title';
+  title.textContent = doc.title || 'Unknown';
+
+  const meta = document.createElement('div');
+  meta.className = 'sr-meta';
+  meta.textContent = `by ${doc.author_name?.[0] || 'Unknown'}${doc.number_of_pages_median ? ` · ${doc.number_of_pages_median}p` : ''}`;
+
+  info.appendChild(title);
+  info.appendChild(meta);
+  item.appendChild(info);
+
+  return item;
+}
+
 async function searchOpenLibrary(query, resultsEl, statusEl) {
   statusEl.textContent = '⟳ QUERYING OPEN LIBRARY...';
   resultsEl.innerHTML  = '';
@@ -637,22 +674,10 @@ async function searchOpenLibrary(query, resultsEl, statusEl) {
     }));
 
     resultsEl._docs = docs;
-    resultsEl.innerHTML = docs.map((doc, i) => {
-      const title   = doc.title || 'Unknown';
-      const author  = doc.author_name?.[0] || 'Unknown';
-      const pages   = doc.number_of_pages_median ? ` · ${doc.number_of_pages_median}p` : '';
-      const coverEl = doc.cover_i
-        ? `<img class="sr-cover" src="https://covers.openlibrary.org/b/id/${doc.cover_i}-S.jpg" alt="" loading="lazy">`
-        : `<div class="sr-cover sr-cover-placeholder">${escHtml(title.charAt(0))}</div>`;
-      return `
-        <div class="search-result-item" data-idx="${i}">
-          ${coverEl}
-          <div class="sr-info">
-            <div class="sr-title">${escHtml(title)}</div>
-            <div class="sr-meta">by ${escHtml(author)}${pages}</div>
-          </div>
-        </div>`;
-    }).join('');
+    const fragment = document.createDocumentFragment();
+    docs.forEach((doc, i) => fragment.appendChild(renderSearchResultItem(doc, i)));
+    resultsEl.innerHTML = '';
+    resultsEl.appendChild(fragment);
 
     resultsEl.querySelectorAll('.search-result-item').forEach(item => {
       item.addEventListener('click', () => {
