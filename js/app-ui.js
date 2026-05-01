@@ -1,240 +1,24 @@
-// ====================================
-// DEFAULT DATA
-// ====================================
-
-const DEFAULT_BOOKS = {
-  "homo-sapiens": {
-    title: "Homo Sapiens",
-    subtitle: "A Brief History of Humankind",
-    author: "Yuval Noah Harari",
-    category: "History",
-    pages: 464,
-    status: "reading",
-    progress: 45,
-    currentPage: 210,
-    rating: 3,
-    started: "January 2026",
-    estimated: "2 weeks",
-    synopsis: "Explores the history of humankind from the Stone Age to the modern age, examining how Homo sapiens came to dominate the world.",
-    notes: ["Fascinating perspective on human evolution", "Chapter 5 particularly interesting", "Need to revisit cognitive revolution section"]
-  },
-  "harry-potter": {
-    title: "Harry Potter",
-    subtitle: "and the Philosopher's Stone",
-    author: "J.K. Rowling",
-    category: "Fantasy",
-    pages: 223,
-    status: "completed",
-    rating: 5,
-    completed: "December 2025",
-    synopsis: "A young wizard discovers his magical heritage and embarks on adventures at Hogwarts School of Witchcraft and Wizardry.",
-    notes: ["Perfect introduction to the wizarding world", "Character development is excellent", "Nostalgic reread - still magical"]
-  },
-  "lotr": {
-    title: "The Lord of the Rings",
-    subtitle: "The Fellowship of the Ring",
-    author: "J.R.R. Tolkien",
-    category: "Fantasy",
-    pages: 423,
-    status: "to-read",
-    synopsis: "Epic fantasy following Frodo Baggins' quest to destroy the One Ring and save Middle-earth from the Dark Lord Sauron.",
-    notes: ["Added to reading queue", "Recommended by multiple sources", "Planning to read before watching films"]
-  },
-  "monte-cristo": {
-    title: "The Count of Monte Cristo",
-    subtitle: "Classic Adventure",
-    author: "Alexandre Dumas",
-    category: "Adventure",
-    pages: 1276,
-    status: "completed",
-    rating: 4,
-    completed: "November 2025",
-    synopsis: "A tale of betrayal, imprisonment, escape, and revenge set in 19th century France.",
-    notes: ["Epic revenge story done perfectly", "Long but never boring", "The planning and execution is masterful"]
-  },
-  "iron-king": {
-    title: "The Iron King",
-    subtitle: "The Accursed Kings",
-    author: "Maurice Druon",
-    category: "Historical Fiction",
-    pages: 344,
-    status: "to-read",
-    synopsis: "First book in a series about the French monarchy in the 14th century, featuring political intrigue and historical drama.",
-    notes: ["Often called 'the original Game of Thrones'", "Recommended for historical fiction fans", "Part of 7-book series"]
-  },
-  "gaudi": {
-    title: "Gaudí: A Biography",
-    subtitle: "Life of a Visionary",
-    author: "Gijs van Hensbergen",
-    category: "Biography",
-    pages: 432,
-    status: "completed",
-    rating: 5,
-    completed: "October 2025",
-    synopsis: "Comprehensive biography of Antoni Gaudí, the visionary Catalan architect behind La Sagrada Família and other masterpieces.",
-    notes: ["Incredible insight into Gaudí's creative process", "Makes me want to visit Barcelona again", "Perfect blend of architecture and biography"]
-  },
-  "nations-fail": {
-    title: "Why Nations Fail",
-    subtitle: "Origins of Power, Prosperity & Poverty",
-    author: "Daron Acemoglu & James Robinson",
-    category: "Economics",
-    pages: 544,
-    status: "to-read",
-    synopsis: "Examines why some nations prosper while others fail, focusing on political and economic institutions.",
-    notes: ["Highly recommended by economists", "Relevant to current global issues", "On reading list for Q2 2026"]
-  }
-};
-
-// ====================================
-// DATA MANAGEMENT
-// ====================================
-
-const VALID_STATUSES = new Set(['reading', 'completed', 'to-read']);
-const RESERVED_BOOK_KEYS = new Set(['__proto__', 'prototype', 'constructor']);
-
-function clamp(value, min, max) {
-  return Math.min(max, Math.max(min, value));
-}
-
-function toPositiveInt(value) {
-  const n = Number.parseInt(value, 10);
-  return Number.isFinite(n) && n > 0 ? n : undefined;
-}
-
-function toNonNegativeInt(value, fallback = 0) {
-  const n = Number.parseInt(value, 10);
-  return Number.isFinite(n) && n >= 0 ? n : fallback;
-}
-
-function cleanText(value, maxLen = 300) {
-  if (typeof value !== 'string') return '';
-  return value.replaceAll(/[\u0000-\u001F\u007F]/g, ' ').trim().slice(0, maxLen);
-}
-
-function sanitizeBookId(rawId) {
-  const id = String(rawId ?? '')
-    .toLowerCase()
-    .replaceAll(/[^a-z0-9-]+/g, '-')
-    .replaceAll(/^-|-$/g, '')
-    .slice(0, 80);
-  if (!id || RESERVED_BOOK_KEYS.has(id)) return '';
-  return id;
-}
-
-function sanitizeNotesList(rawNotes) {
-  if (!Array.isArray(rawNotes)) return [];
-  return rawNotes.map(n => cleanText(n, 260)).filter(Boolean).slice(0, 100);
-}
-
-function applyOptionalBookFields(book, { subtitle, pages, rating, coverId, synopsis }) {
-  if (subtitle) book.subtitle = subtitle;
-  if (pages) book.pages = pages;
-  if (rating) book.rating = clamp(rating, 1, 5);
-  if (coverId) book.coverId = coverId;
-  if (synopsis) book.synopsis = synopsis;
-}
-
-function applyStatusFields(book, { status, pages, currentPage, started, completed }) {
-  if (status === 'reading') {
-    book.currentPage = pages ? clamp(currentPage, 0, pages) : currentPage;
-    book.progress = pages ? clamp(Math.round((book.currentPage / pages) * 100), 0, 100) : 0;
-    if (started) book.started = started;
-  }
-
-  if (status === 'completed' && completed) {
-    book.completed = completed;
-  }
-}
-
-function normalizeBookRecord(rawBook) {
-  if (!rawBook || typeof rawBook !== 'object' || Array.isArray(rawBook)) return null;
-
-  const title = cleanText(rawBook.title, 160);
-  const author = cleanText(rawBook.author, 120);
-  if (!title || !author) return null;
-
-  const status = VALID_STATUSES.has(rawBook.status) ? rawBook.status : 'to-read';
-  const pages = toPositiveInt(rawBook.pages);
-  const rating = toPositiveInt(rawBook.rating);
-  const coverId = toPositiveInt(rawBook.coverId);
-  const currentPage = toNonNegativeInt(rawBook.currentPage, 0);
-
-  const book = {
-    title,
-    author,
-    status,
-    category: cleanText(rawBook.category, 80) || 'Other',
-    notes: sanitizeNotesList(rawBook.notes),
-  };
-
-  const subtitle = cleanText(rawBook.subtitle, 180);
-  const started = cleanText(rawBook.started, 80);
-  const completed = cleanText(rawBook.completed, 80);
-  const synopsis = cleanText(rawBook.synopsis, 2400);
-
-  applyOptionalBookFields(book, { subtitle, pages, rating, coverId, synopsis });
-  applyStatusFields(book, { status, pages, currentPage, started, completed });
-
-  return book;
-}
-
-function normalizeBooksCollection(rawBooks) {
-  if (!rawBooks || typeof rawBooks !== 'object' || Array.isArray(rawBooks)) {
-    return structuredClone(DEFAULT_BOOKS);
-  }
-
-  const normalized = {};
-  for (const [rawId, rawBook] of Object.entries(rawBooks)) {
-    const safeId = sanitizeBookId(rawId);
-    if (!safeId) continue;
-    const safeBook = normalizeBookRecord(rawBook);
-    if (safeBook) normalized[safeId] = safeBook;
-  }
-
-  return Object.keys(normalized).length ? normalized : structuredClone(DEFAULT_BOOKS);
-}
-
-function loadBooks() {
-  const stored = localStorage.getItem('cyberpunk-books');
-  if (stored) {
-    try {
-      const parsed = JSON.parse(stored);
-      return normalizeBooksCollection(parsed);
-    }
-    catch (error) {
-      console.warn('Invalid saved library data, restoring defaults.', error);
-      return structuredClone(DEFAULT_BOOKS);
-    }
-  }
-  return structuredClone(DEFAULT_BOOKS);
-}
-
-function saveBooks() {
-  localStorage.setItem('cyberpunk-books', JSON.stringify(booksData));
-}
-
-let booksData    = loadBooks();
-let activeFilter = 'all';
-let activeSort   = 'default';
-let searchQuery  = '';
-let editingBookId = null;
+import {
+  state,
+  saveBooks,
+  clamp,
+  toPositiveInt,
+  toNonNegativeInt,
+  cleanText,
+} from './state.js';
 
 // ====================================
 // SOUND EFFECTS
 // ====================================
 
-let soundEnabled  = true;
-let audioContext  = null;
-
 function initAudioContext() {
   const AudioContextCtor = globalThis.AudioContext || globalThis.webkitAudioContext;
-  if (!audioContext && AudioContextCtor) audioContext = new AudioContextCtor();
-  return audioContext;
+  if (!state.audioContext && AudioContextCtor) state.audioContext = new AudioContextCtor();
+  return state.audioContext;
 }
 
 function playClickSound() {
-  if (!soundEnabled) return;
+  if (!state.soundEnabled) return;
   try {
     const ctx = initAudioContext();
     if (!ctx) return;
@@ -254,11 +38,11 @@ function playClickSound() {
 }
 
 function toggleSound() {
-  soundEnabled = !soundEnabled;
+  state.soundEnabled = !state.soundEnabled;
   const btn = document.getElementById('sound-toggle');
   if (btn) {
-    btn.textContent = soundEnabled ? '🔊 ON' : '🔇 OFF';
-    btn.style.color = soundEnabled ? '#00ff00' : '#444';
+    btn.textContent = state.soundEnabled ? '🔊 ON' : '🔇 OFF';
+    btn.style.color = state.soundEnabled ? '#00ff00' : '#444';
   }
 }
 
@@ -296,7 +80,7 @@ function countUp(el, target, duration = 700) {
 function updateStats(filteredEntries) {
   const books = filteredEntries
     ? filteredEntries.map(([, b]) => b)
-    : Object.values(booksData);
+    : Object.values(state.booksData);
   countUp(document.getElementById('stat-completed'), books.filter(b => b.status === 'completed').length);
   countUp(document.getElementById('stat-reading'),   books.filter(b => b.status === 'reading').length);
   countUp(document.getElementById('stat-queued'),    books.filter(b => b.status === 'to-read').length);
@@ -392,9 +176,9 @@ function buildCardHTML(id, book) {
 }
 
 function getFilteredEntries() {
-  const filtered = Object.entries(booksData).filter(([, book]) => {
-    const matchFilter = activeFilter === 'all' || book.status === activeFilter;
-    const q = searchQuery.toLowerCase();
+  const filtered = Object.entries(state.booksData).filter(([, book]) => {
+    const matchFilter = state.activeFilter === 'all' || book.status === state.activeFilter;
+    const q = state.searchQuery.toLowerCase();
     const matchSearch = !q
       || book.title.toLowerCase().includes(q)
       || book.author.toLowerCase().includes(q)
@@ -402,11 +186,11 @@ function getFilteredEntries() {
     return matchFilter && matchSearch;
   });
 
-  if (activeSort === 'title-az')  filtered.sort((a, b) => a[1].title.localeCompare(b[1].title));
-  if (activeSort === 'title-za')  filtered.sort((a, b) => b[1].title.localeCompare(a[1].title));
-  if (activeSort === 'rating')    filtered.sort((a, b) => (b[1].rating || 0) - (a[1].rating || 0));
-  if (activeSort === 'pages')     filtered.sort((a, b) => (b[1].pages || 0) - (a[1].pages || 0));
-  if (activeSort === 'added')     filtered.reverse();
+  if (state.activeSort === 'title-az')  filtered.sort((a, b) => a[1].title.localeCompare(b[1].title));
+  if (state.activeSort === 'title-za')  filtered.sort((a, b) => b[1].title.localeCompare(a[1].title));
+  if (state.activeSort === 'rating')    filtered.sort((a, b) => (b[1].rating || 0) - (a[1].rating || 0));
+  if (state.activeSort === 'pages')     filtered.sort((a, b) => (b[1].pages || 0) - (a[1].pages || 0));
+  if (state.activeSort === 'added')     filtered.reverse();
 
   return filtered;
 }
@@ -417,7 +201,7 @@ function renderBooks() {
 
   const entries = getFilteredEntries();
 
-  updateStats(activeFilter !== 'all' || searchQuery ? entries : undefined);
+  updateStats(state.activeFilter !== 'all' || state.searchQuery ? entries : undefined);
 
   if (!entries.length) {
     grid.innerHTML = `
@@ -445,7 +229,7 @@ function renderBooks() {
 // ====================================
 
 function setFilter(filter) {
-  activeFilter = filter;
+  state.activeFilter = filter;
   document.querySelectorAll('.filter-btn').forEach(btn =>
     btn.classList.toggle('active', btn.dataset.filter === filter)
   );
@@ -457,7 +241,7 @@ function setFilter(filter) {
 // ====================================
 
 function showBookDetails(bookId) {
-  const book = booksData[bookId];
+  const book = state.booksData[bookId];
   if (!book) return;
 
   playClickSound();
@@ -475,8 +259,8 @@ function showBookDetails(bookId) {
   const soundBtn = document.createElement('button');
   soundBtn.id        = 'sound-toggle';
   soundBtn.className = 'sound-toggle-btn';
-  soundBtn.textContent = soundEnabled ? '🔊 ON' : '🔇 OFF';
-  soundBtn.style.color = soundEnabled ? '' : '#666';
+  soundBtn.textContent = state.soundEnabled ? '🔊 ON' : '🔇 OFF';
+  soundBtn.style.color = state.soundEnabled ? '' : '#666';
   soundBtn.onclick = toggleSound;
   soundSlot.appendChild(soundBtn);
 
@@ -565,7 +349,7 @@ function showBookDetails(bookId) {
 }
 
 function confirmDelete(bookId) {
-  const book    = booksData[bookId];
+  const book    = state.booksData[bookId];
   const actions = document.getElementById('detail-actions');
   actions.innerHTML = `
     <div class="delete-confirm">
@@ -577,8 +361,8 @@ function confirmDelete(bookId) {
     </div>`;
 
   document.getElementById('confirm-yes').addEventListener('click', () => {
-    const title = booksData[bookId]?.title || 'RECORD';
-    delete booksData[bookId];
+    const title = state.booksData[bookId]?.title || 'RECORD';
+    delete state.booksData[bookId];
     saveBooks();
     closeModal();
     renderBooks();
@@ -756,8 +540,8 @@ function flashField(el) {
 const CATEGORIES = ['History', 'Fantasy', 'Adventure', 'Historical Fiction', 'Biography', 'Economics', 'Science', 'Philosophy', 'Other'];
 
 function openFormModal(bookId = null) {
-  editingBookId = bookId;
-  const book   = bookId ? booksData[bookId] : null;
+  state.editingBookId = bookId;
+  const book   = bookId ? state.booksData[bookId] : null;
   const isEdit = !!book;
 
   const formModal = document.getElementById('form-modal');
@@ -931,7 +715,7 @@ function getUniqueBookId(title, existingId) {
   let id = base;
   let n = 2;
 
-  while (booksData[id]) id = `${base}-${n++}`;
+  while (state.booksData[id]) id = `${base}-${n++}`;
 
   return id;
 }
@@ -985,9 +769,9 @@ function saveBook() {
   const coverId = Number.parseInt(document.getElementById('f-cover-id')?.value) || undefined;
   const book = buildBookPayload({ title, author, status, pages, currentPage, rating, coverId });
 
-  const id = getUniqueBookId(title, editingBookId);
-  const isEdit = !!editingBookId;
-  booksData[id] = book;
+  const id = getUniqueBookId(title, state.editingBookId);
+  const isEdit = !!state.editingBookId;
+  state.booksData[id] = book;
   saveBooks();
   closeFormModal();
   renderBooks();
@@ -997,7 +781,7 @@ function saveBook() {
 function closeFormModal() {
   document.getElementById('form-modal').style.display   = 'none';
   document.getElementById('modal-overlay').style.display = 'none';
-  editingBookId = null;
+  state.editingBookId = null;
 }
 
 // ====================================
@@ -1030,12 +814,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.getElementById('search-input').addEventListener('input', e => {
-    searchQuery = e.target.value;
+    state.searchQuery = e.target.value;
     renderBooks();
   });
 
   document.getElementById('sort-select').addEventListener('change', e => {
-    activeSort = e.target.value;
+    state.activeSort = e.target.value;
     renderBooks();
   });
 
