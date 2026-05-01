@@ -11,49 +11,49 @@
 </head>
 <body>
   <div class="cyber-grid"></div>
-  
+
   <div class="container">
-    
+
     <!-- Header with Stats -->
     <header class="header">
       <div class="title-section">
         <h1 class="glitch" data-text="BOOK.ARCHIVE">BOOK.ARCHIVE</h1>
         <p class="tagline">&gt;_ Digital library v2.0</p>
       </div>
-      
+
       <!-- Stats Dashboard -->
       <div class="stats-grid">
-        <div class="stat-card">
+        <div class="stat-card" data-filter="completed">
           <div class="stat-icon">✅</div>
           <div class="stat-content">
-            <span class="stat-number">3</span>
+            <span class="stat-number" id="stat-completed">0</span>
             <span class="stat-label">Completed</span>
           </div>
           <div class="stat-glow read"></div>
         </div>
-        
-        <div class="stat-card">
+
+        <div class="stat-card" data-filter="reading">
           <div class="stat-icon">📖</div>
           <div class="stat-content">
-            <span class="stat-number">1</span>
+            <span class="stat-number" id="stat-reading">0</span>
             <span class="stat-label">Reading</span>
           </div>
           <div class="stat-glow progress"></div>
         </div>
-        
-        <div class="stat-card">
+
+        <div class="stat-card" data-filter="to-read">
           <div class="stat-icon">📌</div>
           <div class="stat-content">
-            <span class="stat-number">3</span>
+            <span class="stat-number" id="stat-queued">0</span>
             <span class="stat-label">Queued</span>
           </div>
           <div class="stat-glow toread"></div>
         </div>
-        
-        <div class="stat-card">
+
+        <div class="stat-card" data-filter="all">
           <div class="stat-icon">📊</div>
           <div class="stat-content">
-            <span class="stat-number">7</span>
+            <span class="stat-number" id="stat-total">0</span>
             <span class="stat-label">Total</span>
           </div>
           <div class="stat-glow total"></div>
@@ -61,315 +61,23 @@
       </div>
     </header>
 
-    <!-- Books Grid -->
-    <div class="books-grid">
-      
-      <!-- Book Card 1 -->
-      <div class="book-card in-progress" data-book-id="homo-sapiens">
-        <div class="book-spine">
-          <div class="spine-light"></div>
-          <div class="spine-text">HOMO SAPIENS</div>
-        </div>
-        
-        <div class="book-body">
-          <div class="book-header">
-            <div class="status-badge in-progress">
-              <span class="status-icon">📖</span>
-              <span>READING</span>
-            </div>
-            <div class="rating">
-              <span class="star filled">★</span>
-              <span class="star filled">★</span>
-              <span class="star filled">★</span>
-              <span class="star">★</span>
-              <span class="star">★</span>
-            </div>
-          </div>
-          
-          <h3 class="book-title">Homo Sapiens</h3>
-          <p class="book-author">by Yuval Noah Harari</p>
-          
-          <div class="book-meta">
-            <div class="meta-item">
-              <span class="meta-label">Progress:</span>
-              <span class="meta-value">210/464 pages (45%)</span>
-            </div>
-            <div class="meta-item">
-              <span class="meta-label">Started:</span>
-              <span class="meta-value">January 2026</span>
-            </div>
-          </div>
-          
-          <div class="progress-bar">
-            <div class="progress-fill" style="width: 45%"></div>
-          </div>
-          
-          <div class="book-tags">
-            <span class="tag history">🏛️ History</span>
-            <span class="tag">464 pages</span>
-          </div>
-        </div>
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <div class="search-wrapper">
+        <span class="search-prompt">&gt;_</span>
+        <input type="text" id="search-input" class="search-input" placeholder="SEARCH ARCHIVE..." autocomplete="off" spellcheck="false">
       </div>
-
-      <!-- Book Card 2 -->
-      <div class="book-card read" data-book-id="harry-potter">
-        <div class="book-spine">
-          <div class="spine-light"></div>
-          <div class="spine-text">HARRY POTTER</div>
-        </div>
-        
-        <div class="book-body">
-          <div class="book-header">
-            <div class="status-badge read">
-              <span class="status-icon">✅</span>
-              <span>COMPLETED</span>
-            </div>
-            <div class="rating">
-              <span class="star filled">★</span>
-              <span class="star filled">★</span>
-              <span class="star filled">★</span>
-              <span class="star filled">★</span>
-              <span class="star filled">★</span>
-            </div>
-          </div>
-          
-          <h3 class="book-title">Harry Potter</h3>
-          <p class="book-author">by J.K. Rowling</p>
-          
-          <div class="book-meta">
-            <div class="meta-item">
-              <span class="meta-label">Completed:</span>
-              <span class="meta-value">December 2025</span>
-            </div>
-            <div class="meta-item">
-              <span class="meta-label">Rating:</span>
-              <span class="meta-value">5/5 ★★★★★</span>
-            </div>
-          </div>
-          
-          <div class="book-tags">
-            <span class="tag fantasy">✨ Fantasy</span>
-            <span class="tag">223 pages</span>
-          </div>
-        </div>
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">ALL</button>
+        <button class="filter-btn" data-filter="reading">READING</button>
+        <button class="filter-btn" data-filter="completed">DONE</button>
+        <button class="filter-btn" data-filter="to-read">QUEUED</button>
       </div>
-
-      <!-- Book Card 3 -->
-      <div class="book-card to-read" data-book-id="lotr">
-        <div class="book-spine">
-          <div class="spine-light"></div>
-          <div class="spine-text">LOTR</div>
-        </div>
-        
-        <div class="book-body">
-          <div class="book-header">
-            <div class="status-badge to-read">
-              <span class="status-icon">📌</span>
-              <span>TO READ</span>
-            </div>
-            <div class="rating">
-              <span class="star">★</span>
-              <span class="star">★</span>
-              <span class="star">★</span>
-              <span class="star">★</span>
-              <span class="star">★</span>
-            </div>
-          </div>
-          
-          <h3 class="book-title">The Lord of the Rings</h3>
-          <p class="book-author">by J.R.R. Tolkien</p>
-          
-          <div class="book-meta">
-            <div class="meta-item">
-              <span class="meta-label">Status:</span>
-              <span class="meta-value">In Queue</span>
-            </div>
-            <div class="meta-item">
-              <span class="meta-label">Priority:</span>
-              <span class="meta-value">High</span>
-            </div>
-          </div>
-          
-          <div class="book-tags">
-            <span class="tag fantasy">✨ Fantasy</span>
-            <span class="tag">423 pages</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Book Card 4 -->
-      <div class="book-card read" data-book-id="monte-cristo">
-        <div class="book-spine">
-          <div class="spine-light"></div>
-          <div class="spine-text">MONTE CRISTO</div>
-        </div>
-        
-        <div class="book-body">
-          <div class="book-header">
-            <div class="status-badge read">
-              <span class="status-icon">✅</span>
-              <span>COMPLETED</span>
-            </div>
-            <div class="rating">
-              <span class="star filled">★</span>
-              <span class="star filled">★</span>
-              <span class="star filled">★</span>
-              <span class="star filled">★</span>
-              <span class="star">★</span>
-            </div>
-          </div>
-          
-          <h3 class="book-title">The Count of Monte Cristo</h3>
-          <p class="book-author">by Alexandre Dumas</p>
-          
-          <div class="book-meta">
-            <div class="meta-item">
-              <span class="meta-label">Completed:</span>
-              <span class="meta-value">November 2025</span>
-            </div>
-            <div class="meta-item">
-              <span class="meta-label">Rating:</span>
-              <span class="meta-value">4/5 ★★★★☆</span>
-            </div>
-          </div>
-          
-          <div class="book-tags">
-            <span class="tag adventure">⚔️ Adventure</span>
-            <span class="tag">1276 pages</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Book Card 5 -->
-      <div class="book-card to-read" data-book-id="iron-king">
-        <div class="book-spine">
-          <div class="spine-light"></div>
-          <div class="spine-text">IRON KING</div>
-        </div>
-        
-        <div class="book-body">
-          <div class="book-header">
-            <div class="status-badge to-read">
-              <span class="status-icon">📌</span>
-              <span>TO READ</span>
-            </div>
-            <div class="rating">
-              <span class="star">★</span>
-              <span class="star">★</span>
-              <span class="star">★</span>
-              <span class="star">★</span>
-              <span class="star">★</span>
-            </div>
-          </div>
-          
-          <h3 class="book-title">The Iron King</h3>
-          <p class="book-author">by Maurice Druon</p>
-          
-          <div class="book-meta">
-            <div class="meta-item">
-              <span class="meta-label">Series:</span>
-              <span class="meta-value">Book 1 of 7</span>
-            </div>
-            <div class="meta-item">
-              <span class="meta-label">Genre:</span>
-              <span class="meta-value">Historical Fiction</span>
-            </div>
-          </div>
-          
-          <div class="book-tags">
-            <span class="tag fiction">👑 Historical Fiction</span>
-            <span class="tag">344 pages</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Book Card 6 -->
-      <div class="book-card read" data-book-id="gaudi">
-        <div class="book-spine">
-          <div class="spine-light"></div>
-          <div class="spine-text">GAUDÍ</div>
-        </div>
-        
-        <div class="book-body">
-          <div class="book-header">
-            <div class="status-badge read">
-              <span class="status-icon">✅</span>
-              <span>COMPLETED</span>
-            </div>
-            <div class="rating">
-              <span class="star filled">★</span>
-              <span class="star filled">★</span>
-              <span class="star filled">★</span>
-              <span class="star filled">★</span>
-              <span class="star filled">★</span>
-            </div>
-          </div>
-          
-          <h3 class="book-title">Gaudí: A Biography</h3>
-          <p class="book-author">by Gijs van Hensbergen</p>
-          
-          <div class="book-meta">
-            <div class="meta-item">
-              <span class="meta-label">Completed:</span>
-              <span class="meta-value">October 2025</span>
-            </div>
-            <div class="meta-item">
-              <span class="meta-label">Rating:</span>
-              <span class="meta-value">5/5 ★★★★★</span>
-            </div>
-          </div>
-          
-          <div class="book-tags">
-            <span class="tag biography">📝 Biography</span>
-            <span class="tag">432 pages</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Book Card 7 -->
-      <div class="book-card to-read" data-book-id="nations-fail">
-        <div class="book-spine">
-          <div class="spine-light"></div>
-          <div class="spine-text">WHY NATIONS FAIL</div>
-        </div>
-        
-        <div class="book-body">
-          <div class="book-header">
-            <div class="status-badge to-read">
-              <span class="status-icon">📌</span>
-              <span>TO READ</span>
-            </div>
-            <div class="rating">
-              <span class="star">★</span>
-              <span class="star">★</span>
-              <span class="star">★</span>
-              <span class="star">★</span>
-              <span class="star">★</span>
-            </div>
-          </div>
-          
-          <h3 class="book-title">Why Nations Fail</h3>
-          <p class="book-author">by Daron Acemoglu & James Robinson</p>
-          
-          <div class="book-meta">
-            <div class="meta-item">
-              <span class="meta-label">Planned:</span>
-              <span class="meta-value">Q2 2026</span>
-            </div>
-            <div class="meta-item">
-              <span class="meta-label">Topic:</span>
-              <span class="meta-value">Economics & Politics</span>
-            </div>
-          </div>
-          
-          <div class="book-tags">
-            <span class="tag economics">💰 Economics</span>
-            <span class="tag">544 pages</span>
-          </div>
-        </div>
-      </div>
-
+      <button class="add-book-btn" id="add-book-btn">&gt; ADD BOOK</button>
     </div>
+
+    <!-- Books Grid (JS-rendered) -->
+    <div class="books-grid" id="books-grid"></div>
   </div>
 
   <!-- Modal Overlay -->
@@ -381,6 +89,15 @@
       <div class="scanlines"></div>
       <button id="close-modal" class="close-btn">✕</button>
       <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <!-- Add / Edit Form Modal -->
+  <div id="form-modal">
+    <div class="form-modal-container">
+      <div class="scanlines"></div>
+      <button id="close-form-modal" class="close-btn">✕</button>
+      <div id="form-modal-content"></div>
     </div>
   </div>
 
