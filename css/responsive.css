@@ -1,0 +1,31 @@
+/* ====================================
+   RESPONSIVE
+   ==================================== */
+
+@media (max-width: 768px) {
+  h1 { font-size: 2.5rem; letter-spacing: 4px; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .books-grid { grid-template-columns: 1fr; }
+  .toolbar { flex-direction: column; align-items: stretch; }
+  .filter-buttons { justify-content: center; }
+
+  .modal-container,
+  .form-modal-container {
+    width: 95%;
+    padding: 20px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  body { padding: 20px 15px; }
+  h1 { font-size: 2rem; letter-spacing: 2px; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .book-spine { width: 40px; }
+  .spine-text { font-size: 0.6rem; letter-spacing: 2px; }
+  .book-body { padding: 20px; }
+  .book-title { font-size: 1.4rem; }
+  .detail-hero { flex-direction: column; }
+  .detail-cover, .detail-cover-placeholder { width: 60px; height: 84px; }
+}
+

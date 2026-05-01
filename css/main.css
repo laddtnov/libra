@@ -1,4 +1,12 @@
-@import url('./base.css');
-@import url('./modals-and-form.css');
-@import url('./detail-and-search.css');
-@import url('./responsive-toast-sort.css');
+@import url('./foundation.css');
+@import url('./books.css');
+@import url('./modal-shell.css');
+@import url('./toolbar-and-empty.css');
+@import url('./actions.css');
+@import url('./form-modal.css');
+@import url('./detail-modal.css');
+@import url('./detail-panel.css');
+@import url('./openlibrary-search.css');
+@import url('./responsive.css');
+@import url('./toast.css');
+@import url('./sort.css');

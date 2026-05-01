@@ -1,0 +1,49 @@
+/* ====================================
+   SORT DROPDOWN
+   ==================================== */
+
+.sort-wrapper {
+  position: relative;
+}
+
+.sort-select {
+  appearance: none;
+  background: var(--dark-card);
+  border: 2px solid rgba(0, 242, 255, 0.25);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-family: 'Orbitron', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 10px 32px 10px 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.sort-select:hover,
+.sort-select:focus {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  outline: none;
+  box-shadow: 0 0 12px rgba(0, 242, 255, 0.2);
+}
+
+.sort-select option {
+  background: var(--dark-card);
+  color: var(--text-primary);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.9rem;
+}
+
+.sort-wrapper::after {
+  content: '▾';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--neon-cyan);
+  font-size: 0.7rem;
+  pointer-events: none;
+}

@@ -1,0 +1,66 @@
+/* ====================================
+   MODAL ACTIONS (detail modal)
+   ==================================== */
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.terminal-action-btn {
+  background: transparent;
+  border: 2px solid;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 1px;
+}
+
+.terminal-action-btn.edit-btn {
+  border-color: #00ff00;
+  color: #00ff00;
+}
+
+.terminal-action-btn.edit-btn:hover {
+  background: #00ff00;
+  color: #000;
+  box-shadow: 0 0 15px #00ff00;
+}
+
+.terminal-action-btn.delete-btn {
+  border-color: #ff4444;
+  color: #ff4444;
+}
+
+.terminal-action-btn.delete-btn:hover {
+  background: #ff4444;
+  color: #000;
+  box-shadow: 0 0 15px #ff4444;
+}
+
+.terminal-action-btn.cancel-btn {
+  border-color: #555;
+  color: #555;
+}
+
+.terminal-action-btn.cancel-btn:hover {
+  border-color: #00ff00;
+  color: #00ff00;
+}
+
+.terminal-action-btn.save-btn {
+  border-color: #00ff00;
+  color: #00ff00;
+}
+
+.terminal-action-btn.save-btn:hover {
+  background: #00ff00;
+  color: #000;
+  box-shadow: 0 0 15px #00ff00;
+}
+

@@ -1,0 +1,159 @@
+/* ====================================
+   TOOLBAR
+   ==================================== */
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.search-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 200px;
+  background: var(--dark-card);
+  border: 2px solid rgba(0, 242, 255, 0.25);
+  border-radius: 8px;
+  padding: 11px 16px;
+  transition: all 0.3s ease;
+}
+
+.search-wrapper:focus-within {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
+}
+
+.search-prompt {
+  font-family: 'Orbitron', monospace;
+  color: var(--neon-cyan);
+  font-size: 0.9rem;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.search-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  flex: 1;
+  min-width: 0;
+}
+
+.search-input::placeholder {
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  letter-spacing: 1px;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  background: transparent;
+  border: 2px solid rgba(0, 242, 255, 0.25);
+  color: var(--text-secondary);
+  font-family: 'Orbitron', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.filter-btn:hover {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+}
+
+.filter-btn.active {
+  background: rgba(0, 242, 255, 0.1);
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  box-shadow: 0 0 12px rgba(0, 242, 255, 0.2);
+}
+
+.add-book-btn {
+  background: transparent;
+  border: 2px solid var(--neon-pink);
+  color: var(--neon-pink);
+  font-family: 'Orbitron', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.add-book-btn:hover {
+  background: rgba(255, 0, 255, 0.1);
+  box-shadow: 0 0 20px rgba(255, 0, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+/* ====================================
+   CARD ENTRANCE ANIMATION
+   ==================================== */
+
+.card-enter {
+  animation: cardEntrance 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ====================================
+   NO RESULTS STATE
+   ==================================== */
+
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.no-results-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.no-results-text {
+  font-family: 'Orbitron', monospace;
+  color: var(--neon-cyan);
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.no-results-sub {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
