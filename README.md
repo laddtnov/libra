@@ -61,8 +61,8 @@ A personal reading tracker with a full cyberpunk neon UI — glitch title, statu
 ## 🚀 Quick Start
 
 ```bash
-git clone https://github.com/laddtnov/cyberpunk-book-tracker.git
-cd cyberpunk-book-tracker
+git clone https://github.com/laddtnov/book-archive.git
+cd book-archive
 open index.html
 ```
 
@@ -110,7 +110,7 @@ No build step. No dependencies. Just open the file.
 
 1. [🌌 Interactive Solar System](https://github.com/laddtnov/solar-system)
 2. [💼 Cyberpunk Portfolio](https://github.com/laddtnov/laddtnov-hub)
-3. [📚 Book Tracker](https://github.com/laddtnov/cyberpunk-book-tracker) — this project
+3. [📚 Book Tracker](https://github.com/laddtnov/book-archive) — this project
 
 ---
 
