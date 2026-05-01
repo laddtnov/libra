@@ -520,7 +520,7 @@ async function searchOpenLibrary(query, resultsEl, statusEl) {
 
     resultsEl.querySelectorAll('.search-result-item').forEach(item => {
       item.addEventListener('click', () => {
-        const doc = resultsEl._docs[parseInt(item.dataset.idx)];
+        const doc = resultsEl._docs[Number.parseInt(item.dataset.idx)];
         applyBookFromAPI(doc);
         resultsEl.innerHTML = '';
         document.getElementById('book-api-search').value = '';
@@ -698,13 +698,13 @@ function openFormModal(bookId = null) {
   const ratingHidden = document.getElementById('f-rating');
   picker.addEventListener('click', e => {
     if (!e.target.classList.contains('star-pick')) return;
-    const val = parseInt(e.target.dataset.val);
+    const val = Number.parseInt(e.target.dataset.val);
     ratingHidden.value = val;
     picker.querySelectorAll('.star-pick').forEach((s, i) => s.classList.toggle('filled', i < val));
   });
   picker.addEventListener('mouseover', e => {
     if (!e.target.classList.contains('star-pick')) return;
-    const val = parseInt(e.target.dataset.val);
+    const val = Number.parseInt(e.target.dataset.val);
     picker.querySelectorAll('.star-pick').forEach((s, i) => s.classList.toggle('hover', i < val));
   });
   picker.addEventListener('mouseleave', () => {
@@ -743,10 +743,10 @@ function saveBook() {
   if (!valid) return;
 
   const status      = document.getElementById('f-status').value;
-  const pages       = parseInt(document.getElementById('f-pages').value) || null;
-  const currentPage = parseInt(document.getElementById('f-current-page')?.value) || 0;
-  const rating      = parseInt(document.getElementById('f-rating').value) || undefined;
-  const coverId     = parseInt(document.getElementById('f-cover-id')?.value) || undefined;
+  const pages       = Number.parseInt(document.getElementById('f-pages').value) || null;
+  const currentPage = Number.parseInt(document.getElementById('f-current-page')?.value) || 0;
+  const rating      = Number.parseInt(document.getElementById('f-rating').value) || undefined;
+  const coverId     = Number.parseInt(document.getElementById('f-cover-id')?.value) || undefined;
 
   const book = {
     title,
@@ -771,7 +771,7 @@ function saveBook() {
 
   let id = editingBookId;
   if (!id) {
-    let base = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    let base = title.toLowerCase().replaceAll(/[^a-z0-9]+/g, '-').replaceAll(/^-|-$/g, '');
     id = base;
     let n = 2;
     while (booksData[id]) id = `${base}-${n++}`;
@@ -797,8 +797,8 @@ function closeFormModal() {
 
 function escHtml(str) {
   return String(str ?? '')
-    .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
-    .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    .replaceAll('&', '&amp;').replaceAll('"', '&quot;')
+    .replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 }
 
 // ====================================
