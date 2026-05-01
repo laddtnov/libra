@@ -122,6 +122,31 @@ function sanitizeBookId(rawId) {
   return id;
 }
 
+function sanitizeNotesList(rawNotes) {
+  if (!Array.isArray(rawNotes)) return [];
+  return rawNotes.map(n => cleanText(n, 260)).filter(Boolean).slice(0, 100);
+}
+
+function applyOptionalBookFields(book, { subtitle, pages, rating, coverId, synopsis }) {
+  if (subtitle) book.subtitle = subtitle;
+  if (pages) book.pages = pages;
+  if (rating) book.rating = clamp(rating, 1, 5);
+  if (coverId) book.coverId = coverId;
+  if (synopsis) book.synopsis = synopsis;
+}
+
+function applyStatusFields(book, { status, pages, currentPage, started, completed }) {
+  if (status === 'reading') {
+    book.currentPage = pages ? clamp(currentPage, 0, pages) : currentPage;
+    book.progress = pages ? clamp(Math.round((book.currentPage / pages) * 100), 0, 100) : 0;
+    if (started) book.started = started;
+  }
+
+  if (status === 'completed' && completed) {
+    book.completed = completed;
+  }
+}
+
 function normalizeBookRecord(rawBook) {
   if (!rawBook || typeof rawBook !== 'object' || Array.isArray(rawBook)) return null;
 
@@ -140,9 +165,7 @@ function normalizeBookRecord(rawBook) {
     author,
     status,
     category: cleanText(rawBook.category, 80) || 'Other',
-    notes: Array.isArray(rawBook.notes)
-      ? rawBook.notes.map(n => cleanText(n, 260)).filter(Boolean).slice(0, 100)
-      : [],
+    notes: sanitizeNotesList(rawBook.notes),
   };
 
   const subtitle = cleanText(rawBook.subtitle, 180);
@@ -150,21 +173,8 @@ function normalizeBookRecord(rawBook) {
   const completed = cleanText(rawBook.completed, 80);
   const synopsis = cleanText(rawBook.synopsis, 2400);
 
-  if (subtitle) book.subtitle = subtitle;
-  if (pages) book.pages = pages;
-  if (rating) book.rating = clamp(rating, 1, 5);
-  if (coverId) book.coverId = coverId;
-  if (synopsis) book.synopsis = synopsis;
-
-  if (status === 'reading') {
-    book.currentPage = pages ? clamp(currentPage, 0, pages) : currentPage;
-    book.progress = pages ? clamp(Math.round((book.currentPage / pages) * 100), 0, 100) : 0;
-    if (started) book.started = started;
-  }
-
-  if (status === 'completed' && completed) {
-    book.completed = completed;
-  }
+  applyOptionalBookFields(book, { subtitle, pages, rating, coverId, synopsis });
+  applyStatusFields(book, { status, pages, currentPage, started, completed });
 
   return book;
 }
@@ -639,7 +649,9 @@ function renderSearchResultItem(doc, idx) {
 
   const meta = document.createElement('div');
   meta.className = 'sr-meta';
-  meta.textContent = `by ${doc.author_name?.[0] || 'Unknown'}${doc.number_of_pages_median ? ` · ${doc.number_of_pages_median}p` : ''}`;
+  const authorName = doc.author_name?.[0] || 'Unknown';
+  const pagesText = doc.number_of_pages_median ? ` · ${doc.number_of_pages_median}p` : '';
+  meta.textContent = `by ${authorName}${pagesText}`;
 
   info.appendChild(title);
   info.appendChild(meta);
