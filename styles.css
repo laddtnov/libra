@@ -588,28 +588,59 @@ h1 {
   50% { opacity: 0.98; }
 }
 
+/* Modal header — holds sound toggle (left) + close button (right) */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 20;
+  flex-shrink: 0;
+}
+
 /* Close Button */
 .close-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #000;
-  border: 2px solid #00ff00;
-  color: #00ff00;
-  font-size: 20px;
-  font-family: 'Courier New', monospace;
-  width: 35px;
-  height: 35px;
+  background: transparent;
+  border: 2px solid var(--neon-cyan);
+  color: var(--neon-cyan);
+  font-size: 16px;
+  font-family: 'Orbitron', monospace;
+  width: 34px;
+  height: 34px;
   cursor: pointer;
   transition: all 0.2s ease;
-  z-index: 20;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .close-btn:hover {
-  background: #00ff00;
+  background: var(--neon-cyan);
   color: #000;
-  box-shadow: 0 0 15px #00ff00;
+  box-shadow: 0 0 16px var(--neon-cyan);
   transform: rotate(90deg);
+}
+
+/* Sound toggle — sits in .modal-header, no absolute positioning needed */
+.sound-toggle-btn {
+  background: transparent;
+  border: 2px solid rgba(0, 242, 255, 0.35);
+  color: var(--neon-cyan);
+  font-family: 'Orbitron', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  height: 34px;
+}
+
+.sound-toggle-btn:hover {
+  background: rgba(0, 242, 255, 0.1);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
 }
 
 /* CRT Screen Effect */
@@ -1106,19 +1137,6 @@ h1 {
   box-shadow: 0 0 16px var(--neon-cyan);
 }
 
-/* Sound toggle */
-#book-modal .sound-toggle-btn {
-  border-color: rgba(0, 242, 255, 0.4);
-  color: var(--neon-cyan);
-  font-family: 'Orbitron', monospace;
-  font-size: 9px;
-  letter-spacing: 1px;
-}
-#book-modal .sound-toggle-btn:hover {
-  background: rgba(0, 242, 255, 0.1);
-  box-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
-}
-
 /* Scanlines — subtle on the cyberpunk modal */
 #book-modal .scanlines { opacity: 0.25; }
 
@@ -1360,29 +1378,6 @@ h1 {
   z-index: 10;
 }
 
-/* Sound Toggle Button */
-.sound-toggle-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  background: transparent;
-  border: 2px solid #00ff00;
-  color: #00ff00;
-  font-family: 'Courier New', monospace;
-  font-size: 10px;
-  padding: 4px 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  z-index: 25;
-  font-weight: bold;
-  pointer-events: all;
-}
-
-.sound-toggle-btn:hover {
-  background: #00ff00;
-  color: #000;
-  box-shadow: 0 0 10px #00ff00;
-}
 
 /* Terminal Container */
 .terminal-container {

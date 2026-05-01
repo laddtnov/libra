@@ -315,6 +315,17 @@ function showBookDetails(bookId) {
   modal.style.display   = 'flex';
   overlay.style.display = 'block';
 
+  // Sound toggle lives in the header row, not the scrollable content
+  const soundSlot = document.getElementById('modal-sound-slot');
+  soundSlot.innerHTML = '';
+  const soundBtn = document.createElement('button');
+  soundBtn.id        = 'sound-toggle';
+  soundBtn.className = 'sound-toggle-btn';
+  soundBtn.textContent = soundEnabled ? '🔊 ON' : '🔇 OFF';
+  soundBtn.style.color = soundEnabled ? '' : '#666';
+  soundBtn.onclick = toggleSound;
+  soundSlot.appendChild(soundBtn);
+
   const coverHTML = book.coverId
     ? `<img class="detail-cover" src="https://covers.openlibrary.org/b/id/${book.coverId}-M.jpg" alt="cover" loading="lazy">`
     : `<div class="detail-cover-placeholder">${book.title.charAt(0).toUpperCase()}</div>`;
@@ -335,7 +346,6 @@ function showBookDetails(bookId) {
     : `<div class="detail-note muted">No notes added yet.</div>`;
 
   content.innerHTML = `
-    <button class="sound-toggle-btn" id="sound-toggle" onclick="toggleSound()">${soundEnabled ? '🔊 ON' : '🔇 OFF'}</button>
 
     <div class="detail-panel">
       <div class="detail-prompt">&gt; BOOK.ARCHIVE // RECORD RETRIEVED</div>
