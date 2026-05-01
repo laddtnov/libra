@@ -90,10 +90,108 @@ const DEFAULT_BOOKS = {
 // DATA MANAGEMENT
 // ====================================
 
+const VALID_STATUSES = new Set(['reading', 'completed', 'to-read']);
+const RESERVED_BOOK_KEYS = new Set(['__proto__', 'prototype', 'constructor']);
+
+function clamp(value, min, max) {
+  return Math.min(max, Math.max(min, value));
+}
+
+function toPositiveInt(value) {
+  const n = Number.parseInt(value, 10);
+  return Number.isFinite(n) && n > 0 ? n : undefined;
+}
+
+function toNonNegativeInt(value, fallback = 0) {
+  const n = Number.parseInt(value, 10);
+  return Number.isFinite(n) && n >= 0 ? n : fallback;
+}
+
+function cleanText(value, maxLen = 300) {
+  if (typeof value !== 'string') return '';
+  return value.replaceAll(/[\u0000-\u001F\u007F]/g, ' ').trim().slice(0, maxLen);
+}
+
+function sanitizeBookId(rawId) {
+  const id = String(rawId ?? '')
+    .toLowerCase()
+    .replaceAll(/[^a-z0-9-]+/g, '-')
+    .replaceAll(/^-|-$/g, '')
+    .slice(0, 80);
+  if (!id || RESERVED_BOOK_KEYS.has(id)) return '';
+  return id;
+}
+
+function normalizeBookRecord(rawBook) {
+  if (!rawBook || typeof rawBook !== 'object' || Array.isArray(rawBook)) return null;
+
+  const title = cleanText(rawBook.title, 160);
+  const author = cleanText(rawBook.author, 120);
+  if (!title || !author) return null;
+
+  const status = VALID_STATUSES.has(rawBook.status) ? rawBook.status : 'to-read';
+  const pages = toPositiveInt(rawBook.pages);
+  const rating = toPositiveInt(rawBook.rating);
+  const coverId = toPositiveInt(rawBook.coverId);
+  const currentPage = toNonNegativeInt(rawBook.currentPage, 0);
+
+  const book = {
+    title,
+    author,
+    status,
+    category: cleanText(rawBook.category, 80) || 'Other',
+    notes: Array.isArray(rawBook.notes)
+      ? rawBook.notes.map(n => cleanText(n, 260)).filter(Boolean).slice(0, 100)
+      : [],
+  };
+
+  const subtitle = cleanText(rawBook.subtitle, 180);
+  const started = cleanText(rawBook.started, 80);
+  const completed = cleanText(rawBook.completed, 80);
+  const synopsis = cleanText(rawBook.synopsis, 2400);
+
+  if (subtitle) book.subtitle = subtitle;
+  if (pages) book.pages = pages;
+  if (rating) book.rating = clamp(rating, 1, 5);
+  if (coverId) book.coverId = coverId;
+  if (synopsis) book.synopsis = synopsis;
+
+  if (status === 'reading') {
+    book.currentPage = pages ? clamp(currentPage, 0, pages) : currentPage;
+    book.progress = pages ? clamp(Math.round((book.currentPage / pages) * 100), 0, 100) : 0;
+    if (started) book.started = started;
+  }
+
+  if (status === 'completed' && completed) {
+    book.completed = completed;
+  }
+
+  return book;
+}
+
+function normalizeBooksCollection(rawBooks) {
+  if (!rawBooks || typeof rawBooks !== 'object' || Array.isArray(rawBooks)) {
+    return structuredClone(DEFAULT_BOOKS);
+  }
+
+  const normalized = {};
+  for (const [rawId, rawBook] of Object.entries(rawBooks)) {
+    const safeId = sanitizeBookId(rawId);
+    if (!safeId) continue;
+    const safeBook = normalizeBookRecord(rawBook);
+    if (safeBook) normalized[safeId] = safeBook;
+  }
+
+  return Object.keys(normalized).length ? normalized : structuredClone(DEFAULT_BOOKS);
+}
+
 function loadBooks() {
   const stored = localStorage.getItem('cyberpunk-books');
   if (stored) {
-    try { return JSON.parse(stored); }
+    try {
+      const parsed = JSON.parse(stored);
+      return normalizeBooksCollection(parsed);
+    }
     catch (error) {
       console.warn('Invalid saved library data, restoring defaults.', error);
       return structuredClone(DEFAULT_BOOKS);
@@ -224,7 +322,16 @@ function renderStarsHTML(rating, max = 5) {
 
 function buildCardHTML(id, book) {
   const statusClass = getStatusClass(book.status);
-  const spineTitle  = book.title.toUpperCase().slice(0, 16);
+  const safeTitle = escHtml(book.title || 'Untitled');
+  const safeAuthor = escHtml(book.author || 'Unknown');
+  const safeCategory = escHtml(book.category || '');
+  const safeStarted = escHtml(book.started || '—');
+  const safeCompleted = escHtml(book.completed || '—');
+  const safePages = toPositiveInt(book.pages);
+  const safeCurrentPage = toNonNegativeInt(book.currentPage, 0);
+  const safeRating = clamp(toNonNegativeInt(book.rating, 0), 0, 5);
+  const safeProgress = clamp(toNonNegativeInt(book.progress, 0), 0, 100);
+  const spineTitle  = escHtml((book.title || 'UNTITLED').toUpperCase().slice(0, 16));
 
   const statusBadge = {
     reading:   '<span class="status-icon">📖</span><span>READING</span>',
@@ -235,23 +342,23 @@ function buildCardHTML(id, book) {
   let metaHTML = '';
   if (book.status === 'reading') {
     metaHTML = `
-      <div class="meta-item"><span class="meta-label">Progress:</span><span class="meta-value">${book.currentPage || 0}/${book.pages || '?'} pages (${book.progress || 0}%)</span></div>
-      <div class="meta-item"><span class="meta-label">Started:</span><span class="meta-value">${book.started || '—'}</span></div>`;
+      <div class="meta-item"><span class="meta-label">Progress:</span><span class="meta-value">${safeCurrentPage}/${safePages || '?'} pages (${safeProgress}%)</span></div>
+      <div class="meta-item"><span class="meta-label">Started:</span><span class="meta-value">${safeStarted}</span></div>`;
   } else if (book.status === 'completed') {
     metaHTML = `
-      <div class="meta-item"><span class="meta-label">Completed:</span><span class="meta-value">${book.completed || '—'}</span></div>
-      <div class="meta-item"><span class="meta-label">Rating:</span><span class="meta-value">${'★'.repeat(book.rating || 0)}${'☆'.repeat(5 - (book.rating || 0))} ${book.rating || 0}/5</span></div>`;
+      <div class="meta-item"><span class="meta-label">Completed:</span><span class="meta-value">${safeCompleted}</span></div>
+      <div class="meta-item"><span class="meta-label">Rating:</span><span class="meta-value">${'★'.repeat(safeRating)}${'☆'.repeat(5 - safeRating)} ${safeRating}/5</span></div>`;
   } else {
     metaHTML = `
       <div class="meta-item"><span class="meta-label">Status:</span><span class="meta-value">In Queue</span></div>
-      <div class="meta-item"><span class="meta-label">Pages:</span><span class="meta-value">${book.pages || '?'}</span></div>`;
+      <div class="meta-item"><span class="meta-label">Pages:</span><span class="meta-value">${safePages || '?'}</span></div>`;
   }
 
   const progressHTML = book.status === 'reading'
-    ? `<div class="progress-bar"><div class="progress-fill" style="width:${book.progress || 0}%"></div></div>` : '';
+    ? `<div class="progress-bar"><div class="progress-fill" style="width:${safeProgress}%"></div></div>` : '';
 
   const g = GENRE_META[book.category] || { cls: '', emoji: '📚' };
-  const genreTag = book.category ? `<span class="tag ${g.cls}">${g.emoji} ${book.category}</span>` : '';
+  const genreTag = book.category ? `<span class="tag ${g.cls}">${g.emoji} ${safeCategory}</span>` : '';
 
   return `
     <div class="book-spine">
@@ -261,15 +368,15 @@ function buildCardHTML(id, book) {
     <div class="book-body">
       <div class="book-header">
         <div class="status-badge ${statusClass}">${statusBadge}</div>
-        <div class="rating">${renderStarsHTML(book.rating)}</div>
+        <div class="rating">${renderStarsHTML(safeRating)}</div>
       </div>
-      <h3 class="book-title">${book.title}</h3>
-      <p class="book-author">by ${book.author}</p>
+      <h3 class="book-title">${safeTitle}</h3>
+      <p class="book-author">by ${safeAuthor}</p>
       <div class="book-meta">${metaHTML}</div>
       ${progressHTML}
       <div class="book-tags">
         ${genreTag}
-        <span class="tag">${book.pages || '?'} pages</span>
+        <span class="tag">${safePages || '?'} pages</span>
       </div>
     </div>`;
 }
@@ -363,19 +470,32 @@ function showBookDetails(bookId) {
   soundBtn.onclick = toggleSound;
   soundSlot.appendChild(soundBtn);
 
-  const coverHTML = book.coverId
-    ? `<img class="detail-cover" src="https://covers.openlibrary.org/b/id/${book.coverId}-M.jpg" alt="cover" loading="lazy">`
-    : `<div class="detail-cover-placeholder">${book.title.charAt(0).toUpperCase()}</div>`;
+  const safeCoverId = toPositiveInt(book.coverId);
+  const safeTitle = escHtml((book.title || '').toUpperCase());
+  const safeSubtitle = escHtml(book.subtitle || '');
+  const safeAuthor = escHtml(book.author || 'Unknown');
+  const safeStatus = escHtml(String(book.status || 'to-read').toUpperCase().replace('-', ' '));
+  const safeCategory = escHtml(book.category || '—');
+  const safePages = toPositiveInt(book.pages);
+  const safeCurrentPage = toNonNegativeInt(book.currentPage, 0);
+  const safeProgress = clamp(toNonNegativeInt(book.progress, 0), 0, 100);
+  const safeStarted = escHtml(book.started || '—');
+  const safeCompleted = escHtml(book.completed || '—');
+  const safeRating = clamp(toNonNegativeInt(book.rating, 0), 0, 5);
+
+  const coverHTML = safeCoverId
+    ? `<img class="detail-cover" src="https://covers.openlibrary.org/b/id/${safeCoverId}-M.jpg" alt="cover" loading="lazy">`
+    : `<div class="detail-cover-placeholder">${escHtml((book.title || '?').charAt(0).toUpperCase())}</div>`;
 
   let statusRows = '';
   if (book.status === 'reading') {
     statusRows = `
-      <div class="detail-row"><span class="detail-key">&gt; STARTED</span><span class="detail-val">${book.started || '—'}</span></div>
-      <div class="detail-row"><span class="detail-key">&gt; CURRENT PAGE</span><span class="detail-val">${book.currentPage || 0} / ${book.pages || '?'}</span></div>
-      <div class="detail-row"><span class="detail-key">&gt; PROGRESS</span><span class="detail-val">${book.progress || 0}%</span></div>`;
+      <div class="detail-row"><span class="detail-key">&gt; STARTED</span><span class="detail-val">${safeStarted}</span></div>
+      <div class="detail-row"><span class="detail-key">&gt; CURRENT PAGE</span><span class="detail-val">${safeCurrentPage} / ${safePages || '?'}</span></div>
+      <div class="detail-row"><span class="detail-key">&gt; PROGRESS</span><span class="detail-val">${safeProgress}%</span></div>`;
   } else if (book.status === 'completed') {
     statusRows = `
-      <div class="detail-row"><span class="detail-key">&gt; COMPLETED</span><span class="detail-val">${book.completed || '—'}</span></div>`;
+      <div class="detail-row"><span class="detail-key">&gt; COMPLETED</span><span class="detail-val">${safeCompleted}</span></div>`;
   }
 
   const notesHTML = book.notes?.length
@@ -391,19 +511,19 @@ function showBookDetails(bookId) {
       <div class="detail-hero">
         ${coverHTML}
         <div class="detail-hero-text">
-          <div class="detail-title">${escHtml(book.title.toUpperCase())}</div>
-          ${book.subtitle ? `<div class="detail-subtitle">${escHtml(book.subtitle)}</div>` : ''}
-          <div class="detail-author">by ${escHtml(book.author)}</div>
-          <div class="detail-stars">${renderStarsHTML(book.rating)}</div>
+          <div class="detail-title">${safeTitle}</div>
+          ${book.subtitle ? `<div class="detail-subtitle">${safeSubtitle}</div>` : ''}
+          <div class="detail-author">by ${safeAuthor}</div>
+          <div class="detail-stars">${renderStarsHTML(safeRating)}</div>
         </div>
       </div>
 
       <div class="detail-divider">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
 
       <div class="detail-fields">
-        <div class="detail-row"><span class="detail-key">&gt; STATUS</span><span class="detail-val">${book.status.toUpperCase().replace('-', ' ')}</span></div>
-        <div class="detail-row"><span class="detail-key">&gt; CATEGORY</span><span class="detail-val">${book.category || '—'}</span></div>
-        <div class="detail-row"><span class="detail-key">&gt; PAGES</span><span class="detail-val">${book.pages || '?'}</span></div>
+        <div class="detail-row"><span class="detail-key">&gt; STATUS</span><span class="detail-val">${safeStatus}</span></div>
+        <div class="detail-row"><span class="detail-key">&gt; CATEGORY</span><span class="detail-val">${safeCategory}</span></div>
+        <div class="detail-row"><span class="detail-key">&gt; PAGES</span><span class="detail-val">${safePages || '?'}</span></div>
         ${statusRows}
       </div>
 
@@ -498,6 +618,7 @@ async function searchOpenLibrary(query, resultsEl, statusEl) {
   try {
     const url = `https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=7&fields=title,author_name,number_of_pages_median,first_sentence,cover_i,subject`;
     const res  = await fetch(url);
+    if (!res.ok) throw new Error(`OpenLibrary request failed: ${res.status}`);
     const data = await res.json();
 
     statusEl.textContent = '';
@@ -507,14 +628,22 @@ async function searchOpenLibrary(query, resultsEl, statusEl) {
       return;
     }
 
-    resultsEl._docs = data.docs;
-    resultsEl.innerHTML = data.docs.map((doc, i) => {
+    const docs = data.docs.map(doc => ({
+      ...doc,
+      title: cleanText(doc.title, 240) || 'Unknown',
+      author_name: [cleanText(doc.author_name?.[0], 140) || 'Unknown'],
+      number_of_pages_median: toPositiveInt(doc.number_of_pages_median),
+      cover_i: toPositiveInt(doc.cover_i),
+    }));
+
+    resultsEl._docs = docs;
+    resultsEl.innerHTML = docs.map((doc, i) => {
       const title   = doc.title || 'Unknown';
       const author  = doc.author_name?.[0] || 'Unknown';
       const pages   = doc.number_of_pages_median ? ` · ${doc.number_of_pages_median}p` : '';
       const coverEl = doc.cover_i
         ? `<img class="sr-cover" src="https://covers.openlibrary.org/b/id/${doc.cover_i}-S.jpg" alt="" loading="lazy">`
-        : `<div class="sr-cover sr-cover-placeholder">${title.charAt(0)}</div>`;
+        : `<div class="sr-cover sr-cover-placeholder">${escHtml(title.charAt(0))}</div>`;
       return `
         <div class="search-result-item" data-idx="${i}">
           ${coverEl}
@@ -575,7 +704,7 @@ function applyBookFromAPI(doc) {
     coverInput.id   = 'f-cover-id';
     document.getElementById('form-modal-content').appendChild(coverInput);
   }
-  coverInput.value = doc.cover_i || '';
+  coverInput.value = toPositiveInt(doc.cover_i) || '';
 }
 
 function flashField(el) {
