@@ -108,8 +108,8 @@ No build step. No dependencies. Just open the file.
 
 ## 🌠 More Projects
 
-1. [🌌 Interactive Solar System](https://github.com/laddtnov/interactive-solar-system)
-2. [💼 Cyberpunk Portfolio](https://github.com/laddtnov/portfolio-website)
+1. [🌌 Interactive Solar System](https://github.com/laddtnov/solar-system)
+2. [💼 Cyberpunk Portfolio](https://github.com/laddtnov/laddtnov-hub)
 3. [📚 Book Tracker](https://github.com/laddtnov/cyberpunk-book-tracker) — this project
 
 ---
