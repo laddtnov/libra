@@ -94,7 +94,10 @@ function loadBooks() {
   const stored = localStorage.getItem('cyberpunk-books');
   if (stored) {
     try { return JSON.parse(stored); }
-    catch (e) { return structuredClone(DEFAULT_BOOKS); }
+    catch (error) {
+      console.warn('Invalid saved library data, restoring defaults.', error);
+      return structuredClone(DEFAULT_BOOKS);
+    }
   }
   return structuredClone(DEFAULT_BOOKS);
 }
@@ -117,7 +120,8 @@ let soundEnabled  = true;
 let audioContext  = null;
 
 function initAudioContext() {
-  if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+  const AudioContextCtor = globalThis.AudioContext || globalThis.webkitAudioContext;
+  if (!audioContext && AudioContextCtor) audioContext = new AudioContextCtor();
   return audioContext;
 }
 
@@ -125,6 +129,7 @@ function playClickSound() {
   if (!soundEnabled) return;
   try {
     const ctx = initAudioContext();
+    if (!ctx) return;
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.connect(gain);
@@ -135,7 +140,9 @@ function playClickSound() {
     gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
     osc.start(ctx.currentTime);
     osc.stop(ctx.currentTime + 0.08);
-  } catch (e) {}
+  } catch (error) {
+    console.debug('Click sound skipped:', error);
+  }
 }
 
 function toggleSound() {
@@ -529,7 +536,8 @@ async function searchOpenLibrary(query, resultsEl, statusEl) {
       });
     });
 
-  } catch (e) {
+  } catch (error) {
+    console.warn('Open Library search failed.', error);
     statusEl.textContent = '✗ NETWORK ERROR — fill in manually';
     statusEl.style.color = '#ff4444';
   }
@@ -601,7 +609,7 @@ function openFormModal(bookId = null) {
       <div class="terminal-line form-divider-line">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
       <br>
 
-      ${!isEdit ? `
+      ${isEdit ? '' : `
       <div class="book-search-section">
         <div class="terminal-label">&gt; SEARCH OPEN LIBRARY TO AUTO-FILL</div>
         <input type="text" id="book-api-search" class="terminal-input" placeholder="Type a book title..." autocomplete="off" spellcheck="false">
@@ -610,7 +618,7 @@ function openFormModal(bookId = null) {
       </div>
       <div class="terminal-line form-or-divider">─────────────── OR FILL IN MANUALLY ───────────────</div>
       <br>
-      ` : ''}
+      `}
 
       <div class="form-field">
         <label class="terminal-label">&gt; TITLE *</label>
