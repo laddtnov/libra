@@ -734,49 +734,84 @@ function openFormModal(bookId = null) {
   document.getElementById('cancel-form-btn').addEventListener('click', closeFormModal);
 }
 
-function saveBook() {
-  const title  = document.getElementById('f-title').value.trim();
-  const author = document.getElementById('f-author').value.trim();
-  let valid = true;
-  if (!title)  { document.getElementById('f-title').classList.add('input-error');  valid = false; }
-  if (!author) { document.getElementById('f-author').classList.add('input-error'); valid = false; }
-  if (!valid) return;
+function validateBookForm(title, author) {
+  let isValid = true;
 
-  const status      = document.getElementById('f-status').value;
-  const pages       = Number.parseInt(document.getElementById('f-pages').value) || null;
-  const currentPage = Number.parseInt(document.getElementById('f-current-page')?.value) || 0;
-  const rating      = Number.parseInt(document.getElementById('f-rating').value) || undefined;
-  const coverId     = Number.parseInt(document.getElementById('f-cover-id')?.value) || undefined;
+  if (!title) {
+    document.getElementById('f-title').classList.add('input-error');
+    isValid = false;
+  }
+
+  if (!author) {
+    document.getElementById('f-author').classList.add('input-error');
+    isValid = false;
+  }
+
+  return isValid;
+}
+
+function getUniqueBookId(title, existingId) {
+  if (existingId) return existingId;
+
+  const base = title.toLowerCase().replaceAll(/[^a-z0-9]+/g, '-').replaceAll(/^-|-$/g, '');
+  let id = base;
+  let n = 2;
+
+  while (booksData[id]) id = `${base}-${n++}`;
+
+  return id;
+}
+
+function buildBookPayload({ title, author, status, pages, currentPage, rating, coverId }) {
+  const subtitle  = document.getElementById('f-subtitle').value.trim();
+  const started   = document.getElementById('f-started').value.trim();
+  const completed = document.getElementById('f-completed').value.trim();
+  const synopsis  = document.getElementById('f-synopsis').value.trim();
 
   const book = {
     title,
     author,
     status,
-    ...(document.getElementById('f-subtitle').value.trim() && { subtitle: document.getElementById('f-subtitle').value.trim() }),
     category: document.getElementById('f-category').value,
-    ...(pages   && { pages }),
-    ...(rating  && { rating }),
-    ...(coverId && { coverId }),
-    ...(status === 'reading' && {
-      currentPage,
-      progress: pages ? Math.round((currentPage / pages) * 100) : 0,
-      ...(document.getElementById('f-started').value.trim() && { started: document.getElementById('f-started').value.trim() }),
-    }),
-    ...(status === 'completed' && {
-      ...(document.getElementById('f-completed').value.trim() && { completed: document.getElementById('f-completed').value.trim() }),
-    }),
-    ...(document.getElementById('f-synopsis').value.trim() && { synopsis: document.getElementById('f-synopsis').value.trim() }),
     notes: document.getElementById('f-notes').value.split('\n').map(n => n.trim()).filter(Boolean),
   };
 
-  let id = editingBookId;
-  if (!id) {
-    let base = title.toLowerCase().replaceAll(/[^a-z0-9]+/g, '-').replaceAll(/^-|-$/g, '');
-    id = base;
-    let n = 2;
-    while (booksData[id]) id = `${base}-${n++}`;
+  if (subtitle) book.subtitle = subtitle;
+  if (pages) book.pages = pages;
+  if (rating) book.rating = rating;
+  if (coverId) book.coverId = coverId;
+
+  if (status === 'reading') {
+    book.currentPage = currentPage;
+    book.progress = pages ? Math.round((currentPage / pages) * 100) : 0;
+    if (started) book.started = started;
   }
 
+  if (status === 'completed' && completed) {
+    book.completed = completed;
+  }
+
+  if (synopsis) {
+    book.synopsis = synopsis;
+  }
+
+  return book;
+}
+
+function saveBook() {
+  const title  = document.getElementById('f-title').value.trim();
+  const author = document.getElementById('f-author').value.trim();
+
+  if (!validateBookForm(title, author)) return;
+
+  const status = document.getElementById('f-status').value;
+  const pages = Number.parseInt(document.getElementById('f-pages').value) || null;
+  const currentPage = Number.parseInt(document.getElementById('f-current-page')?.value) || 0;
+  const rating = Number.parseInt(document.getElementById('f-rating').value) || undefined;
+  const coverId = Number.parseInt(document.getElementById('f-cover-id')?.value) || undefined;
+  const book = buildBookPayload({ title, author, status, pages, currentPage, rating, coverId });
+
+  const id = getUniqueBookId(title, editingBookId);
   const isEdit = !!editingBookId;
   booksData[id] = book;
   saveBooks();
