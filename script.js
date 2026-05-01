@@ -105,6 +105,7 @@ function saveBooks() {
 
 let booksData    = loadBooks();
 let activeFilter = 'all';
+let activeSort   = 'default';
 let searchQuery  = '';
 let editingBookId = null;
 
@@ -147,6 +148,23 @@ function toggleSound() {
 }
 
 // ====================================
+// TOAST NOTIFICATIONS
+// ====================================
+
+function showToast(message, type = 'success') {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.textContent = `> ${message}`;
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.add('toast-out');
+    toast.addEventListener('animationend', () => toast.remove());
+  }, 2200);
+}
+
+// ====================================
 // STATS + COUNT-UP
 // ====================================
 
@@ -160,8 +178,10 @@ function countUp(el, target, duration = 700) {
   requestAnimationFrame(tick);
 }
 
-function updateStats() {
-  const books = Object.values(booksData);
+function updateStats(filteredEntries) {
+  const books = filteredEntries
+    ? filteredEntries.map(([, b]) => b)
+    : Object.values(booksData);
   countUp(document.getElementById('stat-completed'), books.filter(b => b.status === 'completed').length);
   countUp(document.getElementById('stat-reading'),   books.filter(b => b.status === 'reading').length);
   countUp(document.getElementById('stat-queued'),    books.filter(b => b.status === 'to-read').length);
@@ -248,7 +268,7 @@ function buildCardHTML(id, book) {
 }
 
 function getFilteredEntries() {
-  return Object.entries(booksData).filter(([, book]) => {
+  const filtered = Object.entries(booksData).filter(([, book]) => {
     const matchFilter = activeFilter === 'all' || book.status === activeFilter;
     const q = searchQuery.toLowerCase();
     const matchSearch = !q
@@ -257,6 +277,14 @@ function getFilteredEntries() {
       || (book.category || '').toLowerCase().includes(q);
     return matchFilter && matchSearch;
   });
+
+  if (activeSort === 'title-az')  filtered.sort((a, b) => a[1].title.localeCompare(b[1].title));
+  if (activeSort === 'title-za')  filtered.sort((a, b) => b[1].title.localeCompare(a[1].title));
+  if (activeSort === 'rating')    filtered.sort((a, b) => (b[1].rating || 0) - (a[1].rating || 0));
+  if (activeSort === 'pages')     filtered.sort((a, b) => (b[1].pages || 0) - (a[1].pages || 0));
+  if (activeSort === 'added')     filtered.reverse();
+
+  return filtered;
 }
 
 function renderBooks() {
@@ -264,6 +292,8 @@ function renderBooks() {
   grid.innerHTML = '';
 
   const entries = getFilteredEntries();
+
+  updateStats(activeFilter !== 'all' || searchQuery ? entries : undefined);
 
   if (!entries.length) {
     grid.innerHTML = `
@@ -410,11 +440,12 @@ function confirmDelete(bookId) {
     </div>`;
 
   document.getElementById('confirm-yes').addEventListener('click', () => {
+    const title = booksData[bookId]?.title || 'RECORD';
     delete booksData[bookId];
     saveBooks();
     closeModal();
-    updateStats();
     renderBooks();
+    showToast(`${title.toUpperCase()} DELETED`, 'delete');
   });
 
   document.getElementById('confirm-no').addEventListener('click', () => {
@@ -746,11 +777,12 @@ function saveBook() {
     while (booksData[id]) id = `${base}-${n++}`;
   }
 
+  const isEdit = !!editingBookId;
   booksData[id] = book;
   saveBooks();
   closeFormModal();
-  updateStats();
   renderBooks();
+  showToast(isEdit ? 'RECORD UPDATED' : 'RECORD SAVED', 'success');
 }
 
 function closeFormModal() {
@@ -790,6 +822,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('search-input').addEventListener('input', e => {
     searchQuery = e.target.value;
+    renderBooks();
+  });
+
+  document.getElementById('sort-select').addEventListener('change', e => {
+    activeSort = e.target.value;
     renderBooks();
   });
 

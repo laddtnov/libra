@@ -5,13 +5,14 @@
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-![Status](https://img.shields.io/badge/Status-Complete-success?style=for-the-badge)
+![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
-A futuristic book tracking system with neon-cyberpunk aesthetics, Fallout 3-style terminal interface, and typewriter sound effects.
+A personal reading tracker with a full cyberpunk neon UI — glitch title, status-colored book spines, Open Library auto-fill, and a Fallout-style detail terminal.
 
 [🌐 Live Demo](https://book-archive.laddtnov.xyz/)
-![Portfolio Preview](screenshot-book-terminal.png)![Portfolio Preview](Screenshot-book-desktop.png)
+
+![Portfolio Preview](Screenshot-book-desktop.png)
 
 </div>
 
@@ -19,13 +20,41 @@ A futuristic book tracking system with neon-cyberpunk aesthetics, Fallout 3-styl
 
 ## ✨ Features
 
-- **📖 Smart Book Cards** - Neon-glowing spines with status colors
-- **💚 Fallout Terminal** - Click any book for detailed terminal view with typewriter effect
-- **🔊 Typewriter Sounds** - Authentic typing sounds via Web Audio API
-- **📊 Stats Dashboard** - Real-time reading statistics
-- **⚡ Animated Progress** - Live progress bars for books in progress
-- **🎨 Cyberpunk Design** - Neon cyan, pink, purple aesthetics
-- **📱 Fully Responsive** - Mobile, tablet, desktop optimized
+### Core
+- **Full CRUD** — add, edit, delete books with a neon cyberpunk form modal
+- **localStorage persistence** — your library survives page refresh
+- **Open Library auto-fill** — search any title and auto-populate author, pages, cover, synopsis, and genre
+- **Stats dashboard** — Completed / Reading / Queued / Total with count-up animation; re-animates on every filter change
+- **Clickable stat cards** — tap a stat card to instantly filter the grid
+
+### Book Cards
+- **Status-colored spines** — orange for Reading, green for Completed, purple for Queued
+- **Status-matched hover glow** — each card glows in its own status color on hover
+- **Progress bar** — animated neon gradient bar on Reading cards
+- **Star ratings** — gold stars with hover pulse on card hover
+
+### Toolbar
+- **Live search** — filters by title, author, or category in real time
+- **Filter buttons** — All / Reading / Done / Queued
+- **Sort dropdown** — Title A→Z, Title Z→A, Rating, Pages, Date Added
+
+### Detail Modal (Fallout terminal style)
+- Instant render — cyberpunk neon redesign with dark gradient, cyan border, pink labels
+- Book cover from Open Library (if available)
+- Full fields: status, category, pages, progress, dates, synopsis, notes
+- Edit and Delete always visible; Delete requires inline confirmation
+- Sound toggle (Web Audio API click effect)
+
+### Toast Notifications
+- Neon toasts slide in from the top-right on every save, update, or delete
+- Color-coded: green for save/update, red for delete
+
+### UI & Animations
+- `BOOK.ARCHIVE` title glitch animation (pink + cyan clip-path layers on hover)
+- Tagline neon underline sweeps on hover
+- Staggered card entrance (bounce-in, 70ms per card)
+- Scrolling cyber-grid background
+- CRT scanlines on modals
 
 ---
 
@@ -37,76 +66,34 @@ cd cyberpunk-book-tracker
 open index.html
 ```
 
-**Click on any book card to access the terminal!** 💚
-
----
-
-## 🎮 How It Works
-
-1. **Browse books** in the cyberpunk-styled grid
-2. **Click a book card** to open the Fallout 3 terminal
-3. **Watch text type out** with authentic typewriter sounds
-4. **Read detailed info** - synopsis, notes, progress, ratings
-5. **Close with ESC** or the X button
+No build step. No dependencies. Just open the file.
 
 ---
 
 ## 📊 Book Statuses
 
-| Status | Color | Glow |
-|--------|-------|------|
-| 📖 **Reading** | Orange | Animated pulse |
-| ✅ **Completed** | Green | Steady glow |
-| 📌 **To Read** | Purple | Soft glow |
-
----
-
-## 🎨 Customization
-
-### Add New Books
-
-Edit `script.js`:
-
-```javascript
-"your-book": {
-  title: "Your Book Title",
-  author: "Author Name",
-  category: "Genre",
-  pages: 300,
-  status: "to-read",
-  synopsis: "Description...",
-  notes: ["Note 1", "Note 2"]
-}
-```
-
-### Change Colors
-
-Edit `styles.css`:
-
-```css
-:root {
-  --neon-cyan: #00f2ff;
-  --neon-pink: #ff00ff;
-  --neon-purple: #9d00ff;
-}
-```
+| Status | Spine / Glow Color |
+|--------|--------------------|
+| 📖 Reading | Orange — animated progress bar |
+| ✅ Completed | Green — steady glow |
+| 📌 Queued | Purple — soft glow |
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **HTML5** - Semantic structure
-- **CSS3** - Grid, Flexbox, Animations, Variables
-- **JavaScript ES6+** - Web Audio API, Async/Await
-- **Zero Dependencies** - Pure vanilla code
+- **HTML5** — semantic structure, single page
+- **CSS3** — Grid, Flexbox, custom properties, keyframe animations
+- **JavaScript ES6+** — vanilla, no frameworks; Web Audio API, Open Library fetch
+- **Open Library API** — free, no key required
 
 ---
 
 ## 📱 Responsive
 
-- **Desktop:** Full 3-4 column grid
-- **Tablet:** 2-3 columns, optimized spacing
-- **Mobile:** Single column, touch-friendly
+- **Desktop:** 3–4 column grid
+- **Tablet:** 2 columns
+- **Mobile:** single column, touch-friendly
 
 ---
 
@@ -121,18 +108,16 @@ Edit `styles.css`:
 
 ## 🌠 More Projects
 
-**Cyberpunk Portfolio Collection:**
-
 1. [🌌 Interactive Solar System](https://github.com/laddtnov/interactive-solar-system)
 2. [💼 Cyberpunk Portfolio](https://github.com/laddtnov/portfolio-website)
-3. [📚 Book Tracker](https://github.com/laddtnov/cyberpunk-book-tracker) - This project
+3. [📚 Book Tracker](https://github.com/laddtnov/cyberpunk-book-tracker) — this project
 
 ---
 
 <div align="center">
 
-**Made with ❤️ using HTML, CSS, and JavaScript**
+**Made with HTML, CSS, and JavaScript**
 
-**If you like this project, give it a ⭐!**
+**If you like this project, give it a ⭐**
 
 </div>

@@ -73,6 +73,16 @@
         <button class="filter-btn" data-filter="completed">DONE</button>
         <button class="filter-btn" data-filter="to-read">QUEUED</button>
       </div>
+      <div class="sort-wrapper">
+        <select class="sort-select" id="sort-select">
+          <option value="default">SORT</option>
+          <option value="title-az">TITLE A→Z</option>
+          <option value="title-za">TITLE Z→A</option>
+          <option value="rating">RATING ↓</option>
+          <option value="pages">PAGES ↓</option>
+          <option value="added">DATE ADDED</option>
+        </select>
+      </div>
       <button class="add-book-btn" id="add-book-btn">&gt; ADD BOOK</button>
     </div>
 
@@ -104,6 +114,7 @@
     </div>
   </div>
 
+  <div class="toast-container" id="toast-container"></div>
   <script src="script.js"></script>
 </body>
 </html>
