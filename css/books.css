@@ -100,7 +100,6 @@
 }
 
 .book-card:hover {
-  transform: translateY(-10px);
   border-color: var(--neon-cyan);
   box-shadow:
     0 20px 50px rgba(0, 242, 255, 0.3),
@@ -372,3 +371,67 @@
 .tag.fiction { border-color: #3b82f6; color: #60a5fa; }
 .tag.biography { border-color: #10b981; color: #34d399; }
 .tag.economics { border-color: #eab308; color: #fde047; }
+
+/* ── Card cover thumbnail ── */
+.card-cover {
+  width: 54px;
+  align-self: stretch;
+  object-fit: cover;
+  flex-shrink: 0;
+  border-right: 1px solid rgba(0, 242, 255, 0.15);
+  filter: brightness(0.8) contrast(1.1) saturate(0.9);
+  transition: filter 0.3s ease;
+}
+
+.book-card:hover .card-cover {
+  filter: brightness(1) contrast(1.1) saturate(1.1);
+}
+
+/* ── SVG progress ring ── */
+.progress-ring-wrap {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 15px;
+  flex-shrink: 0;
+}
+
+.progress-ring {
+  width: 56px;
+  height: 56px;
+  transform: rotate(-90deg);
+}
+
+.ring-track {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 3;
+}
+
+.ring-fill {
+  fill: none;
+  stroke: var(--neon-orange);
+  stroke-width: 3;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 4px var(--neon-orange));
+  transition: stroke-dasharray 0.6s ease;
+  animation: ringPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes ringPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.7; }
+}
+
+.ring-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: var(--neon-orange);
+  text-shadow: 0 0 6px var(--neon-orange);
+}

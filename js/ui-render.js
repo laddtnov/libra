@@ -83,8 +83,20 @@ function buildCardHTML(book) {
       <div class="meta-item"><span class="meta-label">Pages:</span><span class="meta-value">${safePages || '?'}</span></div>`;
   }
 
+  const coverHTML = book.coverId
+    ? `<img class="card-cover" src="https://covers.openlibrary.org/b/id/${book.coverId}-S.jpg" alt="" loading="lazy">`
+    : '';
+
   const progressHTML = book.status === 'reading'
-    ? `<div class="progress-bar"><div class="progress-fill" style="width:${safeProgress}%"></div></div>` : '';
+    ? `<div class="progress-ring-wrap">
+        <svg class="progress-ring" viewBox="0 0 36 36" aria-label="${safeProgress}% read">
+          <circle class="ring-track" cx="18" cy="18" r="15.9155"/>
+          <circle class="ring-fill"  cx="18" cy="18" r="15.9155"
+            stroke-dasharray="${safeProgress} 100"/>
+        </svg>
+        <span class="ring-label">${safeProgress}%</span>
+      </div>`
+    : '';
 
   const g = GENRE_META[book.category] || { cls: '', emoji: '📚' };
   const genreTag = book.category ? `<span class="tag ${g.cls}">${g.emoji} ${safeCategory}</span>` : '';
@@ -94,6 +106,7 @@ function buildCardHTML(book) {
       <div class="spine-light"></div>
       <div class="spine-text">${spineTitle}</div>
     </div>
+    ${coverHTML}
     <div class="book-body">
       <div class="book-header">
         <div class="status-badge ${statusClass}">${statusBadge}</div>
@@ -147,6 +160,8 @@ export function renderBooks() {
     return;
   }
 
+  const MAX_TILT = 8;
+
   entries.forEach(([id, book], i) => {
     const card = document.createElement('div');
     card.className = `book-card ${getStatusClass(book.status)} card-enter`;
@@ -154,6 +169,20 @@ export function renderBooks() {
     card.style.animationDelay = `${i * 0.07}s`;
     card.innerHTML = buildCardHTML(book);
     card.addEventListener('click', () => onOpenDetails(id));
+
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      card.style.transition = 'box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease';
+      card.style.transform = `perspective(800px) rotateX(${(-y * MAX_TILT).toFixed(2)}deg) rotateY(${(x * MAX_TILT).toFixed(2)}deg) translateY(-10px)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+      card.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+      card.style.transform = '';
+    });
+
     grid.appendChild(card);
   });
 }
