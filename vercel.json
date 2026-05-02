@@ -2,7 +2,8 @@
   "version": 2,
   "public": true,
   "github": {
-    "enabled": false
+    "enabled": true,
+    "autoAlias": true
   },
   "builds": [
     {
