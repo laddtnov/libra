@@ -13,6 +13,23 @@ const GENRE_META = {
 
 let onOpenDetails = () => {};
 
+const STATUS_SVGS = {
+  completed: `<svg class="status-svg" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="8,1 14,4.5 14,11.5 8,15 2,11.5 2,4.5" stroke="currentColor" stroke-width="1.2"/>
+    <polyline points="5,8.5 7,11 11,5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`,
+  reading: `<svg class="status-svg" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M1 8 C4 3.5 12 3.5 15 8 C12 12.5 4 12.5 1 8Z" stroke="currentColor" stroke-width="1.2"/>
+    <circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.2"/>
+    <circle cx="8" cy="8" r="1" fill="currentColor"/>
+  </svg>`,
+  'to-read': `<svg class="status-svg" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="1" y="2" width="14" height="3.5" rx="1" stroke="currentColor" stroke-width="1.2"/>
+    <rect x="1" y="7" width="10" height="3.5" rx="1" stroke="currentColor" stroke-width="1.2" opacity="0.7"/>
+    <rect x="1" y="12" width="6" height="3.5" rx="1" stroke="currentColor" stroke-width="1.2" opacity="0.4"/>
+  </svg>`,
+};
+
 export function configureRenderHandlers({ openDetails }) {
   onOpenDetails = openDetails;
 }
@@ -63,9 +80,9 @@ function buildCardHTML(book) {
   const spineTitle = escHtml((book.title || 'UNTITLED').toUpperCase().slice(0, 16));
 
   const statusBadge = {
-    reading: '<span class="status-icon">📖</span><span>READING</span>',
-    completed: '<span class="status-icon">✅</span><span>COMPLETED</span>',
-    'to-read': '<span class="status-icon">📌</span><span>TO READ</span>',
+    reading:  `<span class="status-icon">${STATUS_SVGS.reading}</span><span>READING</span>`,
+    completed: `<span class="status-icon">${STATUS_SVGS.completed}</span><span>COMPLETED</span>`,
+    'to-read': `<span class="status-icon">${STATUS_SVGS['to-read']}</span><span>TO READ</span>`,
   }[book.status] || '';
 
   let metaHTML = '';

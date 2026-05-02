@@ -279,6 +279,17 @@
   border: 2px solid;
 }
 
+.status-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.status-svg {
+  width: 15px;
+  height: 15px;
+}
+
 .status-badge.read {
   background: rgba(16, 185, 129, 0.1);
   color: var(--neon-green);
