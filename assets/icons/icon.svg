@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#050510" rx="72"/>
+
+  <!-- Corner brackets -->
+  <polyline points="44,88 44,44 88,44"   stroke="#00f2ff" stroke-width="10" fill="none" stroke-linecap="square"/>
+  <polyline points="424,44 468,44 468,88" stroke="#00f2ff" stroke-width="10" fill="none" stroke-linecap="square"/>
+  <polyline points="44,424 44,468 88,468" stroke="#00f2ff" stroke-width="10" fill="none" stroke-linecap="square"/>
+  <polyline points="424,468 468,468 468,424" stroke="#00f2ff" stroke-width="10" fill="none" stroke-linecap="square"/>
+
+  <!-- Open book — left page -->
+  <path d="M256 148 Q192 132 104 148 L104 376 Q192 360 256 376"
+        fill="rgba(0,242,255,0.07)" stroke="#00f2ff" stroke-width="7"
+        stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- Open book — right page -->
+  <path d="M256 148 Q320 132 408 148 L408 376 Q320 360 256 376"
+        fill="rgba(0,242,255,0.07)" stroke="#00f2ff" stroke-width="7"
+        stroke-linejoin="round" stroke-linecap="round"/>
+  <!-- Spine -->
+  <line x1="256" y1="148" x2="256" y2="376" stroke="#00f2ff" stroke-width="6" opacity="0.6"/>
+
+  <!-- Text lines — left page -->
+  <line x1="126" y1="204" x2="234" y2="200" stroke="#00f2ff" stroke-width="5" stroke-linecap="round" opacity="0.55"/>
+  <line x1="126" y1="234" x2="234" y2="230" stroke="#00f2ff" stroke-width="5" stroke-linecap="round" opacity="0.4"/>
+  <line x1="126" y1="264" x2="200" y2="261" stroke="#00f2ff" stroke-width="5" stroke-linecap="round" opacity="0.25"/>
+
+  <!-- Text lines — right page -->
+  <line x1="278" y1="200" x2="386" y2="204" stroke="#00f2ff" stroke-width="5" stroke-linecap="round" opacity="0.55"/>
+  <line x1="278" y1="230" x2="386" y2="234" stroke="#00f2ff" stroke-width="5" stroke-linecap="round" opacity="0.4"/>
+  <line x1="278" y1="261" x2="352" y2="264" stroke="#00f2ff" stroke-width="5" stroke-linecap="round" opacity="0.25"/>
+</svg>

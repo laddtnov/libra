@@ -1,0 +1,74 @@
+const CACHE = 'book-archive-v1';
+
+const ASSETS = [
+  '/',
+  '/index.html',
+  '/manifest.json',
+  '/css/main.css',
+  '/css/foundation.css',
+  '/css/books.css',
+  '/css/modal-shell.css',
+  '/css/toolbar-and-empty.css',
+  '/css/actions.css',
+  '/css/form-modal.css',
+  '/css/detail-modal.css',
+  '/css/detail-panel.css',
+  '/css/openlibrary-search.css',
+  '/css/responsive.css',
+  '/css/toast.css',
+  '/css/sort.css',
+  '/css/lists.css',
+  '/css/recommendations.css',
+  '/css/discover.css',
+  '/css/lang-switcher.css',
+  '/css/backup.css',
+  '/js/app-ui.js',
+  '/js/state.js',
+  '/js/default-books.js',
+  '/js/ui-render.js',
+  '/js/ui-feedback.js',
+  '/js/ui-detail-modal.js',
+  '/js/ui-form-modal.js',
+  '/js/ui-search.js',
+  '/js/ui-lists.js',
+  '/js/ui-recommendations.js',
+  '/js/ui-discover.js',
+  '/js/ui-backup.js',
+  '/js/i18n.js',
+  '/assets/icons/icon.svg',
+  '/assets/fonts/orbitron-latin.woff2',
+  '/assets/fonts/rajdhani-400-latin.woff2',
+  '/assets/fonts/rajdhani-600-latin.woff2',
+  '/assets/fonts/rajdhani-700-latin.woff2',
+];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE).then(cache => cache.addAll(ASSETS))
+  );
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
+    )
+  );
+  self.clients.claim();
+});
+
+self.addEventListener('fetch', event => {
+  if (event.request.method !== 'GET') return;
+
+  // External API calls — network only, fail silently offline
+  if (!event.request.url.startsWith(self.location.origin)) {
+    event.respondWith(fetch(event.request).catch(() => new Response('', { status: 503 })));
+    return;
+  }
+
+  // App shell — cache first, fall back to network
+  event.respondWith(
+    caches.match(event.request).then(cached => cached || fetch(event.request))
+  );
+});

@@ -15,6 +15,9 @@
   <meta name="twitter:description" content="A personal reading tracker with a full cyberpunk neon UI">
   <meta name="twitter:image" content="https://book-archive.laddtnov.xyz/Screenshot-book-desktop.png">
   <link rel="stylesheet" href="css/main.css">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#00f2ff">
+  <link rel="apple-touch-icon" href="/assets/icons/icon.svg">
 </head>
 <body>
   <div class="cyber-grid"></div>
@@ -226,5 +229,10 @@
 
   <div class="toast-container" id="toast-container"></div>
   <script type="module" src="js/app-ui.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
+    }
+  </script>
 </body>
 </html>
