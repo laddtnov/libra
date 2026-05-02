@@ -2,6 +2,7 @@ import { state, saveBooks, clamp, toPositiveInt, toNonNegativeInt, escHtml } fro
 import { playClickSound, toggleSound, showToast } from './ui-feedback.js';
 import { renderStarsHTML, renderBooks } from './ui-render.js';
 import { toggleBookInList, removeBookFromAllLists, renderListsPanel } from './ui-lists.js';
+import { renderQuotesSection, initQuotesSection } from './ui-quotes.js';
 
 let onOpenFormModal = () => {};
 
@@ -138,6 +139,8 @@ export function showBookDetails(bookId) {
         <div class="detail-section-body">${notesHTML}</div>
       </div>
 
+      ${renderQuotesSection(bookId)}
+
       <div class="detail-section">
         <div class="detail-section-title">&gt;&gt; READING LISTS</div>
         <div class="detail-lists-body" id="detail-lists-body"></div>
@@ -158,6 +161,7 @@ export function showBookDetails(bookId) {
     confirmDelete(bookId);
   });
 
+  initQuotesSection(bookId);
   renderDetailListsSection(bookId);
 }
 

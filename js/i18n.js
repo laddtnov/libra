@@ -124,6 +124,14 @@ const T = {
   preview_no_synopsis:['No synopsis available.','Опис відсутній.',      'Sin sinopsis disponible.','Описание отсутствует.', 'Keine Inhaltsangabe.',      'Brak streszczenia.'],
   preview_add_btn:    ['+ ADD TO ARCHIVE',     '+ ДОДАТИ ДО АРХІВУ',   '+ AÑADIR AL ARCHIVO',   '+ ДОБАВИТЬ В АРХИВ',    '+ ZUM ARCHIV HINZUFÜGEN',  '+ DODAJ DO ARCHIWUM'],
 
+  // Quotes & highlights
+  quotes_title:      ['QUOTES & HIGHLIGHTS',   'ЦИТАТИ ТА ВИДІЛЕННЯ',   'CITAS Y DESTACADOS',   'ЦИТАТЫ И ВЫДЕЛЕНИЯ',   'ZITATE & MARKIERUNGEN',   'CYTATY I WYRÓŻNIENIA'],
+  quotes_empty:      ['No quotes saved yet.',  'Цитат ще немає.',       'Sin citas guardadas.', 'Цитат ещё нет.',       'Noch keine Zitate.',      'Brak zapisanych cytatów.'],
+  quotes_page_label: ['Page',                  'Ст.',                   'Pág.',                 'Стр.',                 'S.',                      'Str.'],
+  quotes_ph_text:    ['Memorable passage...',  'Запам\'ятний уривок...','Pasaje memorable...', 'Запоминающийся отрывок...','Einprägsame Passage...','Pamiętny fragment...'],
+  quotes_ph_page:    ['Page #',               'Стор. №',               'Pág. №',               'Стр. №',               'Seite Nr.',               'Str. nr'],
+  quotes_btn_add:    ['+ ADD QUOTE',           '+ ДОДАТИ ЦИТАТУ',       '+ AÑADIR CITA',       '+ ДОБАВИТЬ ЦИТАТУ',    '+ ZITAT HINZUFÜGEN',      '+ DODAJ CYTAT'],
+
   // Backup buttons
   btn_export:         ['↓ EXPORT',            '↓ ЕКСПОРТ',            '↓ EXPORTAR',           '↓ ЭКСПОРТ',            '↓ EXPORTIEREN',             '↓ EKSPORT'],
   btn_import:         ['↑ IMPORT',            '↑ ІМПОРТ',             '↑ IMPORTAR',           '↑ ИМПОРТ',             '↑ IMPORTIEREN',             '↑ IMPORT'],

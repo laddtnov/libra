@@ -1,0 +1,129 @@
+/* ====================================
+   QUOTES & HIGHLIGHTS
+   ==================================== */
+
+.quote-card {
+  background: rgba(255, 215, 0, 0.04);
+  border: 1px solid rgba(255, 215, 0, 0.12);
+  border-left: 2px solid rgba(255, 215, 0, 0.45);
+  border-radius: 0 4px 4px 0;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+
+.quote-text {
+  font-size: 12px;
+  color: #ffd700;
+  line-height: 1.75;
+  font-style: italic;
+  margin-bottom: 6px;
+  text-shadow: 0 0 6px rgba(255, 215, 0, 0.18);
+  word-break: break-word;
+}
+
+.quote-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.quote-page {
+  font-size: 10px;
+  color: #007700;
+  letter-spacing: 1px;
+}
+
+.quote-delete-btn {
+  background: transparent;
+  border: none;
+  color: #553333;
+  cursor: pointer;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  padding: 0 2px;
+  line-height: 1;
+  transition: color 0.18s ease;
+}
+
+.quote-delete-btn:hover { color: #ff4444; }
+
+.quotes-empty {
+  font-size: 11px;
+  color: #004400;
+  font-style: italic;
+  margin-bottom: 8px;
+}
+
+/* ── Add form ── */
+.quotes-add-form { margin-top: 10px; }
+
+.quote-textarea {
+  width: 100%;
+  min-height: 56px;
+  background: #000d00;
+  border: 1px solid #003a00;
+  color: #00cc00;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  padding: 8px;
+  resize: vertical;
+  box-sizing: border-box;
+  border-radius: 3px;
+  transition: border-color 0.2s ease;
+}
+
+.quote-textarea:focus {
+  outline: none;
+  border-color: rgba(255, 215, 0, 0.45);
+}
+
+.quote-textarea.input-error {
+  border-color: #ff4444;
+  animation: shake 0.35s ease;
+}
+
+.quotes-add-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+  align-items: stretch;
+}
+
+.quote-page-input {
+  width: 76px;
+  flex-shrink: 0;
+  background: #000d00;
+  border: 1px solid #003a00;
+  color: #00cc00;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  padding: 6px 8px;
+  border-radius: 3px;
+  transition: border-color 0.2s ease;
+}
+
+.quote-page-input:focus {
+  outline: none;
+  border-color: rgba(255, 215, 0, 0.45);
+}
+
+.quote-add-btn {
+  flex: 1;
+  background: transparent;
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  color: #ffd700;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.quote-add-btn:hover {
+  background: rgba(255, 215, 0, 0.07);
+  border-color: #ffd700;
+  text-shadow: 0 0 6px rgba(255, 215, 0, 0.4);
+}
