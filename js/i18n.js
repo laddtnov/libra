@@ -4,10 +4,6 @@ const LANGS = ['en', 'uk', 'es', 'ru', 'de', 'pl'];
 
 /* eslint-disable no-multi-spaces */
 const T = {
-  // Header
-  title:    ['BOOK.ARCHIVE',           'КНИЖКОВИЙ.АРХІВ',          'ARCHIVO.LIBROS',         'КНИЖНЫЙ.АРХИВ',           'BUCH.ARCHIV',              'ARCHIWUM.KSIAZEK'],
-  tagline:  ['>_ Digital library v2.0','>_ Цифрова бібліотека v2.0','>_ Biblioteca digital v2.0','>_ Цифровая библиотека v2.0','>_ Digitale Bibliothek v2.0','>_ Biblioteka cyfrowa v2.0'],
-
   // Stat labels
   stat_completed: ['Completed',  'Прочитано',  'Completados', 'Прочитано',  'Gelesen',          'Przeczytane'],
   stat_reading:   ['Reading',    'Читаю',      'Leyendo',     'Читаю',      'Lese',             'Czytam'],
@@ -81,6 +77,49 @@ const T = {
   lists_create:         ['> CREATE',            '> СТВОРИТИ',         '> CREAR',             '> СОЗДАТЬ',          '> ERSTELLEN',              '> UTWÓRZ'],
   active_list_viewing:  ['VIEWING:',            'СПИСОК:',            'LISTA:',              'СПИСОК:',            'LISTE:',                   'LISTA:'],
   active_list_clear:    ['✕ CLEAR',             '✕ ОЧИСТИТИ',         '✕ LIMPIAR',           '✕ СБРОСИТЬ',         '✕ LEEREN',                 '✕ WYCZYŚĆ'],
+
+  // Form modal — headings
+  form_new_record:      ['INITIALIZE NEW BOOK RECORD',   'ІНІЦІАЛІЗАЦІЯ НОВОГО ЗАПИСУ',  'INICIALIZAR NUEVO REGISTRO',  'ИНИЦИАЛИЗАЦИЯ НОВОГО ЗАПИСИ', 'NEUEN BUCHEINTRAG ERSTELLEN',   'INICJALIZUJ NOWY REKORD'],
+  form_modify_record:   ['MODIFY BOOK RECORD',           'РЕДАГУВАННЯ ЗАПИСУ',           'MODIFICAR REGISTRO',          'РЕДАКТИРОВАНИЕ ЗАПИСИ',        'BUCHEINTRAG BEARBEITEN',        'MODYFIKUJ REKORD'],
+  form_search_label:    ['SEARCH OPEN LIBRARY TO AUTO-FILL','ПОШУК У OPEN LIBRARY ДЛЯ АВТОЗАПОВНЕННЯ','BUSCAR EN OPEN LIBRARY PARA AUTOCOMPLETAR','ПОИСК В OPEN LIBRARY ДЛЯ АВТОЗАПОЛНЕНИЯ','OPEN LIBRARY DURCHSUCHEN ZUM AUSFÜLLEN','SZUKAJ W OPEN LIBRARY DO AUTOUZUPEŁNIANIA'],
+  form_search_ph:       ['Type a book title...',         'Введіть назву книги...',       'Escribe un título...',        'Введите название книги...',    'Buchtitel eingeben...',         'Wpisz tytuł książki...'],
+  form_or_manual:       ['OR FILL IN MANUALLY',          'АБО ЗАПОВНІТЬ ВРУЧНУ',         'O COMPLETAR MANUALMENTE',     'ИЛИ ЗАПОЛНИТЬ ВРУЧНУЮ',        'ODER MANUELL AUSFÜLLEN',        'LUB WYPEŁNIJ RĘCZNIE'],
+
+  // Form modal — field labels
+  form_lbl_title:       ['TITLE *',                      'НАЗВА *',                      'TÍTULO *',                    'НАЗВАНИЕ *',                   'TITEL *',                       'TYTUŁ *'],
+  form_ph_title:        ['Book title',                   'Назва книги',                  'Título del libro',            'Название книги',                'Buchtitel',                     'Tytuł książki'],
+  form_lbl_subtitle:    ['SUBTITLE',                     'ПІДЗАГОЛОВОК',                 'SUBTÍTULO',                   'ПОДЗАГОЛОВОК',                 'UNTERTITEL',                    'PODTYTUŁ'],
+  form_ph_subtitle:     ['Optional subtitle',            'Необов\'язковий підзаголовок', 'Subtítulo opcional',          'Необязательный подзаголовок',  'Optionaler Untertitel',         'Opcjonalny podtytuł'],
+  form_lbl_author:      ['AUTHOR *',                     'АВТОР *',                      'AUTOR *',                     'АВТОР *',                      'AUTOR *',                       'AUTOR *'],
+  form_ph_author:       ['Author name',                  'Ім\'я автора',                 'Nombre del autor',            'Имя автора',                   'Autorenname',                   'Imię autora'],
+  form_lbl_category:    ['CATEGORY',                     'КАТЕГОРІЯ',                    'CATEGORÍA',                   'КАТЕГОРИЯ',                    'KATEGORIE',                     'KATEGORIA'],
+  form_lbl_pages:       ['TOTAL PAGES',                  'КІЛЬКІСТЬ СТОРІНОК',           'PÁGINAS TOTALES',             'ВСЕГО СТРАНИЦ',                'SEITEN GESAMT',                 'ŁĄCZNA LICZBA STRON'],
+  form_ph_pages:        ['e.g. 464',                     'напр. 464',                    'p.ej. 464',                   'напр. 464',                    'z.B. 464',                      'np. 464'],
+  form_lbl_status:      ['STATUS',                       'СТАТУС',                       'ESTADO',                      'СТАТУС',                       'STATUS',                        'STATUS'],
+  form_opt_reading:     ['CURRENTLY READING',            'ЧИТАЮ ЗАРАЗ',                  'LEYENDO ACTUALMENTE',         'ЧИТАЮ СЕЙЧАС',                 'LESE GERADE',                   'CZYTAM TERAZ'],
+  form_opt_completed:   ['COMPLETED',                    'ПРОЧИТАНО',                    'COMPLETADO',                  'ПРОЧИТАНО',                    'ABGESCHLOSSEN',                 'PRZECZYTANE'],
+  form_opt_queued:      ['IN QUEUE',                     'У ЧЕРЗІ',                      'EN COLA',                     'В ОЧЕРЕДИ',                    'IN DER WARTESCHLANGE',          'W KOLEJCE'],
+  form_lbl_cur_page:    ['CURRENT PAGE',                 'ПОТОЧНА СТОРІНКА',             'PÁGINA ACTUAL',               'ТЕКУЩАЯ СТРАНИЦА',             'AKTUELLE SEITE',                'BIEŻĄCA STRONA'],
+  form_ph_cur_page:     ["Page you're on",               'На якій сторінці',             'Página actual',               'На какой странице',            'Aktuelle Seite',                'Aktualna strona'],
+  form_lbl_started:     ['STARTED',                      'РОЗПОЧАТО',                    'INICIADO',                    'НАЧАТО',                       'BEGONNEN',                      'ROZPOCZĘTO'],
+  form_ph_started:      ['e.g. January 2026',            'напр. Січень 2026',            'p.ej. Enero 2026',            'напр. Январь 2026',            'z.B. Januar 2026',              'np. Styczeń 2026'],
+  form_lbl_completed:   ['COMPLETED DATE',               'ДАТА ЗАВЕРШЕННЯ',              'FECHA DE FINALIZACIÓN',       'ДАТА ЗАВЕРШЕНИЯ',              'ABSCHLUSSDATUM',                'DATA ZAKOŃCZENIA'],
+  form_ph_completed:    ['e.g. December 2025',           'напр. Грудень 2025',           'p.ej. Diciembre 2025',        'напр. Декабрь 2025',           'z.B. Dezember 2025',            'np. Grudzień 2025'],
+  form_lbl_rating:      ['RATING',                       'РЕЙТИНГ',                      'PUNTUACIÓN',                  'РЕЙТИНГ',                      'BEWERTUNG',                     'OCENA'],
+  form_lbl_synopsis:    ['SYNOPSIS',                     'СИНОПСИС',                     'SINOPSIS',                    'СИНОПСИС',                     'INHALTSANGABE',                 'STRESZCZENIE'],
+  form_ph_synopsis:     ['Brief description...',         'Короткий опис...',             'Breve descripción...',        'Краткое описание...',          'Kurze Beschreibung...',         'Krótki opis...'],
+  form_lbl_notes:       ['NOTES (one per line)',         'НОТАТКИ (по одній на рядок)',  'NOTAS (una por línea)',       'ЗАМЕТКИ (по одной в строке)', 'NOTIZEN (je eine pro Zeile)',   'NOTATKI (jedna na linię)'],
+  form_ph_notes:        ['Your thoughts...',             'Ваші думки...',                'Tus pensamientos...',         'Ваши мысли...',                'Deine Gedanken...',             'Twoje myśli...'],
+
+  // Form modal — buttons
+  form_btn_create:      ['CREATE RECORD',                'СТВОРИТИ ЗАПИС',               'CREAR REGISTRO',              'СОЗДАТЬ ЗАПИСЬ',               'EINTRAG ERSTELLEN',             'UTWÓRZ REKORD'],
+  form_btn_update:      ['UPDATE RECORD',                'ОНОВИТИ ЗАПИС',                'ACTUALIZAR REGISTRO',         'ОБНОВИТЬ ЗАПИСЬ',              'EINTRAG AKTUALISIEREN',         'AKTUALIZUJ REKORD'],
+  form_btn_cancel:      ['CANCEL',                       'СКАСУВАТИ',                    'CANCELAR',                    'ОТМЕНА',                       'ABBRECHEN',                     'ANULUJ'],
+
+  // Toast notifications
+  toast_saved:          ['RECORD SAVED',                 'ЗАПИС ЗБЕРЕЖЕНО',              'REGISTRO GUARDADO',           'ЗАПИСЬ СОХРАНЕНА',             'EINTRAG GESPEICHERT',           'REKORD ZAPISANY'],
+  toast_updated:        ['RECORD UPDATED',               'ЗАПИС ОНОВЛЕНО',               'REGISTRO ACTUALIZADO',        'ЗАПИСЬ ОБНОВЛЕНА',             'EINTRAG AKTUALISIERT',          'REKORD ZAKTUALIZOWANY'],
+  toast_deleted:        ['RECORD DELETED',               'ЗАПИС ВИДАЛЕНО',               'REGISTRO ELIMINADO',          'ЗАПИСЬ УДАЛЕНА',               'EINTRAG GELÖSCHT',              'REKORD USUNIĘTY'],
 };
 /* eslint-enable no-multi-spaces */
 
@@ -114,13 +153,6 @@ export function applyI18n() {
   document.querySelectorAll('[data-i18n-ph]').forEach(el => {
     el.placeholder = t(el.dataset.i18nPh);
   });
-
-  const glitch = document.querySelector('.glitch');
-  if (glitch) {
-    const txt = t('title');
-    glitch.textContent = txt;
-    glitch.dataset.text = txt;
-  }
 
   const sortMap = { default: 'sort_default', 'title-az': 'sort_title_az', 'title-za': 'sort_title_za', rating: 'sort_rating', pages: 'sort_pages', added: 'sort_added' };
   document.querySelectorAll('#sort-select option').forEach(opt => {

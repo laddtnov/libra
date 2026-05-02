@@ -2,6 +2,7 @@ import { state, saveBooks, debounce, escHtml } from './state.js';
 import { searchOpenLibrary } from './ui-search.js';
 import { renderBooks } from './ui-render.js';
 import { showToast } from './ui-feedback.js';
+import { t } from './i18n.js';
 
 const CATEGORIES = ['History', 'Fantasy', 'Adventure', 'Historical Fiction', 'Biography', 'Economics', 'Science', 'Philosophy', 'Other'];
 
@@ -88,7 +89,7 @@ function saveBook() {
   saveBooks();
   closeFormModal();
   renderBooks();
-  showToast(isEdit ? 'RECORD UPDATED' : 'RECORD SAVED', 'success');
+  showToast(isEdit ? t('toast_updated') : t('toast_saved'), 'success');
 }
 
 export function closeFormModal() {
@@ -113,72 +114,72 @@ export function openFormModal(bookId = null) {
 
   content.innerHTML = `
     <div class="terminal-form">
-      <div class="terminal-line">&gt; ${isEdit ? 'MODIFY BOOK RECORD' : 'INITIALIZE NEW BOOK RECORD'}</div>
+      <div class="terminal-line">&gt; ${isEdit ? t('form_modify_record') : t('form_new_record')}</div>
       <div class="terminal-line form-divider-line">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
       <br>
 
       ${isEdit ? '' : `
       <div class="book-search-section">
-        <div class="terminal-label">&gt; SEARCH OPEN LIBRARY TO AUTO-FILL</div>
-        <input type="text" id="book-api-search" class="terminal-input" placeholder="Type a book title..." autocomplete="off" spellcheck="false">
+        <div class="terminal-label">&gt; ${t('form_search_label')}</div>
+        <input type="text" id="book-api-search" class="terminal-input" placeholder="${t('form_search_ph')}" autocomplete="off" spellcheck="false">
         <div class="search-status" id="search-status"></div>
         <div id="api-search-results" class="api-search-results"></div>
       </div>
-      <div class="terminal-line form-or-divider">─────────────── OR FILL IN MANUALLY ───────────────</div>
+      <div class="terminal-line form-or-divider">─────────────── ${t('form_or_manual')} ───────────────</div>
       <br>
       `}
 
       <div class="form-field">
-        <label class="terminal-label">&gt; TITLE *</label>
-        <input id="f-title" class="terminal-input" value="${escHtml(book?.title || '')}" placeholder="Book title">
+        <label class="terminal-label">&gt; ${t('form_lbl_title')}</label>
+        <input id="f-title" class="terminal-input" value="${escHtml(book?.title || '')}" placeholder="${t('form_ph_title')}">
       </div>
       <div class="form-field">
-        <label class="terminal-label">&gt; SUBTITLE</label>
-        <input id="f-subtitle" class="terminal-input" value="${escHtml(book?.subtitle || '')}" placeholder="Optional subtitle">
+        <label class="terminal-label">&gt; ${t('form_lbl_subtitle')}</label>
+        <input id="f-subtitle" class="terminal-input" value="${escHtml(book?.subtitle || '')}" placeholder="${t('form_ph_subtitle')}">
       </div>
       <div class="form-field">
-        <label class="terminal-label">&gt; AUTHOR *</label>
-        <input id="f-author" class="terminal-input" value="${escHtml(book?.author || '')}" placeholder="Author name">
+        <label class="terminal-label">&gt; ${t('form_lbl_author')}</label>
+        <input id="f-author" class="terminal-input" value="${escHtml(book?.author || '')}" placeholder="${t('form_ph_author')}">
       </div>
       <div class="form-field">
-        <label class="terminal-label">&gt; CATEGORY</label>
+        <label class="terminal-label">&gt; ${t('form_lbl_category')}</label>
         <select id="f-category" class="terminal-select">
           ${CATEGORIES.map(c => `<option value="${c}"${book?.category === c ? ' selected' : ''}>${c}</option>`).join('')}
         </select>
       </div>
       <div class="form-field">
-        <label class="terminal-label">&gt; TOTAL PAGES</label>
-        <input id="f-pages" class="terminal-input" type="number" min="1" value="${book?.pages || ''}" placeholder="e.g. 464">
+        <label class="terminal-label">&gt; ${t('form_lbl_pages')}</label>
+        <input id="f-pages" class="terminal-input" type="number" min="1" value="${book?.pages || ''}" placeholder="${t('form_ph_pages')}">
       </div>
       <div class="form-field">
-        <label class="terminal-label">&gt; STATUS</label>
+        <label class="terminal-label">&gt; ${t('form_lbl_status')}</label>
         <select id="f-status" class="terminal-select">
-          <option value="reading"${book?.status === 'reading' ? ' selected' : ''}>CURRENTLY READING</option>
-          <option value="completed"${book?.status === 'completed' ? ' selected' : ''}>COMPLETED</option>
-          <option value="to-read"${(!book || book?.status === 'to-read') ? ' selected' : ''}>IN QUEUE</option>
+          <option value="reading"${book?.status === 'reading' ? ' selected' : ''}>${t('form_opt_reading')}</option>
+          <option value="completed"${book?.status === 'completed' ? ' selected' : ''}>${t('form_opt_completed')}</option>
+          <option value="to-read"${(!book || book?.status === 'to-read') ? ' selected' : ''}>${t('form_opt_queued')}</option>
         </select>
       </div>
 
       <div id="reading-fields" style="display:${book?.status === 'reading' ? 'block' : 'none'}">
         <div class="form-field">
-          <label class="terminal-label">&gt; CURRENT PAGE</label>
-          <input id="f-current-page" class="terminal-input" type="number" min="0" value="${book?.currentPage || ''}" placeholder="Page you're on">
+          <label class="terminal-label">&gt; ${t('form_lbl_cur_page')}</label>
+          <input id="f-current-page" class="terminal-input" type="number" min="0" value="${book?.currentPage || ''}" placeholder="${t('form_ph_cur_page')}">
         </div>
         <div class="form-field">
-          <label class="terminal-label">&gt; STARTED</label>
-          <input id="f-started" class="terminal-input" value="${escHtml(book?.started || '')}" placeholder="e.g. January 2026">
+          <label class="terminal-label">&gt; ${t('form_lbl_started')}</label>
+          <input id="f-started" class="terminal-input" value="${escHtml(book?.started || '')}" placeholder="${t('form_ph_started')}">
         </div>
       </div>
 
       <div id="completed-fields" style="display:${book?.status === 'completed' ? 'block' : 'none'}">
         <div class="form-field">
-          <label class="terminal-label">&gt; COMPLETED DATE</label>
-          <input id="f-completed" class="terminal-input" value="${escHtml(book?.completed || '')}" placeholder="e.g. December 2025">
+          <label class="terminal-label">&gt; ${t('form_lbl_completed')}</label>
+          <input id="f-completed" class="terminal-input" value="${escHtml(book?.completed || '')}" placeholder="${t('form_ph_completed')}">
         </div>
       </div>
 
       <div class="form-field">
-        <label class="terminal-label">&gt; RATING</label>
+        <label class="terminal-label">&gt; ${t('form_lbl_rating')}</label>
         <div class="star-picker" id="star-picker">
           ${Array.from({ length: 5 }, (_, i) =>
             `<span class="star-pick${i < rv ? ' filled' : ''}" data-val="${i + 1}">★</span>`
@@ -188,17 +189,17 @@ export function openFormModal(bookId = null) {
       </div>
 
       <div class="form-field">
-        <label class="terminal-label">&gt; SYNOPSIS</label>
-        <textarea id="f-synopsis" class="terminal-textarea" placeholder="Brief description...">${escHtml(book?.synopsis || '')}</textarea>
+        <label class="terminal-label">&gt; ${t('form_lbl_synopsis')}</label>
+        <textarea id="f-synopsis" class="terminal-textarea" placeholder="${t('form_ph_synopsis')}">${escHtml(book?.synopsis || '')}</textarea>
       </div>
       <div class="form-field">
-        <label class="terminal-label">&gt; NOTES (one per line)</label>
-        <textarea id="f-notes" class="terminal-textarea" placeholder="Your thoughts...">${escHtml((book?.notes || []).join('\n'))}</textarea>
+        <label class="terminal-label">&gt; ${t('form_lbl_notes')}</label>
+        <textarea id="f-notes" class="terminal-textarea" placeholder="${t('form_ph_notes')}">${escHtml((book?.notes || []).join('\n'))}</textarea>
       </div>
 
       <div class="form-actions">
-        <button class="terminal-action-btn save-btn" id="save-book-btn">[ ${isEdit ? 'UPDATE RECORD' : 'CREATE RECORD'} ]</button>
-        <button class="terminal-action-btn cancel-btn" id="cancel-form-btn">[ CANCEL ]</button>
+        <button class="terminal-action-btn save-btn" id="save-book-btn">[ ${isEdit ? t('form_btn_update') : t('form_btn_create')} ]</button>
+        <button class="terminal-action-btn cancel-btn" id="cancel-form-btn">[ ${t('form_btn_cancel')} ]</button>
       </div>
     </div>`;
 
