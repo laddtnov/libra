@@ -31,7 +31,14 @@
       <!-- Stats Dashboard -->
       <div class="stats-grid">
         <div class="stat-card" data-filter="completed">
-          <div class="stat-icon">✅</div>
+          <div class="stat-icon">
+            <!-- Hexagon checkmark -->
+            <svg class="stat-svg" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <polygon points="18,2 33,10 33,26 18,34 3,26 3,10" stroke="currentColor" stroke-width="1.5" opacity="0.35"/>
+              <polygon points="18,7 28,13 28,23 18,29 8,23 8,13" stroke="currentColor" stroke-width="1.5"/>
+              <polyline points="12,18 16,22 24,13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
           <div class="stat-content">
             <span class="stat-number" id="stat-completed">0</span>
             <span class="stat-label">Completed</span>
@@ -40,7 +47,16 @@
         </div>
 
         <div class="stat-card" data-filter="reading">
-          <div class="stat-icon">📖</div>
+          <div class="stat-icon">
+            <!-- Eye aperture -->
+            <svg class="stat-svg" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 18 C9 9 27 9 33 18 C27 27 9 27 3 18Z" stroke="currentColor" stroke-width="1.5"/>
+              <circle cx="18" cy="18" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+              <circle cx="18" cy="18" r="2.2" fill="currentColor"/>
+              <line x1="3" y1="18" x2="8" y2="18" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+              <line x1="28" y1="18" x2="33" y2="18" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+            </svg>
+          </div>
           <div class="stat-content">
             <span class="stat-number" id="stat-reading">0</span>
             <span class="stat-label">Reading</span>
@@ -49,7 +65,14 @@
         </div>
 
         <div class="stat-card" data-filter="to-read">
-          <div class="stat-icon">📌</div>
+          <div class="stat-icon">
+            <!-- Queue stack -->
+            <svg class="stat-svg" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="4" y="5" width="28" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+              <rect x="4" y="15" width="22" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5" opacity="0.7"/>
+              <rect x="4" y="25" width="14" height="6" rx="1.5" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+            </svg>
+          </div>
           <div class="stat-content">
             <span class="stat-number" id="stat-queued">0</span>
             <span class="stat-label">Queued</span>
@@ -58,7 +81,19 @@
         </div>
 
         <div class="stat-card" data-filter="all">
-          <div class="stat-icon">📊</div>
+          <div class="stat-icon">
+            <!-- Circuit grid -->
+            <svg class="stat-svg" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="3" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+              <rect x="21" y="3" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+              <rect x="3" y="21" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+              <rect x="21" y="21" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="15" y1="9" x2="21" y2="9" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="15" y1="27" x2="21" y2="27" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="9" y1="15" x2="9" y2="21" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="27" y1="15" x2="27" y2="21" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </div>
           <div class="stat-content">
             <span class="stat-number" id="stat-total">0</span>
             <span class="stat-label">Total</span>

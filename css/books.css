@@ -21,9 +21,7 @@
 }
 
 .stat-card:hover {
-  border-color: var(--neon-cyan);
   transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0, 242, 255, 0.3);
 }
 
 .stat-glow {
@@ -58,8 +56,69 @@
 }
 
 .stat-icon {
-  font-size: 2.5rem;
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
+@keyframes stat-icon-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.65; }
+}
+
+.stat-svg {
+  width: 48px;
+  height: 48px;
+  transition: filter 0.3s ease, transform 0.3s ease;
+  animation: stat-icon-pulse 3s ease-in-out infinite;
+}
+
+/* Per-card icon color */
+[data-filter="completed"] .stat-svg { color: var(--neon-green); }
+[data-filter="reading"]   .stat-svg { color: var(--neon-orange); }
+[data-filter="to-read"]   .stat-svg { color: var(--neon-purple); }
+[data-filter="all"]       .stat-svg { color: var(--neon-cyan); }
+
+/* Per-card number color */
+[data-filter="completed"] .stat-number { color: var(--neon-green); }
+[data-filter="reading"]   .stat-number { color: var(--neon-orange); }
+[data-filter="to-read"]   .stat-number { color: var(--neon-purple); }
+[data-filter="all"]       .stat-number { color: var(--neon-cyan); }
+
+/* Per-card idle border tint */
+[data-filter="completed"] { border-color: rgba(16, 185, 129, 0.25); }
+[data-filter="reading"]   { border-color: rgba(245, 158, 11, 0.25); }
+[data-filter="to-read"]   { border-color: rgba(157, 0, 255, 0.25); }
+
+/* Hover: icon glow + card border */
+[data-filter="completed"]:hover .stat-svg {
+  filter: drop-shadow(0 0 6px var(--neon-green)) drop-shadow(0 0 14px var(--neon-green));
+  transform: scale(1.1);
+  animation: none;
+}
+[data-filter="reading"]:hover .stat-svg {
+  filter: drop-shadow(0 0 6px var(--neon-orange)) drop-shadow(0 0 14px var(--neon-orange));
+  transform: scale(1.1);
+  animation: none;
+}
+[data-filter="to-read"]:hover .stat-svg {
+  filter: drop-shadow(0 0 6px var(--neon-purple)) drop-shadow(0 0 14px var(--neon-purple));
+  transform: scale(1.1);
+  animation: none;
+}
+[data-filter="all"]:hover .stat-svg {
+  filter: drop-shadow(0 0 6px var(--neon-cyan)) drop-shadow(0 0 14px var(--neon-cyan));
+  transform: scale(1.1);
+  animation: none;
+}
+
+[data-filter="completed"]:hover { border-color: var(--neon-green);  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.25); }
+[data-filter="reading"]:hover   { border-color: var(--neon-orange); box-shadow: 0 10px 30px rgba(245, 158, 11, 0.25); }
+[data-filter="to-read"]:hover   { border-color: var(--neon-purple); box-shadow: 0 10px 30px rgba(157, 0, 255, 0.25); }
+[data-filter="all"]:hover       { border-color: var(--neon-cyan);   box-shadow: 0 10px 30px rgba(0, 242, 255, 0.25); }
 
 .stat-content {
   display: flex;
@@ -69,7 +128,6 @@
 .stat-number {
   font-size: 2.5rem;
   font-weight: 700;
-  color: var(--neon-cyan);
   line-height: 1;
 }
 
