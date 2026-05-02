@@ -5,6 +5,7 @@ import { renderBooks, setFilter, configureRenderHandlers, updateStats } from './
 import { openListsPanel, closeListsPanel, initListsPanel } from './ui-lists.js';
 import { openRecsPanel, closeRecsPanel, initRecsPanel } from './ui-recommendations.js';
 import { fetchDiscover, clearDiscover, debouncedFetch, closePreviewModal } from './ui-discover.js';
+import { exportBooks, importBooks } from './ui-backup.js';
 import { initI18n, setLanguage, getLang, applyI18n } from './i18n.js';
 
 configureRenderHandlers({ openDetails: showBookDetails });
@@ -64,6 +65,12 @@ function initApp() {
       closeListsPanel();
       closeRecsPanel();
     }
+  });
+
+  document.getElementById('export-btn').addEventListener('click', exportBooks);
+  document.getElementById('import-input').addEventListener('change', e => {
+    importBooks(e.target.files[0]);
+    e.target.value = '';
   });
 
   document.getElementById('lists-btn').addEventListener('click', openListsPanel);

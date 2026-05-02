@@ -124,6 +124,14 @@ const T = {
   preview_no_synopsis:['No synopsis available.','Опис відсутній.',      'Sin sinopsis disponible.','Описание отсутствует.', 'Keine Inhaltsangabe.',      'Brak streszczenia.'],
   preview_add_btn:    ['+ ADD TO ARCHIVE',     '+ ДОДАТИ ДО АРХІВУ',   '+ AÑADIR AL ARCHIVO',   '+ ДОБАВИТЬ В АРХИВ',    '+ ZUM ARCHIV HINZUFÜGEN',  '+ DODAJ DO ARCHIWUM'],
 
+  // Backup buttons
+  btn_export:         ['↓ EXPORT',            '↓ ЕКСПОРТ',            '↓ EXPORTAR',           '↓ ЭКСПОРТ',            '↓ EXPORTIEREN',             '↓ EKSPORT'],
+  btn_import:         ['↑ IMPORT',            '↑ ІМПОРТ',             '↑ IMPORTAR',           '↑ ИМПОРТ',             '↑ IMPORTIEREN',             '↑ IMPORT'],
+  export_success:     ['ARCHIVE EXPORTED',    'АРХІВ ЕКСПОРТОВАНО',   'ARCHIVO EXPORTADO',    'АРХИВ ЭКСПОРТИРОВАН',  'ARCHIV EXPORTIERT',         'ARCHIWUM WYEKSPORTOWANE'],
+  import_success:     ['{n} RECORDS IMPORTED','{n} ЗАПИСІВ ІМПОРТОВАНО','{n} REGISTROS IMPORTADOS','{n} ЗАПИСЕЙ ИМПОРТИРОВАНО','{n} EINTRÄGE IMPORTIERT','{n} REKORDÓW ZAIMPORTOWANYCH'],
+  import_invalid:     ['INVALID FILE FORMAT', 'НЕВІРНИЙ ФОРМАТ ФАЙЛУ','FORMATO INVÁLIDO',     'НЕВЕРНЫЙ ФОРМАТ ФАЙЛА','UNGÜLTIGES DATEIFORMAT',    'NIEPRAWIDŁOWY FORMAT'],
+  import_error:       ['IMPORT FAILED',       'ПОМИЛКА ІМПОРТУ',      'ERROR DE IMPORTACIÓN', 'ОШИБКА ИМПОРТА',       'IMPORT FEHLGESCHLAGEN',     'BŁĄD IMPORTU'],
+
   // Toast notifications
   toast_saved:          ['RECORD SAVED',                 'ЗАПИС ЗБЕРЕЖЕНО',              'REGISTRO GUARDADO',           'ЗАПИСЬ СОХРАНЕНА',             'EINTRAG GESPEICHERT',           'REKORD ZAPISANY'],
   toast_updated:        ['RECORD UPDATED',               'ЗАПИС ОНОВЛЕНО',               'REGISTRO ACTUALIZADO',        'ЗАПИСЬ ОБНОВЛЕНА',             'EINTRAG AKTUALISIERT',          'REKORD ZAKTUALIZOWANY'],

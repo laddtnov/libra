@@ -1,0 +1,38 @@
+/* ====================================
+   BACKUP — EXPORT / IMPORT BUTTONS
+   ==================================== */
+
+.backup-btns {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.backup-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 14px;
+  background: transparent;
+  border: 1px solid rgba(0, 242, 255, 0.3);
+  border-radius: 6px;
+  color: rgba(0, 242, 255, 0.6);
+  font-family: 'Orbitron', monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.backup-btn:hover {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  background: rgba(0, 242, 255, 0.07);
+  box-shadow: 0 0 12px rgba(0, 242, 255, 0.18);
+}
+
+.import-btn {
+  cursor: pointer;
+}
