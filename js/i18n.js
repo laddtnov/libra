@@ -25,7 +25,7 @@ const T = {
   sort_added:     ['DATE ADDED', 'ДАТА ДОДАВАННЯ','FECHA AÑADIDO','ДАТА ДОБАВЛЕНИЯ','DATUM HINZUGEFÜGT','DATA DODANIA'],
 
   // Toolbar buttons
-  btn_lists:      ['📋 LISTS',   '📋 СПИСКИ',  '📋 LISTAS',   '📋 СПИСКИ',  '📋 LISTEN',        '📋 LISTY'],
+  btn_lists:      ['LISTS',      'СПИСКИ',     'LISTAS',      'СПИСКИ',     'LISTEN',           'LISTY'],
   btn_recommend:  ['⚡ RECOMMEND','⚡ РЕКОМЕНДАЦІЇ','⚡ RECOMENDAR','⚡ РЕКОМЕНДАЦИИ','⚡ EMPFEHLEN','⚡ POLECAJ'],
   btn_add_book:   ['> ADD BOOK', '> ДОДАТИ КНИГУ','> AÑADIR LIBRO','> ДОБАВИТЬ КНИГУ','> BUCH HINZUFÜGEN','> DODAJ KSIĄŻKĘ'],
 
