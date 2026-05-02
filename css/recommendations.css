@@ -1,0 +1,235 @@
+/* ====================================
+   RECOMMENDATIONS PANEL MODAL
+   ==================================== */
+
+#recommendations-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.recs-container {
+  pointer-events: all;
+  position: relative;
+  background: linear-gradient(135deg, #0d0d1a 0%, #0a0a14 100%);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  border-radius: 12px;
+  box-shadow:
+    0 0 40px rgba(245, 158, 11, 0.15),
+    0 0 80px rgba(245, 158, 11, 0.06),
+    inset 0 1px 0 rgba(245, 158, 11, 0.12);
+  width: min(560px, 94vw);
+  max-height: 82vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.recs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.recs-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--neon-orange);
+  text-shadow: 0 0 12px rgba(245, 158, 11, 0.55);
+  letter-spacing: 2px;
+}
+
+/* ====================================
+   RECS CONTENT SECTIONS
+   ==================================== */
+
+#recs-content {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.recs-stats-line {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+  padding: 10px 14px;
+  background: rgba(245, 158, 11, 0.05);
+  border-left: 2px solid rgba(245, 158, 11, 0.4);
+  border-radius: 0 4px 4px 0;
+}
+
+.recs-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.recs-section-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--neon-orange);
+  letter-spacing: 2px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+/* ====================================
+   GENRE BARS
+   ==================================== */
+
+.genre-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.genre-bar-row {
+  display: grid;
+  grid-template-columns: 160px 1fr 32px;
+  align-items: center;
+  gap: 10px;
+}
+
+.genre-bar-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.genre-bar {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.65rem;
+  color: var(--neon-orange);
+  letter-spacing: 1px;
+  text-shadow: 0 0 6px rgba(245, 158, 11, 0.4);
+}
+
+.genre-bar-count {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.6rem;
+  color: var(--neon-orange);
+  text-align: right;
+  opacity: 0.8;
+}
+
+/* ====================================
+   RECOMMENDATION CARDS
+   ==================================== */
+
+.rec-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rec-card {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 14px;
+  background: rgba(245, 158, 11, 0.04);
+  border: 1px solid rgba(245, 158, 11, 0.15);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.rec-card:hover {
+  border-color: rgba(245, 158, 11, 0.35);
+  background: rgba(245, 158, 11, 0.08);
+}
+
+.rec-cover {
+  width: 40px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 3px;
+  flex-shrink: 0;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.rec-cover-placeholder {
+  width: 40px;
+  height: 56px;
+  flex-shrink: 0;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Orbitron', monospace;
+  font-size: 1.1rem;
+  color: var(--neon-orange);
+}
+
+.rec-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.rec-card-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rec-card-author {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.rec-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.rec-tag {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.55rem;
+  color: var(--neon-orange);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 4px;
+  padding: 2px 7px;
+  letter-spacing: 0.5px;
+}
+
+.rec-reason {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.58rem;
+  color: var(--neon-green);
+  letter-spacing: 0.5px;
+}
+
+.recs-no-data {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+  padding: 12px 0;
+}

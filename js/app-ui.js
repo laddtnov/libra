@@ -2,6 +2,8 @@ import { state } from './state.js';
 import { openFormModal, closeFormModal } from './ui-form-modal.js';
 import { showBookDetails, closeModal, configureDetailHandlers } from './ui-detail-modal.js';
 import { renderBooks, setFilter, configureRenderHandlers, updateStats } from './ui-render.js';
+import { openListsPanel, closeListsPanel, initListsPanel } from './ui-lists.js';
+import { openRecsPanel, closeRecsPanel, initRecsPanel } from './ui-recommendations.js';
 
 configureRenderHandlers({ openDetails: showBookDetails });
 configureDetailHandlers({ openFormModal });
@@ -36,13 +38,22 @@ function initApp() {
   document.getElementById('modal-overlay').addEventListener('click', () => {
     closeModal();
     closeFormModal();
+    closeListsPanel();
+    closeRecsPanel();
   });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       closeModal();
       closeFormModal();
+      closeListsPanel();
+      closeRecsPanel();
     }
   });
+
+  document.getElementById('lists-btn').addEventListener('click', openListsPanel);
+  document.getElementById('recommend-btn').addEventListener('click', openRecsPanel);
+  initListsPanel();
+  initRecsPanel();
 }
 
 document.addEventListener('DOMContentLoaded', initApp);

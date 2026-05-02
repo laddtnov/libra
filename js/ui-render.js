@@ -124,14 +124,17 @@ function buildCardHTML(book) {
 }
 
 function getFilteredEntries() {
-  const filtered = Object.entries(state.booksData).filter(([, book]) => {
+  const activeListIds = state.activeList ? state.lists[state.activeList]?.bookIds : null;
+
+  const filtered = Object.entries(state.booksData).filter(([id, book]) => {
     const matchFilter = state.activeFilter === 'all' || book.status === state.activeFilter;
+    const matchList = !activeListIds || activeListIds.includes(id);
     const q = state.searchQuery.toLowerCase();
     const matchSearch = !q
       || book.title.toLowerCase().includes(q)
       || book.author.toLowerCase().includes(q)
       || (book.category || '').toLowerCase().includes(q);
-    return matchFilter && matchSearch;
+    return matchFilter && matchList && matchSearch;
   });
 
   if (state.activeSort === 'title-az') filtered.sort((a, b) => a[1].title.localeCompare(b[1].title));

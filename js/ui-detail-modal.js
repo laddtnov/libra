@@ -1,6 +1,7 @@
 import { state, saveBooks, clamp, toPositiveInt, toNonNegativeInt, escHtml } from './state.js';
 import { playClickSound, toggleSound, showToast } from './ui-feedback.js';
 import { renderStarsHTML, renderBooks } from './ui-render.js';
+import { toggleBookInList, removeBookFromAllLists, renderListsPanel } from './ui-lists.js';
 
 let onOpenFormModal = () => {};
 
@@ -27,6 +28,7 @@ function confirmDelete(bookId) {
 
   document.getElementById('confirm-yes').addEventListener('click', () => {
     const title = state.booksData[bookId]?.title || 'RECORD';
+    removeBookFromAllLists(bookId);
     delete state.booksData[bookId];
     saveBooks();
     closeModal();
@@ -136,6 +138,11 @@ export function showBookDetails(bookId) {
         <div class="detail-section-body">${notesHTML}</div>
       </div>
 
+      <div class="detail-section">
+        <div class="detail-section-title">&gt;&gt; READING LISTS</div>
+        <div class="detail-lists-body" id="detail-lists-body"></div>
+      </div>
+
       <div class="modal-actions" id="detail-actions">
         <button class="terminal-action-btn edit-btn" id="detail-edit">[ EDIT ]</button>
         <button class="terminal-action-btn delete-btn" id="detail-delete">[ DELETE ]</button>
@@ -149,5 +156,34 @@ export function showBookDetails(bookId) {
 
   document.getElementById('detail-delete').addEventListener('click', () => {
     confirmDelete(bookId);
+  });
+
+  renderDetailListsSection(bookId);
+}
+
+function renderDetailListsSection(bookId) {
+  const body = document.getElementById('detail-lists-body');
+  if (!body) return;
+
+  const lists = Object.values(state.lists);
+  if (!lists.length) {
+    body.innerHTML = `<span class="detail-lists-empty">&gt; No lists yet — open LISTS to create one.</span>`;
+    return;
+  }
+
+  body.innerHTML = lists.map(list => {
+    const inList = list.bookIds.includes(bookId);
+    return `
+      <button class="detail-list-toggle${inList ? ' in-list' : ''}" data-list-id="${escHtml(list.id)}">
+        ${inList ? '✓' : '+'} ${escHtml(list.name)}
+      </button>`;
+  }).join('');
+
+  body.querySelectorAll('.detail-list-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+      toggleBookInList(btn.dataset.listId, bookId);
+      renderListsPanel();
+      renderDetailListsSection(bookId);
+    });
   });
 }

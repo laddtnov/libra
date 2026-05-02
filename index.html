@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cyberpunk Book Tracker</title>
+  <meta name="description" content="A personal reading tracker with a full cyberpunk neon UI — glitch title, status-colored book spines, Open Library auto-fill, and a Fallout-style detail terminal.">
+  <meta property="og:title" content="Cyberpunk Book Tracker">
+  <meta property="og:description" content="A personal reading tracker with a full cyberpunk neon UI — glitch title, status-colored book spines, Open Library auto-fill, and a Fallout-style detail terminal.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://book-archive.laddtnov.xyz/">
+  <meta property="og:image" content="https://book-archive.laddtnov.xyz/Screenshot-book-desktop.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Cyberpunk Book Tracker">
+  <meta name="twitter:description" content="A personal reading tracker with a full cyberpunk neon UI">
+  <meta name="twitter:image" content="https://book-archive.laddtnov.xyz/Screenshot-book-desktop.png">
   <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
@@ -80,7 +90,10 @@
           <option value="added">DATE ADDED</option>
         </select>
       </div>
+      <button class="lists-btn" id="lists-btn">📋 LISTS</button>
+      <button class="recs-btn" id="recommend-btn">⚡ RECOMMEND</button>
       <button class="add-book-btn" id="add-book-btn">&gt; ADD BOOK</button>
+      <div id="active-list-indicator" class="active-list-indicator" style="display:none"></div>
     </div>
 
     <!-- Books Grid (JS-rendered) -->
@@ -108,6 +121,34 @@
       <div class="scanlines"></div>
       <button id="close-form-modal" class="close-btn">✕</button>
       <div id="form-modal-content"></div>
+    </div>
+  </div>
+
+  <!-- Lists Panel -->
+  <div id="lists-panel" style="display:none">
+    <div class="lists-panel-container">
+      <div class="scanlines"></div>
+      <div class="lists-panel-header">
+        <span class="lists-panel-title">&gt;_ READING LISTS</span>
+        <button id="close-lists-panel" class="close-btn">✕</button>
+      </div>
+      <div class="lists-create-row">
+        <input type="text" id="new-list-input" class="new-list-input" placeholder="LIST NAME..." maxlength="60" spellcheck="false" autocomplete="off">
+        <button id="create-list-btn" class="create-list-submit">&gt; CREATE</button>
+      </div>
+      <div id="lists-container"></div>
+    </div>
+  </div>
+
+  <!-- Recommendations Panel -->
+  <div id="recommendations-panel" style="display:none">
+    <div class="recs-container">
+      <div class="scanlines"></div>
+      <div class="recs-header">
+        <span class="recs-title">&gt;_ GENRE ANALYSIS</span>
+        <button id="close-recs-panel" class="close-btn">✕</button>
+      </div>
+      <div id="recs-content"></div>
     </div>
   </div>
 

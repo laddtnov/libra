@@ -1,0 +1,337 @@
+/* ====================================
+   LISTS & RECOMMEND TOOLBAR BUTTONS
+   ==================================== */
+
+.lists-btn,
+.recs-btn {
+  background: transparent;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 11px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.lists-btn {
+  border: 2px solid var(--neon-purple);
+  color: var(--neon-purple);
+}
+
+.lists-btn:hover {
+  background: rgba(157, 0, 255, 0.12);
+  box-shadow: 0 0 18px rgba(157, 0, 255, 0.35);
+  transform: translateY(-2px);
+}
+
+.recs-btn {
+  border: 2px solid var(--neon-orange);
+  color: var(--neon-orange);
+}
+
+.recs-btn:hover {
+  background: rgba(245, 158, 11, 0.12);
+  box-shadow: 0 0 18px rgba(245, 158, 11, 0.35);
+  transform: translateY(-2px);
+}
+
+/* ====================================
+   ACTIVE LIST INDICATOR
+   ==================================== */
+
+.active-list-indicator {
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: rgba(157, 0, 255, 0.08);
+  border: 1px solid rgba(157, 0, 255, 0.35);
+  border-radius: 8px;
+  order: 99;
+}
+
+.active-list-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.7rem;
+  color: var(--neon-purple);
+  letter-spacing: 1px;
+}
+
+.clear-list-btn {
+  background: transparent;
+  border: 1px solid rgba(157, 0, 255, 0.4);
+  color: var(--neon-purple);
+  font-family: 'Orbitron', monospace;
+  font-size: 0.6rem;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clear-list-btn:hover {
+  background: rgba(157, 0, 255, 0.15);
+  border-color: var(--neon-purple);
+}
+
+/* ====================================
+   LISTS PANEL MODAL
+   ==================================== */
+
+#lists-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.lists-panel-container {
+  pointer-events: all;
+  position: relative;
+  background: linear-gradient(135deg, #0d0d1a 0%, #0a0a14 100%);
+  border: 1px solid rgba(157, 0, 255, 0.5);
+  border-radius: 12px;
+  box-shadow:
+    0 0 40px rgba(157, 0, 255, 0.2),
+    0 0 80px rgba(157, 0, 255, 0.08),
+    inset 0 1px 0 rgba(157, 0, 255, 0.15);
+  width: min(500px, 92vw);
+  max-height: 80vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.lists-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lists-panel-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--neon-purple);
+  text-shadow: 0 0 12px rgba(157, 0, 255, 0.6);
+  letter-spacing: 2px;
+}
+
+/* ====================================
+   CREATE ROW
+   ==================================== */
+
+.lists-create-row {
+  display: flex;
+  gap: 10px;
+}
+
+.new-list-input {
+  flex: 1;
+  background: rgba(157, 0, 255, 0.05);
+  border: 1px solid rgba(157, 0, 255, 0.3);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 10px 14px;
+  outline: none;
+  transition: all 0.2s ease;
+  letter-spacing: 0.5px;
+}
+
+.new-list-input::placeholder {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
+.new-list-input:focus {
+  border-color: var(--neon-purple);
+  box-shadow: 0 0 10px rgba(157, 0, 255, 0.2);
+}
+
+.create-list-submit {
+  background: transparent;
+  border: 1px solid var(--neon-purple);
+  color: var(--neon-purple);
+  font-family: 'Orbitron', monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  letter-spacing: 1px;
+}
+
+.create-list-submit:hover {
+  background: rgba(157, 0, 255, 0.15);
+  box-shadow: 0 0 12px rgba(157, 0, 255, 0.3);
+}
+
+/* ====================================
+   LIST ITEMS
+   ==================================== */
+
+#lists-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(157, 0, 255, 0.04);
+  border: 1px solid rgba(157, 0, 255, 0.18);
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.list-item:hover {
+  border-color: rgba(157, 0, 255, 0.4);
+  background: rgba(157, 0, 255, 0.08);
+}
+
+.list-item--active {
+  border-color: rgba(157, 0, 255, 0.6);
+  background: rgba(157, 0, 255, 0.12);
+  box-shadow: 0 0 14px rgba(157, 0, 255, 0.15);
+}
+
+.list-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.list-item-name {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.list-item-count {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.6rem;
+  color: rgba(157, 0, 255, 0.7);
+  letter-spacing: 1px;
+}
+
+.list-item-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.list-view-btn,
+.list-del-btn {
+  background: transparent;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.list-view-btn {
+  border: 1px solid rgba(157, 0, 255, 0.4);
+  color: var(--neon-purple);
+}
+
+.list-view-btn:hover,
+.list-view-btn.active {
+  background: rgba(157, 0, 255, 0.15);
+  border-color: var(--neon-purple);
+  box-shadow: 0 0 8px rgba(157, 0, 255, 0.25);
+}
+
+.list-del-btn {
+  border: 1px solid rgba(255, 0, 255, 0.3);
+  color: var(--neon-pink);
+}
+
+.list-del-btn:hover {
+  background: rgba(255, 0, 255, 0.1);
+  border-color: var(--neon-pink);
+}
+
+.lists-empty {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+  padding: 20px 0;
+  text-align: center;
+}
+
+/* ====================================
+   DETAIL MODAL — READING LISTS SECTION
+   ==================================== */
+
+.detail-lists-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.detail-list-toggle {
+  background: rgba(157, 0, 255, 0.06);
+  border: 1px solid rgba(157, 0, 255, 0.3);
+  color: var(--text-secondary);
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.5px;
+}
+
+.detail-list-toggle:hover {
+  border-color: var(--neon-purple);
+  color: var(--neon-purple);
+  background: rgba(157, 0, 255, 0.12);
+}
+
+.detail-list-toggle.in-list {
+  background: rgba(157, 0, 255, 0.18);
+  border-color: var(--neon-purple);
+  color: var(--neon-purple);
+  box-shadow: 0 0 8px rgba(157, 0, 255, 0.2);
+}
+
+.detail-lists-empty {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+}

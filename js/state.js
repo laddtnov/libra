@@ -143,9 +143,40 @@ function loadBooks() {
   return structuredClone(DEFAULT_BOOKS);
 }
 
+function normalizeListRecord(raw) {
+  if (!raw || typeof raw !== 'object') return null;
+  const name = cleanText(String(raw.name || ''), 60).trim();
+  if (!name) return null;
+  const bookIds = Array.isArray(raw.bookIds)
+    ? raw.bookIds.filter(id => typeof id === 'string' && id.length > 0).slice(0, 500)
+    : [];
+  return { name, bookIds };
+}
+
+function loadLists() {
+  const stored = localStorage.getItem('cyberpunk-lists');
+  if (!stored) return {};
+  try {
+    const parsed = JSON.parse(stored);
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return {};
+    const normalized = {};
+    for (const [id, raw] of Object.entries(parsed)) {
+      const safeId = sanitizeBookId(id);
+      if (!safeId) continue;
+      const list = normalizeListRecord(raw);
+      if (list) normalized[safeId] = { id: safeId, ...list };
+    }
+    return normalized;
+  } catch {
+    return {};
+  }
+}
+
 export const state = {
   booksData: loadBooks(),
+  lists: loadLists(),
   activeFilter: 'all',
+  activeList: null,
   activeSort: 'default',
   searchQuery: '',
   editingBookId: null,
@@ -155,4 +186,8 @@ export const state = {
 
 export function saveBooks() {
   localStorage.setItem('cyberpunk-books', JSON.stringify(state.booksData));
+}
+
+export function saveLists() {
+  localStorage.setItem('cyberpunk-lists', JSON.stringify(state.lists));
 }
