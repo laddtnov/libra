@@ -25,7 +25,15 @@
     <header class="header">
       <div class="title-section">
         <h1 class="glitch" data-text="BOOK.ARCHIVE">BOOK.ARCHIVE</h1>
-        <p class="tagline">&gt;_ Digital library v2.0</p>
+        <p class="tagline" data-i18n="tagline">&gt;_ Digital library v2.0</p>
+        <div class="lang-switcher">
+          <button class="lang-btn active" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="uk">UA</button>
+          <button class="lang-btn" data-lang="es">ES</button>
+          <button class="lang-btn" data-lang="ru">RU</button>
+          <button class="lang-btn" data-lang="de">DE</button>
+          <button class="lang-btn" data-lang="pl">PL</button>
+        </div>
       </div>
 
       <!-- Stats Dashboard -->
@@ -41,7 +49,7 @@
           </div>
           <div class="stat-content">
             <span class="stat-number" id="stat-completed">0</span>
-            <span class="stat-label">Completed</span>
+            <span class="stat-label" data-i18n="stat_completed">Completed</span>
           </div>
           <div class="stat-glow read"></div>
         </div>
@@ -59,7 +67,7 @@
           </div>
           <div class="stat-content">
             <span class="stat-number" id="stat-reading">0</span>
-            <span class="stat-label">Reading</span>
+            <span class="stat-label" data-i18n="stat_reading">Reading</span>
           </div>
           <div class="stat-glow progress"></div>
         </div>
@@ -75,7 +83,7 @@
           </div>
           <div class="stat-content">
             <span class="stat-number" id="stat-queued">0</span>
-            <span class="stat-label">Queued</span>
+            <span class="stat-label" data-i18n="stat_queued">Queued</span>
           </div>
           <div class="stat-glow toread"></div>
         </div>
@@ -96,7 +104,7 @@
           </div>
           <div class="stat-content">
             <span class="stat-number" id="stat-total">0</span>
-            <span class="stat-label">Total</span>
+            <span class="stat-label" data-i18n="stat_total">Total</span>
           </div>
           <div class="stat-glow total"></div>
         </div>
@@ -110,26 +118,29 @@
         <input type="text" id="search-input" class="search-input" placeholder="SEARCH ARCHIVE..." autocomplete="off" spellcheck="false">
       </div>
       <div class="filter-buttons">
-        <button class="filter-btn active" data-filter="all">ALL</button>
-        <button class="filter-btn" data-filter="reading">READING</button>
-        <button class="filter-btn" data-filter="completed">DONE</button>
-        <button class="filter-btn" data-filter="to-read">QUEUED</button>
+        <button class="filter-btn active" data-filter="all" data-i18n="filter_all">ALL</button>
+        <button class="filter-btn" data-filter="reading" data-i18n="filter_reading">READING</button>
+        <button class="filter-btn" data-filter="completed" data-i18n="filter_done">DONE</button>
+        <button class="filter-btn" data-filter="to-read" data-i18n="filter_queued">QUEUED</button>
       </div>
       <div class="sort-wrapper">
         <select class="sort-select" id="sort-select">
-          <option value="default">SORT</option>
-          <option value="title-az">TITLE A→Z</option>
-          <option value="title-za">TITLE Z→A</option>
-          <option value="rating">RATING ↓</option>
-          <option value="pages">PAGES ↓</option>
-          <option value="added">DATE ADDED</option>
+          <option value="default" data-i18n="sort_default">SORT</option>
+          <option value="title-az" data-i18n="sort_title_az">TITLE A→Z</option>
+          <option value="title-za" data-i18n="sort_title_za">TITLE Z→A</option>
+          <option value="rating" data-i18n="sort_rating">RATING ↓</option>
+          <option value="pages" data-i18n="sort_pages">PAGES ↓</option>
+          <option value="added" data-i18n="sort_added">DATE ADDED</option>
         </select>
       </div>
-      <button class="lists-btn" id="lists-btn">📋 LISTS</button>
-      <button class="recs-btn" id="recommend-btn">⚡ RECOMMEND</button>
-      <button class="add-book-btn" id="add-book-btn">&gt; ADD BOOK</button>
+      <button class="lists-btn" id="lists-btn" data-i18n="btn_lists">📋 LISTS</button>
+      <button class="recs-btn" id="recommend-btn" data-i18n="btn_recommend">⚡ RECOMMEND</button>
+      <button class="add-book-btn" id="add-book-btn" data-i18n="btn_add_book">&gt; ADD BOOK</button>
       <div id="active-list-indicator" class="active-list-indicator" style="display:none"></div>
     </div>
+
+    <!-- Web Discover Section (shown when search bar is active) -->
+    <div id="discover-section" style="display:none"></div>
 
     <!-- Books Grid (JS-rendered) -->
     <div class="books-grid" id="books-grid"></div>

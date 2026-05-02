@@ -1,0 +1,39 @@
+/* ====================================
+   LANGUAGE SWITCHER
+   ==================================== */
+
+.lang-switcher {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.lang-btn {
+  padding: 4px 9px;
+  background: transparent;
+  border: 1px solid rgba(0, 242, 255, 0.18);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.35);
+  font-family: 'Orbitron', monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+}
+
+.lang-btn:hover {
+  border-color: rgba(0, 242, 255, 0.5);
+  color: var(--neon-cyan);
+}
+
+.lang-btn.active {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  background: rgba(0, 242, 255, 0.08);
+  text-shadow: 0 0 6px rgba(0, 242, 255, 0.5);
+}

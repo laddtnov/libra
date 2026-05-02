@@ -233,3 +233,51 @@
   letter-spacing: 1px;
   padding: 12px 0;
 }
+
+/* ── Rec card add button ── */
+.rec-card {
+  align-items: center;
+}
+
+.rec-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.rec-add-btn {
+  flex-shrink: 0;
+  align-self: center;
+  padding: 7px 12px;
+  background: transparent;
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  border-radius: 4px;
+  color: var(--neon-orange);
+  font-family: 'Orbitron', monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.rec-add-btn:hover {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: var(--neon-orange);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.25);
+}
+
+/* ── Loading state ── */
+.recs-loading {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.65rem;
+  color: var(--neon-orange);
+  letter-spacing: 1px;
+  padding: 16px 0;
+  animation: recsLoadPulse 1.4s ease-in-out infinite;
+}
+
+@keyframes recsLoadPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}

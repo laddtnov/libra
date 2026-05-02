@@ -434,6 +434,14 @@
   gap: 5px;
 }
 
+.genre-svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  vertical-align: middle;
+  display: inline-block;
+}
+
 .tag.history { border-color: #8b5cf6; color: #a78bfa; }
 .tag.fantasy { border-color: #ec4899; color: #f9a8d4; }
 .tag.adventure { border-color: #f59e0b; color: #fbbf24; }

@@ -1,0 +1,187 @@
+/* ====================================
+   DISCOVER / WEB SEARCH SECTION
+   ==================================== */
+
+#discover-section {
+  display: none;
+  margin-top: 10px;
+}
+
+.discover-status-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 14px;
+  margin-bottom: 22px;
+  background: rgba(0, 242, 255, 0.04);
+  border-left: 2px solid rgba(0, 242, 255, 0.4);
+  border-radius: 0 4px 4px 0;
+}
+
+.discover-status-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--neon-cyan);
+  letter-spacing: 1.5px;
+  text-shadow: 0 0 8px rgba(0, 242, 255, 0.4);
+}
+
+.discover-count {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.6rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+}
+
+.discover-loading {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+  padding: 30px 0;
+  text-align: center;
+  animation: discoverPulse 1.4s ease-in-out infinite;
+}
+
+@keyframes discoverPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+
+.discover-empty {
+  color: var(--text-secondary);
+  animation: none;
+}
+
+.discover-error {
+  color: #ff5555;
+  animation: none;
+}
+
+/* ── Results Grid ── */
+.discover-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+/* ── Result Card ── */
+.discover-card {
+  background: var(--dark-card);
+  border: 1px solid rgba(0, 242, 255, 0.15);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.discover-card:hover {
+  border-color: rgba(0, 242, 255, 0.5);
+  box-shadow: 0 4px 24px rgba(0, 242, 255, 0.12);
+}
+
+/* ── Cover ── */
+.discover-cover-wrap {
+  flex-shrink: 0;
+}
+
+.discover-cover {
+  width: 54px;
+  height: 78px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 242, 255, 0.18);
+  display: block;
+  filter: brightness(0.85) saturate(0.9);
+  transition: filter 0.2s ease;
+}
+
+.discover-card:hover .discover-cover {
+  filter: brightness(1) saturate(1.1);
+}
+
+.discover-cover-placeholder {
+  width: 54px;
+  height: 78px;
+  background: rgba(0, 242, 255, 0.08);
+  border: 1px solid rgba(0, 242, 255, 0.2);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Orbitron', monospace;
+  font-size: 1.4rem;
+  color: var(--neon-cyan);
+  opacity: 0.7;
+}
+
+/* ── Info ── */
+.discover-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.discover-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.discover-author {
+  font-size: 0.83rem;
+  color: var(--text-secondary);
+}
+
+.discover-meta {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.58rem;
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+.discover-desc {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-top: 5px;
+}
+
+/* ── Add button ── */
+.discover-add-btn {
+  flex-shrink: 0;
+  align-self: center;
+  padding: 7px 13px;
+  background: transparent;
+  border: 1px solid rgba(0, 242, 255, 0.45);
+  border-radius: 4px;
+  color: var(--neon-cyan);
+  font-family: 'Orbitron', monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.discover-add-btn:hover {
+  background: rgba(0, 242, 255, 0.1);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 12px rgba(0, 242, 255, 0.25);
+}

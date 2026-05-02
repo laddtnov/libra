@@ -1,14 +1,66 @@
 import { state, clamp, toPositiveInt, toNonNegativeInt, escHtml } from './state.js';
+import { t } from './i18n.js';
+
+const GENRE_SVGS = {
+  History: `<svg class="genre-svg" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="2" y1="2.5" x2="2" y2="10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="7" y1="1.5" x2="7" y2="10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="12" y1="2.5" x2="12" y2="10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="1" y1="10" x2="13" y2="10" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+    <line x1="1" y1="2.5" x2="13" y2="2.5" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+  </svg>`,
+  Fantasy: `<svg class="genre-svg" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="7,1 12,5 10,12.5 4,12.5 2,5" stroke="currentColor" stroke-width="1.2"/>
+    <line x1="2" y1="5" x2="12" y2="5" stroke="currentColor" stroke-width="0.9" opacity="0.55"/>
+    <line x1="7" y1="1" x2="4" y2="12.5" stroke="currentColor" stroke-width="0.7" opacity="0.3"/>
+    <line x1="7" y1="1" x2="10" y2="12.5" stroke="currentColor" stroke-width="0.7" opacity="0.3"/>
+  </svg>`,
+  Adventure: `<svg class="genre-svg" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/>
+    <polygon points="7,2.5 8.3,6.3 7,5.5 5.7,6.3" fill="currentColor"/>
+    <polygon points="7,11.5 5.7,7.7 7,8.5 8.3,7.7" fill="currentColor" opacity="0.5"/>
+    <circle cx="7" cy="7" r="1" fill="currentColor" opacity="0.6"/>
+  </svg>`,
+  'Historical Fiction': `<svg class="genre-svg" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <polyline points="1,11 1,5.5 4.5,8 7,2 9.5,8 13,5.5 13,11" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>
+    <line x1="1" y1="11" x2="13" y2="11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+  </svg>`,
+  Biography: `<svg class="genre-svg" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="7" cy="4.5" r="2.5" stroke="currentColor" stroke-width="1.2"/>
+    <path d="M2 13C2 9.5 4.5 8 7 8C9.5 8 12 9.5 12 13" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+  </svg>`,
+  Economics: `<svg class="genre-svg" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="1.5" y="7.5" width="2.5" height="4.5" stroke="currentColor" stroke-width="1.1" rx="0.3"/>
+    <rect x="5.75" y="5" width="2.5" height="7" stroke="currentColor" stroke-width="1.1" rx="0.3"/>
+    <rect x="10" y="2" width="2.5" height="10" stroke="currentColor" stroke-width="1.1" rx="0.3"/>
+  </svg>`,
+  Science: `<svg class="genre-svg" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="7" cy="7" r="1.3" fill="currentColor"/>
+    <ellipse cx="7" cy="7" rx="5.5" ry="2" stroke="currentColor" stroke-width="1"/>
+    <ellipse cx="7" cy="7" rx="5.5" ry="2" stroke="currentColor" stroke-width="1" transform="rotate(60 7 7)"/>
+    <ellipse cx="7" cy="7" rx="5.5" ry="2" stroke="currentColor" stroke-width="1" transform="rotate(-60 7 7)"/>
+  </svg>`,
+  Philosophy: `<svg class="genre-svg" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="4.5" cy="7" r="3.5" stroke="currentColor" stroke-width="1.1"/>
+    <circle cx="9.5" cy="7" r="3.5" stroke="currentColor" stroke-width="1.1"/>
+  </svg>`,
+};
+const GENRE_DEFAULT_SVG = `<svg class="genre-svg" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="2" y="1" width="10" height="12" rx="1" stroke="currentColor" stroke-width="1.2"/>
+  <line x1="5" y1="1" x2="5" y2="13" stroke="currentColor" stroke-width="1" opacity="0.5"/>
+  <line x1="7" y1="4" x2="10" y2="4" stroke="currentColor" stroke-width="0.8" opacity="0.5"/>
+  <line x1="7" y1="6.5" x2="10" y2="6.5" stroke="currentColor" stroke-width="0.8" opacity="0.5"/>
+</svg>`;
 
 const GENRE_META = {
-  History: { cls: 'history', emoji: '🏛️' },
-  Fantasy: { cls: 'fantasy', emoji: '✨' },
-  Adventure: { cls: 'adventure', emoji: '⚔️' },
-  'Historical Fiction': { cls: 'fiction', emoji: '👑' },
-  Biography: { cls: 'biography', emoji: '📝' },
-  Economics: { cls: 'economics', emoji: '💰' },
-  Science: { cls: 'science', emoji: '🔬' },
-  Philosophy: { cls: 'philosophy', emoji: '🧠' },
+  History:            { cls: 'history' },
+  Fantasy:            { cls: 'fantasy' },
+  Adventure:          { cls: 'adventure' },
+  'Historical Fiction': { cls: 'fiction' },
+  Biography:          { cls: 'biography' },
+  Economics:          { cls: 'economics' },
+  Science:            { cls: 'science' },
+  Philosophy:         { cls: 'philosophy' },
 };
 
 let onOpenDetails = () => {};
@@ -80,24 +132,24 @@ function buildCardHTML(book) {
   const spineTitle = escHtml((book.title || 'UNTITLED').toUpperCase().slice(0, 16));
 
   const statusBadge = {
-    reading:  `<span class="status-icon">${STATUS_SVGS.reading}</span><span>READING</span>`,
-    completed: `<span class="status-icon">${STATUS_SVGS.completed}</span><span>COMPLETED</span>`,
-    'to-read': `<span class="status-icon">${STATUS_SVGS['to-read']}</span><span>TO READ</span>`,
+    reading:   `<span class="status-icon">${STATUS_SVGS.reading}</span><span>${t('status_reading')}</span>`,
+    completed: `<span class="status-icon">${STATUS_SVGS.completed}</span><span>${t('status_completed')}</span>`,
+    'to-read': `<span class="status-icon">${STATUS_SVGS['to-read']}</span><span>${t('status_to_read')}</span>`,
   }[book.status] || '';
 
   let metaHTML = '';
   if (book.status === 'reading') {
     metaHTML = `
-      <div class="meta-item"><span class="meta-label">Progress:</span><span class="meta-value">${safeCurrentPage}/${safePages || '?'} pages (${safeProgress}%)</span></div>
-      <div class="meta-item"><span class="meta-label">Started:</span><span class="meta-value">${safeStarted}</span></div>`;
+      <div class="meta-item"><span class="meta-label">${t('meta_progress')}:</span><span class="meta-value">${safeCurrentPage}/${safePages || '?'} pages (${safeProgress}%)</span></div>
+      <div class="meta-item"><span class="meta-label">${t('meta_started')}:</span><span class="meta-value">${safeStarted}</span></div>`;
   } else if (book.status === 'completed') {
     metaHTML = `
-      <div class="meta-item"><span class="meta-label">Completed:</span><span class="meta-value">${safeCompleted}</span></div>
-      <div class="meta-item"><span class="meta-label">Rating:</span><span class="meta-value">${'★'.repeat(safeRating)}${'☆'.repeat(5 - safeRating)} ${safeRating}/5</span></div>`;
+      <div class="meta-item"><span class="meta-label">${t('meta_completed')}:</span><span class="meta-value">${safeCompleted}</span></div>
+      <div class="meta-item"><span class="meta-label">${t('meta_rating')}:</span><span class="meta-value">${'★'.repeat(safeRating)}${'☆'.repeat(5 - safeRating)} ${safeRating}/5</span></div>`;
   } else {
     metaHTML = `
-      <div class="meta-item"><span class="meta-label">Status:</span><span class="meta-value">In Queue</span></div>
-      <div class="meta-item"><span class="meta-label">Pages:</span><span class="meta-value">${safePages || '?'}</span></div>`;
+      <div class="meta-item"><span class="meta-label">${t('meta_status')}:</span><span class="meta-value">${t('meta_in_queue')}</span></div>
+      <div class="meta-item"><span class="meta-label">${t('meta_pages')}:</span><span class="meta-value">${safePages || '?'}</span></div>`;
   }
 
   const coverHTML = book.coverId
@@ -115,8 +167,9 @@ function buildCardHTML(book) {
       </div>`
     : '';
 
-  const g = GENRE_META[book.category] || { cls: '', emoji: '📚' };
-  const genreTag = book.category ? `<span class="tag ${g.cls}">${g.emoji} ${safeCategory}</span>` : '';
+  const g = GENRE_META[book.category] || { cls: '' };
+  const genreSvg = GENRE_SVGS[book.category] || GENRE_DEFAULT_SVG;
+  const genreTag = book.category ? `<span class="tag ${g.cls}">${genreSvg} ${safeCategory}</span>` : '';
 
   return `
     <div class="book-spine">
@@ -174,8 +227,8 @@ export function renderBooks() {
     grid.innerHTML = `
       <div class="no-results">
         <div class="no-results-icon">📭</div>
-        <div class="no-results-text">&gt; NO RECORDS FOUND</div>
-        <div class="no-results-sub">Adjust filters or search query</div>
+        <div class="no-results-text">${t('no_records')}</div>
+        <div class="no-results-sub">${t('no_records_sub')}</div>
       </div>`;
     return;
   }

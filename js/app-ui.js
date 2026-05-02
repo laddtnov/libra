@@ -1,14 +1,19 @@
-import { state } from './state.js';
+import { state, debounce } from './state.js';
 import { openFormModal, closeFormModal } from './ui-form-modal.js';
 import { showBookDetails, closeModal, configureDetailHandlers } from './ui-detail-modal.js';
 import { renderBooks, setFilter, configureRenderHandlers, updateStats } from './ui-render.js';
 import { openListsPanel, closeListsPanel, initListsPanel } from './ui-lists.js';
 import { openRecsPanel, closeRecsPanel, initRecsPanel } from './ui-recommendations.js';
+import { fetchDiscover, clearDiscover, debouncedFetch } from './ui-discover.js';
+import { initI18n, setLanguage, getLang, applyI18n } from './i18n.js';
 
 configureRenderHandlers({ openDetails: showBookDetails });
 configureDetailHandlers({ openFormModal });
 
 function initApp() {
+  initI18n();
+  applyI18n();
+
   updateStats();
   renderBooks();
 
@@ -23,9 +28,17 @@ function initApp() {
     card.addEventListener('click', () => setFilter(card.dataset.filter));
   });
 
-  document.getElementById('search-input').addEventListener('input', e => {
-    state.searchQuery = e.target.value;
-    renderBooks();
+  // Search bar → web discover
+  const searchInput = document.getElementById('search-input');
+  searchInput.addEventListener('input', e => {
+    const q = e.target.value.trim();
+    if (!q) {
+      clearDiscover();
+      state.searchQuery = '';
+      renderBooks();
+    } else {
+      debouncedFetch(q);
+    }
   });
 
   document.getElementById('sort-select').addEventListener('change', e => {
@@ -54,6 +67,15 @@ function initApp() {
   document.getElementById('recommend-btn').addEventListener('click', openRecsPanel);
   initListsPanel();
   initRecsPanel();
+
+  // Language switcher
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setLanguage(btn.dataset.lang);
+      applyI18n();
+      renderBooks();
+    });
+  });
 }
 
 document.addEventListener('DOMContentLoaded', initApp);

@@ -1,11 +1,14 @@
-import { state, escHtml } from './state.js';
+import { state, escHtml, cleanText, toPositiveInt } from './state.js';
+import { openFormModal } from './ui-form-modal.js';
+import { applyBookFromAPI } from './ui-search.js';
+import { t } from './i18n.js';
 
-function computeRecommendations() {
-  const books = Object.entries(state.booksData);
+const DEFAULT_GENRES = ['Fantasy', 'History', 'Science', 'Biography', 'Economics'];
 
+function getGenreProfile() {
   const genreCount = {};
   let totalCompleted = 0;
-  for (const [, b] of books) {
+  for (const b of Object.values(state.booksData)) {
     if (b.status === 'completed') {
       totalCompleted++;
       if (b.category && b.category !== 'Other') {
@@ -13,39 +16,35 @@ function computeRecommendations() {
       }
     }
   }
-
-  const queued = books.filter(([, b]) => b.status === 'to-read');
-
-  const scored = queued.map(([id, b]) => {
-    const genreScore = b.category ? (genreCount[b.category] || 0) : 0;
-    const ratingBoost = b.rating ? b.rating * 0.2 : 0;
-    const score = genreScore * 2 + ratingBoost;
-    let reason;
-    if (genreScore > 0) {
-      reason = `${genreCount[b.category]} completed ${b.category} book${genreCount[b.category] !== 1 ? 's' : ''}`;
-    } else if (b.rating) {
-      reason = `Rated ${b.rating}/5 stars`;
-    } else {
-      reason = 'In your queue';
-    }
-    return { id, book: b, score, reason };
-  });
-
-  scored.sort((a, b) => b.score - a.score || a.book.title.localeCompare(b.book.title));
-
   const topGenres = Object.entries(genreCount)
     .sort((a, b) => b[1] - a[1])
-    .slice(0, 6);
-
-  return { recommendations: scored.slice(0, 6), topGenres, totalCompleted };
+    .slice(0, 3)
+    .map(([genre]) => genre);
+  return { genreCount, topGenres, totalCompleted };
 }
 
-function buildGenreBars(topGenres) {
-  if (!topGenres.length) {
-    return `<div class="recs-no-data">&gt; No genre data yet — complete some books to build your profile.</div>`;
+function getExistingTitles() {
+  return new Set(Object.values(state.booksData).map(b => b.title.toLowerCase().trim()));
+}
+
+async function fetchForGenre(genre) {
+  const subject = genre.toLowerCase().replaceAll(' ', '_');
+  try {
+    const url = `https://openlibrary.org/search.json?subject=${encodeURIComponent(subject)}&limit=8&fields=title,author_name,first_publish_year,number_of_pages_median,cover_i,subject`;
+    const res = await fetch(url);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data.docs || [];
+  } catch {
+    return [];
   }
-  const max = topGenres[0][1];
-  return topGenres.map(([genre, count]) => {
+}
+
+function buildGenreBars(topGenres, genreCount) {
+  if (!topGenres.length) return '';
+  const max = genreCount[topGenres[0]];
+  return topGenres.map(genre => {
+    const count = genreCount[genre];
     const filled = Math.round((count / max) * 12);
     const bar = '█'.repeat(filled) + '░'.repeat(12 - filled);
     return `
@@ -57,55 +56,138 @@ function buildGenreBars(topGenres) {
   }).join('');
 }
 
-function buildRecCards(recommendations) {
-  if (!recommendations.length) {
-    return `<div class="recs-no-data">&gt; Add books to your queue to get recommendations.</div>`;
+function buildRecCard(doc, genre, completedInGenre) {
+  const title = cleanText(doc.title, 200) || 'Unknown';
+  const author = cleanText(doc.author_name?.[0], 120) || 'Unknown';
+  const coverId = toPositiveInt(doc.cover_i);
+
+  const card = document.createElement('div');
+  card.className = 'rec-card';
+
+  if (coverId) {
+    const img = document.createElement('img');
+    img.className = 'rec-cover';
+    img.src = `https://covers.openlibrary.org/b/id/${coverId}-S.jpg`;
+    img.alt = '';
+    img.loading = 'lazy';
+    card.appendChild(img);
+  } else {
+    const ph = document.createElement('div');
+    ph.className = 'rec-cover-placeholder';
+    ph.textContent = title.charAt(0).toUpperCase();
+    card.appendChild(ph);
   }
-  return recommendations.map(({ book, reason }) => {
-    const safeTitle = escHtml(book.title);
-    const safeAuthor = escHtml(book.author);
-    const safeCategory = escHtml(book.category || 'Other');
-    const safeReason = escHtml(reason);
-    const coverHTML = book.coverId
-      ? `<img class="rec-cover" src="https://covers.openlibrary.org/b/id/${book.coverId}-S.jpg" alt="" loading="lazy">`
-      : `<div class="rec-cover-placeholder">${escHtml(book.title.charAt(0).toUpperCase())}</div>`;
-    return `
-      <div class="rec-card">
-        ${coverHTML}
-        <div class="rec-card-body">
-          <div class="rec-card-title">${safeTitle}</div>
-          <div class="rec-card-author">by ${safeAuthor}</div>
-          <div class="rec-card-meta">
-            <span class="rec-tag">${safeCategory}</span>
-            <span class="rec-reason">&gt; ${safeReason}</span>
-          </div>
-        </div>
-      </div>`;
-  }).join('');
+
+  const body = document.createElement('div');
+  body.className = 'rec-card-body';
+
+  const titleEl = document.createElement('div');
+  titleEl.className = 'rec-card-title';
+  titleEl.textContent = title;
+  body.appendChild(titleEl);
+
+  const authorEl = document.createElement('div');
+  authorEl.className = 'rec-card-author';
+  authorEl.textContent = `by ${author}`;
+  body.appendChild(authorEl);
+
+  const meta = document.createElement('div');
+  meta.className = 'rec-card-meta';
+
+  const tag = document.createElement('span');
+  tag.className = 'rec-tag';
+  tag.textContent = genre;
+  meta.appendChild(tag);
+
+  const reason = document.createElement('span');
+  reason.className = 'rec-reason';
+  reason.textContent = completedInGenre > 0
+    ? `> ${completedInGenre} ${genre} ${completedInGenre === 1 ? t('recs_completed_suffix_sg') : t('recs_completed_suffix_pl')}`
+    : '> Popular in genre';
+  meta.appendChild(reason);
+
+  body.appendChild(meta);
+  card.appendChild(body);
+
+  const addBtn = document.createElement('button');
+  addBtn.className = 'rec-add-btn';
+  addBtn.textContent = t('recs_add');
+  addBtn.addEventListener('click', () => {
+    const normalizedDoc = {
+      ...doc,
+      title: cleanText(doc.title, 240) || 'Unknown',
+      author_name: [cleanText(doc.author_name?.[0], 140) || 'Unknown'],
+      number_of_pages_median: toPositiveInt(doc.number_of_pages_median),
+      cover_i: coverId,
+    };
+    openFormModal();
+    applyBookFromAPI(normalizedDoc);
+  });
+  card.appendChild(addBtn);
+
+  return card;
 }
 
-export function renderRecsPanel() {
+export async function renderRecsPanel() {
   const content = document.getElementById('recs-content');
   if (!content) return;
 
-  const { recommendations, topGenres, totalCompleted } = computeRecommendations();
+  const { genreCount, topGenres, totalCompleted } = getGenreProfile();
+  const genresToFetch = topGenres.length >= 2
+    ? topGenres
+    : [...new Set([...topGenres, ...DEFAULT_GENRES])].slice(0, 3);
 
   const statsLine = totalCompleted > 0
-    ? `&gt; Analyzed ${totalCompleted} completed book${totalCompleted !== 1 ? 's' : ''} — genre profile loaded.`
-    : `&gt; No completed books yet — finish some reads to unlock recommendations.`;
+    ? `${t('recs_analyzed')} ${totalCompleted} ${totalCompleted === 1 ? t('recs_completed_suffix_sg') : t('recs_completed_suffix_pl')} ${t('recs_genre_loaded')}`
+    : t('recs_no_completed');
+
+  const barsHTML = topGenres.length
+    ? buildGenreBars(topGenres, genreCount)
+    : `<div class="recs-no-data">${t('recs_no_genre')}</div>`;
 
   content.innerHTML = `
     <div class="recs-stats-line">${statsLine}</div>
-
     <div class="recs-section">
-      <div class="recs-section-title">&gt;&gt; GENRE PROFILE</div>
-      <div class="genre-bars">${buildGenreBars(topGenres)}</div>
+      <div class="recs-section-title">${t('recs_genre_profile')}</div>
+      <div class="genre-bars">${barsHTML}</div>
     </div>
-
     <div class="recs-section">
-      <div class="recs-section-title">&gt;&gt; RECOMMENDED READS</div>
-      <div class="rec-cards">${buildRecCards(recommendations)}</div>
+      <div class="recs-section-title">${t('recs_recommended')}</div>
+      <div class="rec-cards" id="rec-cards-container">
+        <div class="recs-loading">${t('recs_loading')}</div>
+      </div>
     </div>`;
+
+  // Async fetch from Open Library
+  const existing = getExistingTitles();
+  const collected = [];
+
+  for (const genre of genresToFetch) {
+    const docs = await fetchForGenre(genre);
+    const completedInGenre = genreCount[genre] || 0;
+    for (const doc of docs) {
+      const normalTitle = (doc.title || '').toLowerCase().trim();
+      if (!normalTitle) continue;
+      if (existing.has(normalTitle)) continue;
+      if (collected.find(c => c.doc.title?.toLowerCase().trim() === normalTitle)) continue;
+      collected.push({ doc, genre, completedInGenre });
+      if (collected.length >= 9) break;
+    }
+    if (collected.length >= 9) break;
+  }
+
+  const container = document.getElementById('rec-cards-container');
+  if (!container) return;
+
+  if (!collected.length) {
+    container.innerHTML = `<div class="recs-no-data">${t('recs_no_data')}</div>`;
+    return;
+  }
+
+  container.innerHTML = '';
+  collected.forEach(({ doc, genre, completedInGenre }) =>
+    container.appendChild(buildRecCard(doc, genre, completedInGenre))
+  );
 }
 
 export function openRecsPanel() {

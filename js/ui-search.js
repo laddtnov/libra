@@ -44,7 +44,7 @@ function flashField(el) {
   setTimeout(() => el.classList.remove('field-filled'), 900);
 }
 
-function applyBookFromAPI(doc) {
+export function applyBookFromAPI(doc) {
   const synopsis = typeof doc.first_sentence === 'object'
     ? doc.first_sentence?.value || ''
     : doc.first_sentence || '';
