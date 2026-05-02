@@ -116,6 +116,14 @@ const T = {
   form_btn_update:      ['UPDATE RECORD',                'ОНОВИТИ ЗАПИС',                'ACTUALIZAR REGISTRO',         'ОБНОВИТЬ ЗАПИСЬ',              'EINTRAG AKTUALISIEREN',         'AKTUALIZUJ REKORD'],
   form_btn_cancel:      ['CANCEL',                       'СКАСУВАТИ',                    'CANCELAR',                    'ОТМЕНА',                       'ABBRECHEN',                     'ANULUJ'],
 
+  // Discover preview modal
+  preview_heading:    ['>_ BOOK PREVIEW',      '>_ ПЕРЕГЛЯД КНИГИ',     '>_ VISTA PREVIA',        '>_ ПРЕДПРОСМОТР',       '>_ BUCHVORSCHAU',           '>_ PODGLĄD KSIĄŻKI'],
+  preview_year:       ['Year',                 'Рік',                   'Año',                    'Год',                   'Jahr',                      'Rok'],
+  preview_pages:      ['Pages',                'Сторінок',              'Páginas',                'Страниц',               'Seiten',                    'Stron'],
+  preview_synopsis:   ['SYNOPSIS',             'СИНОПСИС',              'SINOPSIS',               'СИНОПСИС',              'INHALTSANGABE',             'STRESZCZENIE'],
+  preview_no_synopsis:['No synopsis available.','Опис відсутній.',      'Sin sinopsis disponible.','Описание отсутствует.', 'Keine Inhaltsangabe.',      'Brak streszczenia.'],
+  preview_add_btn:    ['+ ADD TO ARCHIVE',     '+ ДОДАТИ ДО АРХІВУ',   '+ AÑADIR AL ARCHIVO',   '+ ДОБАВИТЬ В АРХИВ',    '+ ZUM ARCHIV HINZUFÜGEN',  '+ DODAJ DO ARCHIWUM'],
+
   // Toast notifications
   toast_saved:          ['RECORD SAVED',                 'ЗАПИС ЗБЕРЕЖЕНО',              'REGISTRO GUARDADO',           'ЗАПИСЬ СОХРАНЕНА',             'EINTRAG GESPEICHERT',           'REKORD ZAPISANY'],
   toast_updated:        ['RECORD UPDATED',               'ЗАПИС ОНОВЛЕНО',               'REGISTRO ACTUALIZADO',        'ЗАПИСЬ ОБНОВЛЕНА',             'EINTRAG AKTUALISIERT',          'REKORD ZAKTUALIZOWANY'],

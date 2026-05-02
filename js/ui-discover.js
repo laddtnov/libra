@@ -5,6 +5,63 @@ import { t } from './i18n.js';
 
 let discoverActive = false;
 
+export function closePreviewModal() {
+  document.getElementById('discover-preview').style.display = 'none';
+  document.getElementById('modal-overlay').style.display = 'none';
+}
+
+function openPreviewModal(doc) {
+  const modal = document.getElementById('discover-preview');
+  const content = document.getElementById('discover-preview-content');
+  const overlay = document.getElementById('modal-overlay');
+
+  const coverSrc = doc.cover_i
+    ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg`
+    : null;
+
+  const sentence = typeof doc.first_sentence === 'object'
+    ? (doc.first_sentence?.value || '')
+    : (doc.first_sentence || '');
+
+  const year = doc.first_publish_year || '';
+  const pages = doc.number_of_pages_median || '';
+  const author = doc.author_name?.[0] || 'Unknown';
+
+  const metaParts = [];
+  if (year) metaParts.push(`<span class="dp-meta-item"><span class="dp-meta-label">${t('preview_year')}</span> ${year}</span>`);
+  if (pages) metaParts.push(`<span class="dp-meta-item"><span class="dp-meta-label">${t('preview_pages')}</span> ${pages}</span>`);
+
+  content.innerHTML = `
+    <div class="dp-header">
+      <span class="dp-heading">${t('preview_heading')}</span>
+    </div>
+    <div class="dp-body">
+      <div class="dp-cover-col">
+        ${coverSrc
+          ? `<img class="dp-cover" src="${coverSrc}" alt="" loading="lazy">`
+          : `<div class="dp-cover dp-cover-ph">${(doc.title || 'U').charAt(0).toUpperCase()}</div>`
+        }
+      </div>
+      <div class="dp-info-col">
+        <div class="dp-title">${doc.title || 'Unknown'}</div>
+        <div class="dp-author">by ${author}</div>
+        ${metaParts.length ? `<div class="dp-meta">${metaParts.join('<span class="dp-meta-sep">·</span>')}</div>` : ''}
+        <div class="dp-synopsis-label">&gt; ${t('preview_synopsis')}</div>
+        <div class="dp-synopsis">${sentence || t('preview_no_synopsis')}</div>
+        <button class="dp-add-btn" id="dp-add-btn">[ ${t('preview_add_btn')} ]</button>
+      </div>
+    </div>`;
+
+  modal.style.display = 'flex';
+  overlay.style.display = 'block';
+
+  document.getElementById('dp-add-btn').addEventListener('click', () => {
+    closePreviewModal();
+    openFormModal();
+    applyBookFromAPI(doc);
+  });
+}
+
 function buildDiscoverCard(doc) {
   const card = document.createElement('div');
   card.className = 'discover-card';
@@ -70,6 +127,9 @@ function buildDiscoverCard(doc) {
     applyBookFromAPI(doc);
   });
   card.appendChild(addBtn);
+
+  card.style.cursor = 'pointer';
+  card.addEventListener('click', () => openPreviewModal(doc));
 
   return card;
 }

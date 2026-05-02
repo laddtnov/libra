@@ -4,7 +4,7 @@ import { showBookDetails, closeModal, configureDetailHandlers } from './ui-detai
 import { renderBooks, setFilter, configureRenderHandlers, updateStats } from './ui-render.js';
 import { openListsPanel, closeListsPanel, initListsPanel } from './ui-lists.js';
 import { openRecsPanel, closeRecsPanel, initRecsPanel } from './ui-recommendations.js';
-import { fetchDiscover, clearDiscover, debouncedFetch } from './ui-discover.js';
+import { fetchDiscover, clearDiscover, debouncedFetch, closePreviewModal } from './ui-discover.js';
 import { initI18n, setLanguage, getLang, applyI18n } from './i18n.js';
 
 configureRenderHandlers({ openDetails: showBookDetails });
@@ -48,9 +48,11 @@ function initApp() {
 
   document.getElementById('close-modal').addEventListener('click', closeModal);
   document.getElementById('close-form-modal').addEventListener('click', closeFormModal);
+  document.getElementById('close-discover-preview').addEventListener('click', closePreviewModal);
   document.getElementById('modal-overlay').addEventListener('click', () => {
     closeModal();
     closeFormModal();
+    closePreviewModal();
     closeListsPanel();
     closeRecsPanel();
   });
@@ -58,6 +60,7 @@ function initApp() {
     if (e.key === 'Escape') {
       closeModal();
       closeFormModal();
+      closePreviewModal();
       closeListsPanel();
       closeRecsPanel();
     }

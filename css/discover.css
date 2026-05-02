@@ -185,3 +185,208 @@
   border-color: var(--neon-cyan);
   box-shadow: 0 0 12px rgba(0, 242, 255, 0.25);
 }
+
+/* ────────────────────────────────────
+   DISCOVER PREVIEW MODAL
+   ──────────────────────────────────── */
+#discover-preview {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.discover-preview-container {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: linear-gradient(145deg, #0a0a1a 0%, #0d0d20 60%, #0a0a18 100%);
+  border: 1px solid rgba(0, 242, 255, 0.35);
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 1px rgba(0, 242, 255, 0.08),
+    0 0 40px rgba(0, 242, 255, 0.12),
+    0 20px 60px rgba(0, 0, 0, 0.7);
+  padding: 28px 32px 32px;
+}
+
+#discover-preview .close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+}
+
+/* Header */
+.dp-header {
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(0, 242, 255, 0.12);
+}
+
+.dp-heading {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--neon-cyan);
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+}
+
+/* Body — two columns */
+.dp-body {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+}
+
+/* Cover column */
+.dp-cover-col {
+  flex-shrink: 0;
+}
+
+.dp-cover {
+  width: 120px;
+  height: 175px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 242, 255, 0.25);
+  display: block;
+  filter: brightness(0.9) saturate(0.95);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 12px rgba(0, 242, 255, 0.08);
+}
+
+.dp-cover-ph {
+  width: 120px;
+  height: 175px;
+  background: rgba(0, 242, 255, 0.06);
+  border: 1px solid rgba(0, 242, 255, 0.2);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Orbitron', monospace;
+  font-size: 2.4rem;
+  color: var(--neon-cyan);
+  opacity: 0.5;
+}
+
+/* Info column */
+.dp-info-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dp-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.dp-author {
+  font-size: 0.9rem;
+  color: var(--neon-cyan);
+  opacity: 0.8;
+}
+
+.dp-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.dp-meta-item {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.58rem;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.5px;
+}
+
+.dp-meta-label {
+  color: rgba(0, 242, 255, 0.45);
+  text-transform: uppercase;
+}
+
+.dp-meta-sep {
+  color: rgba(255, 255, 255, 0.15);
+  font-size: 0.7rem;
+}
+
+.dp-synopsis-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: var(--neon-pink);
+  letter-spacing: 1.5px;
+  margin-top: 8px;
+  text-shadow: 0 0 8px rgba(255, 0, 128, 0.3);
+}
+
+.dp-synopsis {
+  font-size: 0.87rem;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.65;
+}
+
+.dp-add-btn {
+  margin-top: 20px;
+  align-self: flex-start;
+  padding: 10px 22px;
+  background: transparent;
+  border: 1px solid rgba(0, 242, 255, 0.5);
+  border-radius: 4px;
+  color: var(--neon-cyan);
+  font-family: 'Orbitron', monospace;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dp-add-btn:hover {
+  background: rgba(0, 242, 255, 0.1);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 18px rgba(0, 242, 255, 0.3);
+  text-shadow: 0 0 8px rgba(0, 242, 255, 0.6);
+}
+
+/* Responsive */
+@media (max-width: 540px) {
+  .dp-body {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .dp-info-col {
+    width: 100%;
+  }
+
+  .dp-title {
+    font-size: 1.2rem;
+    text-align: center;
+  }
+
+  .dp-author {
+    text-align: center;
+  }
+
+  .dp-meta {
+    justify-content: center;
+  }
+
+  .dp-add-btn {
+    align-self: center;
+  }
+}
