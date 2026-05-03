@@ -13,7 +13,7 @@ const ADDRESSES = {
 
 function cryptoRowHTML(symbol, address) {
   return `
-    <div class="crypto-row">
+    <div class="crypto-row" data-crypto="${symbol}">
       <span class="crypto-symbol">${symbol}</span>
       <span class="crypto-address" title="${address}">${address}</span>
       <button class="crypto-copy-btn" data-address="${address}">[ COPY ]</button>
