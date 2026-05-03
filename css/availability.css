@@ -1,0 +1,93 @@
+/* ====================================
+   WHERE TO FIND — AVAILABILITY SECTION
+   ==================================== */
+
+.availability-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.avail-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  border: 1px solid;
+  text-decoration: none;
+  transition: background 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease, transform 0.18s ease;
+  cursor: pointer;
+}
+
+.avail-btn:hover {
+  transform: translateY(-2px);
+}
+
+.avail-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+}
+
+.avail-tag {
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  opacity: 0.65;
+}
+
+/* ── FREE / LIBRARY — green ── */
+.avail-free {
+  border-color: rgba(0, 255, 136, 0.25);
+  background: rgba(0, 255, 136, 0.04);
+  color: #00ff88;
+}
+
+.avail-free:hover {
+  border-color: rgba(0, 255, 136, 0.6);
+  background: rgba(0, 255, 136, 0.1);
+  box-shadow: 0 0 14px rgba(0, 255, 136, 0.2);
+}
+
+.avail-free .avail-tag { color: rgba(0, 255, 136, 0.55); }
+
+/* ── USED / CHEAP — amber ── */
+.avail-cheap {
+  border-color: rgba(255, 170, 0, 0.25);
+  background: rgba(255, 170, 0, 0.04);
+  color: #ffaa00;
+}
+
+.avail-cheap:hover {
+  border-color: rgba(255, 170, 0, 0.6);
+  background: rgba(255, 170, 0, 0.1);
+  box-shadow: 0 0 14px rgba(255, 170, 0, 0.2);
+}
+
+.avail-cheap .avail-tag { color: rgba(255, 170, 0, 0.55); }
+
+/* ── STORE / BUY — cyan ── */
+.avail-store {
+  border-color: rgba(0, 242, 255, 0.25);
+  background: rgba(0, 242, 255, 0.04);
+  color: #00f2ff;
+}
+
+.avail-store:hover {
+  border-color: rgba(0, 242, 255, 0.6);
+  background: rgba(0, 242, 255, 0.1);
+  box-shadow: 0 0 14px rgba(0, 242, 255, 0.2);
+}
+
+.avail-store .avail-tag { color: rgba(0, 242, 255, 0.55); }
+
+/* ── Footer note ── */
+.avail-note {
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.2);
+  letter-spacing: 0.4px;
+  margin-top: 4px;
+}

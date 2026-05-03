@@ -140,6 +140,10 @@ const T = {
   sessions_btn_add:   ['+ LOG SESSION',          '+ ЗАПИСАТИ СЕСІЮ',          '+ REGISTRAR SESIÓN',       '+ ЗАПИСАТЬ СЕССИЮ',        '+ SITZUNG EINTRAGEN',        '+ DODAJ SESJĘ'],
   sessions_pages_unit:['pp.',                    'стор.',                     'pp.',                      'стр.',                     'S.',                         'str.'],
 
+  // Where to find
+  avail_title: ['WHERE TO FIND',                    'ДЕ ЗНАЙТИ',                         'DÓNDE ENCONTRAR',                  'ГДЕ НАЙТИ',                        'WO ZU FINDEN',                      'GDZIE ZNALEŹĆ'],
+  avail_note:  ['External links — prices and availability vary.','Зовнішні посилання — ціни та наявність можуть відрізнятись.','Enlaces externos — los precios y la disponibilidad varían.','Внешние ссылки — цены и наличие могут отличаться.','Externe Links — Preise und Verfügbarkeit variieren.','Linki zewnętrzne — ceny i dostępność mogą się różnić.'],
+
   // Backup buttons
   btn_export:         ['↓ EXPORT',            '↓ ЕКСПОРТ',            '↓ EXPORTAR',           '↓ ЭКСПОРТ',            '↓ EXPORTIEREN',             '↓ EKSPORT'],
   btn_import:         ['↑ IMPORT',            '↑ ІМПОРТ',             '↑ IMPORTAR',           '↑ ИМПОРТ',             '↑ IMPORTIEREN',             '↑ IMPORT'],

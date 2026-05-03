@@ -4,6 +4,7 @@ import { renderStarsHTML, renderBooks } from './ui-render.js';
 import { toggleBookInList, removeBookFromAllLists, renderListsPanel } from './ui-lists.js';
 import { renderQuotesSection, initQuotesSection } from './ui-quotes.js';
 import { renderSessionsSection, initSessionsSection } from './ui-sessions.js';
+import { renderAvailabilitySection } from './ui-availability.js';
 
 let onOpenFormModal = () => {};
 
@@ -143,6 +144,8 @@ export function showBookDetails(bookId) {
       ${renderQuotesSection(bookId)}
 
       ${renderSessionsSection(bookId)}
+
+      ${renderAvailabilitySection(bookId)}
 
       <div class="detail-section">
         <div class="detail-section-title">&gt;&gt; READING LISTS</div>

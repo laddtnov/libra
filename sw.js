@@ -1,4 +1,4 @@
-const CACHE = 'libra-v2';
+const CACHE = 'libra-v3';
 
 const ASSETS = [
   '/',
@@ -25,6 +25,7 @@ const ASSETS = [
   '/css/quotes.css',
   '/css/sessions.css',
   '/css/donate.css',
+  '/css/availability.css',
   '/js/app-ui.js',
   '/js/state.js',
   '/js/default-books.js',
@@ -40,6 +41,7 @@ const ASSETS = [
   '/js/ui-quotes.js',
   '/js/ui-sessions.js',
   '/js/ui-donate.js',
+  '/js/ui-availability.js',
   '/js/i18n.js',
   '/assets/icons/icon.svg',
   '/assets/fonts/orbitron-latin.woff2',
