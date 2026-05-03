@@ -2,12 +2,12 @@
 // Stripe: create a Payment Link at dashboard.stripe.com → Payment Links
 // Product name: "Support Libra"
 // Description:  "Voluntary tip to support Libra — a free personal reading tracker. No product is delivered."
-const STRIPE_URL = 'https://buy.stripe.com/YOUR_STRIPE_LINK';
+const STRIPE_URL = 'https://donate.stripe.com/14A4gAfl0bws82t1e58bS03';
 
 const ADDRESSES = {
-  BTC: 'YOUR_BTC_ADDRESS',
-  ETH: 'YOUR_ETH_ADDRESS',
-  SOL: 'YOUR_SOL_ADDRESS',
+  BTC: '3CnYJidSvWZwooemAtoJxBbWFgKAafS4aT',
+  ETH: '0xC0B3934a621C9124E35E5f023dD58df5Cd91a072',
+  SOL: '9WuCR65iN9PKPPSZUoAnf7e2BEbCtUa8CAvSGnDZ1AnY',
 };
 // ──────────────────────────────────────────────────────────────────────────────
 
