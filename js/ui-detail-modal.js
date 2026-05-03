@@ -107,7 +107,7 @@ export function showBookDetails(bookId) {
 
   content.innerHTML = `
     <div class="detail-panel">
-      <div class="detail-prompt">&gt; BOOK.ARCHIVE // RECORD RETRIEVED</div>
+      <div class="detail-prompt">&gt; LIBRA // RECORD RETRIEVED</div>
       <div class="detail-divider">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
 
       <div class="detail-hero">

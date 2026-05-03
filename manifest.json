@@ -1,6 +1,6 @@
 {
-  "name": "Book.Archive",
-  "short_name": "Book.Archive",
+  "name": "Libra",
+  "short_name": "Libra",
   "description": "Cyberpunk personal reading tracker — track, discover, and organise your books.",
   "start_url": "/",
   "scope": "/",

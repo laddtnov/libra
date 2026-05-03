@@ -1,7 +1,7 @@
 // ── Replace these with your real values ───────────────────────────────────────
 // Stripe: create a Payment Link at dashboard.stripe.com → Payment Links
-// Product name: "Support Book.Archive"
-// Description:  "Voluntary tip to support Book.Archive — a free personal reading tracker. No product is delivered."
+// Product name: "Support Libra"
+// Description:  "Voluntary tip to support Libra — a free personal reading tracker. No product is delivered."
 const STRIPE_URL = 'https://buy.stripe.com/YOUR_STRIPE_LINK';
 
 const ADDRESSES = {
@@ -23,7 +23,7 @@ function cryptoRowHTML(symbol, address) {
 function buildDonateHTML() {
   return `
     <div class="donate-intro">
-      <div class="donate-tagline">&gt; Book.Archive is free and open-source.</div>
+      <div class="donate-tagline">&gt; Libra is free and open-source.</div>
       <div class="donate-tagline">&gt; If it's useful to you, a tip keeps it going.</div>
     </div>
 
