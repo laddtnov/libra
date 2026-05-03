@@ -10,7 +10,7 @@
 
 A personal reading tracker with a full cyberpunk neon UI — glitch title, status-colored book spines, Open Library auto-fill, and a Fallout-style detail terminal.
 
-[🌐 Live Demo](https://book-archive.laddtnov.xyz/)
+[🌐 Live Demo](https://libra.laddtnov.xyz/)
 
 ![Portfolio Preview](Screenshot-book-desktop.png)
 
