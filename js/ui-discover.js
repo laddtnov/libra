@@ -1,4 +1,4 @@
-import { debounce, cleanText, toPositiveInt } from './state.js';
+import { debounce, cleanText, toPositiveInt, escHtml } from './state.js';
 import { openFormModal } from './ui-form-modal.js';
 import { applyBookFromAPI } from './ui-search.js';
 import { t } from './i18n.js';
@@ -28,8 +28,8 @@ function openPreviewModal(doc) {
   const author = doc.author_name?.[0] || 'Unknown';
 
   const metaParts = [];
-  if (year) metaParts.push(`<span class="dp-meta-item"><span class="dp-meta-label">${t('preview_year')}</span> ${year}</span>`);
-  if (pages) metaParts.push(`<span class="dp-meta-item"><span class="dp-meta-label">${t('preview_pages')}</span> ${pages}</span>`);
+  if (year) metaParts.push(`<span class="dp-meta-item"><span class="dp-meta-label">${t('preview_year')}</span> ${escHtml(String(year))}</span>`);
+  if (pages) metaParts.push(`<span class="dp-meta-item"><span class="dp-meta-label">${t('preview_pages')}</span> ${escHtml(String(pages))}</span>`);
 
   content.innerHTML = `
     <div class="dp-header">
@@ -39,15 +39,15 @@ function openPreviewModal(doc) {
       <div class="dp-cover-col">
         ${coverSrc
           ? `<img class="dp-cover" src="${coverSrc}" alt="" loading="lazy">`
-          : `<div class="dp-cover dp-cover-ph">${(doc.title || 'U').charAt(0).toUpperCase()}</div>`
+          : `<div class="dp-cover dp-cover-ph">${escHtml((doc.title || 'U').charAt(0).toUpperCase())}</div>`
         }
       </div>
       <div class="dp-info-col">
-        <div class="dp-title">${doc.title || 'Unknown'}</div>
-        <div class="dp-author">by ${author}</div>
+        <div class="dp-title">${escHtml(doc.title || 'Unknown')}</div>
+        <div class="dp-author">by ${escHtml(author)}</div>
         ${metaParts.length ? `<div class="dp-meta">${metaParts.join('<span class="dp-meta-sep">·</span>')}</div>` : ''}
         <div class="dp-synopsis-label">&gt; ${t('preview_synopsis')}</div>
-        <div class="dp-synopsis">${sentence || t('preview_no_synopsis')}</div>
+        <div class="dp-synopsis">${escHtml(sentence) || t('preview_no_synopsis')}</div>
         <button class="dp-add-btn" id="dp-add-btn">[ ${t('preview_add_btn')} ]</button>
       </div>
     </div>`;
@@ -146,7 +146,7 @@ export async function fetchDiscover(query) {
     <div class="discover-status-bar">
       <span class="discover-status-label" data-i18n="discover_header">${t('discover_header')}</span>
     </div>
-    <div class="discover-loading">&gt; ${t('discover_querying')} "${query.toUpperCase()}"...</div>`;
+    <div class="discover-loading">&gt; ${t('discover_querying')} "${escHtml(query.toUpperCase())}"...</div>`;
 
   try {
     const url = `https://openlibrary.org/search.json?q=${encodeURIComponent(query)}&limit=8&fields=title,author_name,first_publish_year,number_of_pages_median,first_sentence,cover_i,subject`;
@@ -159,7 +159,7 @@ export async function fetchDiscover(query) {
         <div class="discover-status-bar">
           <span class="discover-status-label">${t('discover_header')}</span>
         </div>
-        <div class="discover-loading discover-empty">&gt; ${t('discover_no_results')}: "${query.toUpperCase()}"</div>`;
+        <div class="discover-loading discover-empty">&gt; ${t('discover_no_results')}: "${escHtml(query.toUpperCase())}"</div>`;
       return;
     }
 
@@ -174,7 +174,7 @@ export async function fetchDiscover(query) {
     section.innerHTML = `
       <div class="discover-status-bar">
         <span class="discover-status-label">${t('discover_header')}</span>
-        <span class="discover-count">"${query}" — ${docs.length} ${t('discover_found')}</span>
+        <span class="discover-count">"${escHtml(query)}" — ${docs.length} ${t('discover_found')}</span>
       </div>`;
     const resultsGrid = document.createElement('div');
     resultsGrid.className = 'discover-grid';

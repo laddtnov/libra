@@ -284,7 +284,7 @@ function buildApiKeyHTML(savedKey) {
                  id="recs-api-key-input"
                  class="recs-api-key-input"
                  placeholder="sk-ant-api03-..."
-                 value="${isSet ? savedKey : ''}">
+                 value="${isSet ? escHtml(savedKey) : ''}">
           <button id="recs-api-save-btn" class="recs-api-btn recs-api-btn--save">[ SAVE ]</button>
           <button id="recs-api-clear-btn" class="recs-api-btn recs-api-btn--clear">[ CLEAR ]</button>
         </div>
