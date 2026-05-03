@@ -1,4 +1,4 @@
-const CACHE = 'book-archive-v2';
+const CACHE = 'book-archive-v4';
 
 const ASSETS = [
   '/',
@@ -22,6 +22,9 @@ const ASSETS = [
   '/css/discover.css',
   '/css/lang-switcher.css',
   '/css/backup.css',
+  '/css/quotes.css',
+  '/css/sessions.css',
+  '/css/donate.css',
   '/js/app-ui.js',
   '/js/state.js',
   '/js/default-books.js',
@@ -34,6 +37,9 @@ const ASSETS = [
   '/js/ui-recommendations.js',
   '/js/ui-discover.js',
   '/js/ui-backup.js',
+  '/js/ui-quotes.js',
+  '/js/ui-sessions.js',
+  '/js/ui-donate.js',
   '/js/i18n.js',
   '/assets/icons/icon.svg',
   '/assets/fonts/orbitron-latin.woff2',

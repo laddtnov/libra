@@ -61,6 +61,15 @@ function sanitizeNotesList(rawNotes) {
   return rawNotes.map(n => cleanText(n, 260)).filter(Boolean).slice(0, 100);
 }
 
+function sanitizeSessions(rawSessions) {
+  if (!Array.isArray(rawSessions)) return [];
+  return rawSessions
+    .filter(s => s && typeof s === 'object' && typeof s.date === 'string' && s.date.length > 0)
+    .map(s => ({ date: cleanText(s.date, 20), pages: toPositiveInt(s.pages) || 0 }))
+    .filter(s => s.pages > 0)
+    .slice(0, 1000);
+}
+
 function applyOptionalBookFields(book, { subtitle, pages, rating, coverId, synopsis }) {
   if (subtitle) book.subtitle = subtitle;
   if (pages) book.pages = pages;
@@ -100,6 +109,9 @@ function normalizeBookRecord(rawBook) {
     status,
     category: cleanText(rawBook.category, 80) || 'Other',
     notes: sanitizeNotesList(rawBook.notes),
+    ...(Array.isArray(rawBook.sessions) && rawBook.sessions.length
+      ? { sessions: sanitizeSessions(rawBook.sessions) }
+      : {}),
   };
 
   const subtitle = cleanText(rawBook.subtitle, 180);

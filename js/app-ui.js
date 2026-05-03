@@ -6,6 +6,7 @@ import { openListsPanel, closeListsPanel, initListsPanel } from './ui-lists.js';
 import { openRecsPanel, closeRecsPanel, initRecsPanel } from './ui-recommendations.js';
 import { fetchDiscover, clearDiscover, debouncedFetch, closePreviewModal } from './ui-discover.js';
 import { exportBooks, importBooks } from './ui-backup.js';
+import { openDonatePanel, closeDonatePanel, initDonatePanel } from './ui-donate.js';
 import { initI18n, setLanguage, getLang, applyI18n } from './i18n.js';
 
 configureRenderHandlers({ openDetails: showBookDetails });
@@ -56,6 +57,7 @@ function initApp() {
     closePreviewModal();
     closeListsPanel();
     closeRecsPanel();
+    closeDonatePanel();
   });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
@@ -64,6 +66,7 @@ function initApp() {
       closePreviewModal();
       closeListsPanel();
       closeRecsPanel();
+      closeDonatePanel();
     }
   });
 
@@ -75,8 +78,10 @@ function initApp() {
 
   document.getElementById('lists-btn').addEventListener('click', openListsPanel);
   document.getElementById('recommend-btn').addEventListener('click', openRecsPanel);
+  document.getElementById('donate-btn').addEventListener('click', openDonatePanel);
   initListsPanel();
   initRecsPanel();
+  initDonatePanel();
 
   // Language switcher
   document.querySelectorAll('.lang-btn').forEach(btn => {

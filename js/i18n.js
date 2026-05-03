@@ -132,6 +132,14 @@ const T = {
   quotes_ph_page:    ['Page #',               'Стор. №',               'Pág. №',               'Стр. №',               'Seite Nr.',               'Str. nr'],
   quotes_btn_add:    ['+ ADD QUOTE',           '+ ДОДАТИ ЦИТАТУ',       '+ AÑADIR CITA',       '+ ДОБАВИТЬ ЦИТАТУ',    '+ ZITAT HINZUFÜGEN',      '+ DODAJ CYTAT'],
 
+  // Reading session log
+  sessions_title:     ['SESSION LOG',            'ЖУРНАЛ СЕСІЙ',              'REGISTRO DE SESIONES',     'ЖУРНАЛ СЕССИЙ',            'SITZUNGSPROTOKOLL',          'DZIENNIK SESJI'],
+  sessions_empty:     ['No sessions logged yet.','Сесій ще немає.',           'Sin sesiones registradas.','Сессий ещё нет.',          'Noch keine Sitzungen.',      'Brak zapisanych sesji.'],
+  sessions_total:     ['TOTAL PAGES LOGGED',     'ВСЬОГО СТОРІНОК',           'PÁGINAS REGISTRADAS',      'ВСЕГО СТРАНИЦ',            'SEITEN GESAMT',              'ŁĄCZNIE STRON'],
+  sessions_ph_pages:  ['Pages read',             'Сторінок прочитано',        'Páginas leídas',           'Страниц прочитано',        'Gelesene Seiten',            'Przeczytane strony'],
+  sessions_btn_add:   ['+ LOG SESSION',          '+ ЗАПИСАТИ СЕСІЮ',          '+ REGISTRAR SESIÓN',       '+ ЗАПИСАТЬ СЕССИЮ',        '+ SITZUNG EINTRAGEN',        '+ DODAJ SESJĘ'],
+  sessions_pages_unit:['pp.',                    'стор.',                     'pp.',                      'стр.',                     'S.',                         'str.'],
+
   // Backup buttons
   btn_export:         ['↓ EXPORT',            '↓ ЕКСПОРТ',            '↓ EXPORTAR',           '↓ ЭКСПОРТ',            '↓ EXPORTIEREN',             '↓ EKSPORT'],
   btn_import:         ['↑ IMPORT',            '↑ ІМПОРТ',             '↑ IMPORTAR',           '↑ ИМПОРТ',             '↑ IMPORTIEREN',             '↑ IMPORT'],
