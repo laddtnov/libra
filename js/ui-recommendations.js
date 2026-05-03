@@ -178,11 +178,16 @@ function buildAIRecCard(rec, olDoc) {
     const base = olDoc || {};
     openFormModal();
     applyBookFromAPI({
-      ...base,
-      title:                    cleanText(base.title || title, 240)           || title,
-      author_name:              [cleanText((base.author_name?.[0]) || author, 140) || author],
-      number_of_pages_median:   toPositiveInt(base.number_of_pages_median),
-      cover_i:                  coverId,
+      title:                  cleanText(base.title || title, 240) || title,
+      author_name:            [cleanText((base.author_name?.[0]) || author, 140) || author],
+      number_of_pages_median: toPositiveInt(base.number_of_pages_median),
+      cover_i:                coverId,
+      first_sentence:         typeof base.first_sentence === 'object'
+                                ? base.first_sentence?.value || ''
+                                : base.first_sentence || '',
+      subject:                Array.isArray(base.subject)
+                                ? base.subject.map(s => String(s)).slice(0, 20)
+                                : [],
     });
   });
   card.appendChild(addBtn);
@@ -236,11 +241,16 @@ function buildGenreRecCard(doc, genre, completedInGenre) {
   addBtn.addEventListener('click', () => {
     openFormModal();
     applyBookFromAPI({
-      ...doc,
-      title:                   cleanText(doc.title, 240)            || 'Unknown',
-      author_name:             [cleanText(doc.author_name?.[0], 140) || 'Unknown'],
-      number_of_pages_median:  toPositiveInt(doc.number_of_pages_median),
-      cover_i:                 coverId,
+      title:                  cleanText(doc.title, 240) || 'Unknown',
+      author_name:            [cleanText(doc.author_name?.[0], 140) || 'Unknown'],
+      number_of_pages_median: toPositiveInt(doc.number_of_pages_median),
+      cover_i:                coverId,
+      first_sentence:         typeof doc.first_sentence === 'object'
+                                ? doc.first_sentence?.value || ''
+                                : doc.first_sentence || '',
+      subject:                Array.isArray(doc.subject)
+                                ? doc.subject.map(s => String(s)).slice(0, 20)
+                                : [],
     });
   });
   card.appendChild(addBtn);

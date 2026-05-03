@@ -164,11 +164,17 @@ export async function fetchDiscover(query) {
     }
 
     const docs = data.docs.map(doc => ({
-      ...doc,
-      title: cleanText(doc.title, 240) || 'Unknown',
-      author_name: [cleanText(doc.author_name?.[0], 140) || 'Unknown'],
-      number_of_pages_median: toPositiveInt(doc.number_of_pages_median),
-      cover_i: toPositiveInt(doc.cover_i),
+      title:                    cleanText(doc.title, 240) || 'Unknown',
+      author_name:              [cleanText(doc.author_name?.[0], 140) || 'Unknown'],
+      number_of_pages_median:   toPositiveInt(doc.number_of_pages_median),
+      cover_i:                  toPositiveInt(doc.cover_i),
+      first_publish_year:       toPositiveInt(doc.first_publish_year),
+      first_sentence:           typeof doc.first_sentence === 'object'
+                                  ? cleanText(doc.first_sentence?.value, 500) || ''
+                                  : cleanText(doc.first_sentence, 500) || '',
+      subject:                  Array.isArray(doc.subject)
+                                  ? doc.subject.map(s => String(s)).slice(0, 20)
+                                  : [],
     }));
 
     section.innerHTML = `
