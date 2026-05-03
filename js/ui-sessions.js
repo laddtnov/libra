@@ -1,5 +1,12 @@
 import { state, saveBooks, escHtml, toPositiveInt } from './state.js';
+import { renderBooks, updateStats } from './ui-render.js';
 import { t } from './i18n.js';
+
+function syncProgress(book) {
+  const total = (book.sessions || []).reduce((sum, s) => sum + s.pages, 0);
+  book.currentPage = total;
+  book.progress = book.pages ? Math.min(Math.round((total / book.pages) * 100), 100) : 0;
+}
 
 function sessionRowHTML(s, idx) {
   return `
@@ -37,7 +44,10 @@ function bindDeleteButtons(bookId) {
       const book = state.booksData[bookId];
       if (!book?.sessions) return;
       book.sessions.splice(idx, 1);
+      syncProgress(book);
       saveBooks();
+      renderBooks();
+      updateStats();
       refreshList(bookId);
     });
   });
@@ -85,7 +95,10 @@ export function initSessionsSection(bookId) {
     if (!book) return;
     if (!book.sessions) book.sessions = [];
     book.sessions.push({ date, pages });
+    syncProgress(book);
     saveBooks();
+    renderBooks();
+    updateStats();
     refreshList(bookId);
 
     pagesEl.value = '';
