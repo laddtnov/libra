@@ -365,27 +365,15 @@ function bindApiKeyUI(onRefresh) {
   });
 }
 
-// ── Main render ────────────────────────────────────────────────────────────────
+// ── Panel shell builder ────────────────────────────────────────────────────────
 
-export async function renderRecsPanel() {
-  const content = document.getElementById('recs-content');
-  if (!content) return;
-
-  const apiKey        = getSavedKey();
-  const completedBooks = getCompletedBooks();
-  const { genreCount, topGenres, totalCompleted } = getGenreProfile();
-
-  const genresToFetch = topGenres.length >= 2
-    ? topGenres
-    : [...new Set([...topGenres, ...DEFAULT_GENRES])].slice(0, 3);
-
+function buildPanelShell(content, apiKey, completedBooks, topGenres, genreCount, totalCompleted) {
   const completedSuffix = totalCompleted === 1 ? t('recs_completed_suffix_sg') : t('recs_completed_suffix_pl');
   const statsLine = totalCompleted > 0
     ? `${t('recs_analyzed')} ${totalCompleted} ${completedSuffix} ${t('recs_genre_loaded')}`
     : t('recs_no_completed');
 
   content.textContent = '';
-
   content.appendChild(buildApiKeyEl(apiKey));
 
   const statsEl = document.createElement('div');
@@ -435,55 +423,55 @@ export async function renderRecsPanel() {
   cardsContainer.appendChild(loadEl);
   recSection.appendChild(cardsContainer);
   content.appendChild(recSection);
+}
 
-  bindApiKeyUI(() => renderRecsPanel());
+// ── AI path (returns true if cards were rendered) ──────────────────────────────
 
-  const container = document.getElementById('rec-cards-container');
-  if (!container) return;
+async function tryAIRecs(container, apiKey, completedBooks) {
+  try {
+    const recs = await getClaudeRecommendations(apiKey, completedBooks);
+    if (!Array.isArray(recs) || !recs.length) throw new Error('empty_response');
 
-  // ── AI path ────────────────────────────────────────────────────────────────
-  if (apiKey && completedBooks.length >= 1) {
-    try {
-      const recs = await getClaudeRecommendations(apiKey, completedBooks);
-      if (!Array.isArray(recs) || !recs.length) throw new Error('empty_response');
+    const existing = getExistingTitles();
+    const filtered = recs
+      .filter(r => r?.title && !existing.has(r.title.toLowerCase().trim()))
+      .slice(0, 6);
 
-      const existing = getExistingTitles();
-      const filtered = recs
-        .filter(r => r?.title && !existing.has(r.title.toLowerCase().trim()))
-        .slice(0, 6);
+    const enriched = await Promise.all(
+      filtered.map(rec =>
+        enrichFromOpenLibrary(rec.title, rec.author).then(ol => ({ rec, ol }))
+      )
+    );
 
-      const enriched = await Promise.all(
-        filtered.map(rec =>
-          enrichFromOpenLibrary(rec.title, rec.author).then(ol => ({ rec, ol }))
-        )
-      );
+    if (!document.getElementById('rec-cards-container')) return true;
+    container.innerHTML = '';
+    enriched.forEach(({ rec, ol }) => container.appendChild(buildAIRecCard(rec, ol)));
+    return true;
 
-      if (!document.getElementById('rec-cards-container')) return;
-      container.innerHTML = '';
-      enriched.forEach(({ rec, ol }) => container.appendChild(buildAIRecCard(rec, ol)));
-      return;
-
-    } catch (err) {
-      if (err.message === 'invalid_key') {
-        clearKey();
-        showToast('Invalid API key — cleared.', 'delete');
-      }
-      if (document.getElementById('rec-cards-container')) {
-        container.textContent = '';
-        const aiErrEl = document.createElement('div');
-        aiErrEl.className = 'recs-loading';
-        aiErrEl.textContent = '> AI unavailable — loading genre recs...';
-        container.appendChild(aiErrEl);
-      }
+  } catch (err) {
+    if (err.message === 'invalid_key') {
+      clearKey();
+      showToast('Invalid API key — cleared.', 'delete');
     }
+    if (document.getElementById('rec-cards-container')) {
+      container.textContent = '';
+      const aiErrEl = document.createElement('div');
+      aiErrEl.className = 'recs-loading';
+      aiErrEl.textContent = '> AI unavailable — loading genre recs...';
+      container.appendChild(aiErrEl);
+    }
+    return false;
   }
+}
 
-  // ── Genre fallback ─────────────────────────────────────────────────────────
+// ── Genre fallback ─────────────────────────────────────────────────────────────
+
+async function loadGenreRecs(container, genresToFetch, genreCount) {
   const existing  = getExistingTitles();
   const collected = [];
 
   for (const genre of genresToFetch) {
-    const docs            = await fetchForGenre(genre);
+    const docs             = await fetchForGenre(genre);
     const completedInGenre = genreCount[genre] || 0;
     for (const doc of docs) {
       const normalTitle = (doc.title || '').toLowerCase().trim();
@@ -510,6 +498,33 @@ export async function renderRecsPanel() {
   collected.forEach(({ doc, genre, completedInGenre }) =>
     container.appendChild(buildGenreRecCard(doc, genre, completedInGenre))
   );
+}
+
+// ── Main render ────────────────────────────────────────────────────────────────
+
+export async function renderRecsPanel() {
+  const content = document.getElementById('recs-content');
+  if (!content) return;
+
+  const apiKey         = getSavedKey();
+  const completedBooks = getCompletedBooks();
+  const { genreCount, topGenres, totalCompleted } = getGenreProfile();
+  const genresToFetch  = topGenres.length >= 2
+    ? topGenres
+    : [...new Set([...topGenres, ...DEFAULT_GENRES])].slice(0, 3);
+
+  buildPanelShell(content, apiKey, completedBooks, topGenres, genreCount, totalCompleted);
+  bindApiKeyUI(() => renderRecsPanel());
+
+  const container = document.getElementById('rec-cards-container');
+  if (!container) return;
+
+  if (apiKey && completedBooks.length >= 1) {
+    const done = await tryAIRecs(container, apiKey, completedBooks);
+    if (done) return;
+  }
+
+  await loadGenreRecs(container, genresToFetch, genreCount);
 }
 
 export function openRecsPanel() {
