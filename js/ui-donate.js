@@ -97,7 +97,7 @@ function bindSendButton() {
     const email = emailEl.value.trim();
     const name  = nameEl?.value.trim() ?? '';
 
-    if (!email || !email.includes('@')) {
+    if (!email?.includes('@')) {
       setStatus(status, '> ERROR — enter a valid email address', 'error');
       emailEl.focus();
       return;

@@ -114,7 +114,7 @@ export default async function handler(req, res) {
 
   const { email, name } = req.body ?? {};
 
-  if (!email || !email.includes('@') || email.length > 320) {
+  if (!email?.includes('@') || email.length > 320) {
     return res.status(400).json({ error: 'Valid email required' });
   }
 
