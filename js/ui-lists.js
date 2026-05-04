@@ -78,7 +78,7 @@ function buildListsHTML() {
       <div class="list-item${isActive ? ' list-item--active' : ''}">
         <div class="list-item-info">
           <span class="list-item-name">${escHtml(list.name)}</span>
-          <span class="list-item-count">${count} book${count !== 1 ? 's' : ''}</span>
+          <span class="list-item-count">${count} book${count === 1 ? '' : 's'}</span>
         </div>
         <div class="list-item-actions">
           <button class="list-view-btn${isActive ? ' active' : ''}" data-list-id="${escHtml(list.id)}">

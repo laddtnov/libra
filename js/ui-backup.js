@@ -12,30 +12,27 @@ export function exportBooks() {
   a.download = `libra-${new Date().toISOString().slice(0, 10)}.json`;
   document.body.appendChild(a);
   a.click();
-  document.body.removeChild(a);
+  a.remove();
   URL.revokeObjectURL(url);
   showToast(t('export_success'), 'success');
 }
 
-export function importBooks(file) {
+export async function importBooks(file) {
   if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    try {
-      const parsed = JSON.parse(e.target.result);
-      if (typeof parsed !== 'object' || Array.isArray(parsed) || !Object.keys(parsed).length) {
-        showToast(t('import_invalid'), 'delete');
-        return;
-      }
-      const count = Object.keys(parsed).length;
-      Object.assign(state.booksData, parsed);
-      saveBooks();
-      updateStats();
-      renderBooks();
-      showToast(t('import_success').replace('{n}', count), 'success');
-    } catch {
-      showToast(t('import_error'), 'delete');
+  try {
+    const text = await file.text();
+    const parsed = JSON.parse(text);
+    if (typeof parsed !== 'object' || Array.isArray(parsed) || !Object.keys(parsed).length) {
+      showToast(t('import_invalid'), 'delete');
+      return;
     }
-  };
-  reader.readAsText(file);
+    const count = Object.keys(parsed).length;
+    Object.assign(state.booksData, parsed);
+    saveBooks();
+    updateStats();
+    renderBooks();
+    showToast(t('import_success').replace('{n}', count), 'success');
+  } catch {
+    showToast(t('import_error'), 'delete');
+  }
 }

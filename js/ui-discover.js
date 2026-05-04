@@ -223,7 +223,7 @@ export async function fetchDiscover(query) {
   initBar.className = 'discover-status-bar';
   const initLbl = document.createElement('span');
   initLbl.className = 'discover-status-label';
-  initLbl.setAttribute('data-i18n', 'discover_header');
+  initLbl.dataset.i18n = 'discover_header';
   initLbl.textContent = t('discover_header');
   initBar.appendChild(initLbl);
   section.appendChild(initBar);
@@ -267,7 +267,7 @@ export async function fetchDiscover(query) {
                                   ? cleanText(doc.first_sentence?.value, 500) || ''
                                   : cleanText(doc.first_sentence, 500) || '',
       subject:                  Array.isArray(doc.subject)
-                                  ? doc.subject.map(s => String(s)).slice(0, 20)
+                                  ? doc.subject.map(String).slice(0, 20)
                                   : [],
     }));
 

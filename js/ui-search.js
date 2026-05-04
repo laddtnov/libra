@@ -107,7 +107,7 @@ export async function searchOpenLibrary(query, resultsEl, statusEl) {
                                 ? cleanText(doc.first_sentence?.value, 500) || ''
                                 : cleanText(doc.first_sentence, 500) || '',
       subject:                Array.isArray(doc.subject)
-                                ? doc.subject.map(s => String(s)).slice(0, 20)
+                                ? doc.subject.map(String).slice(0, 20)
                                 : [],
     }));
 

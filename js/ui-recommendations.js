@@ -186,7 +186,7 @@ function buildAIRecCard(rec, olDoc) {
                                 ? base.first_sentence?.value || ''
                                 : base.first_sentence || '',
       subject:                Array.isArray(base.subject)
-                                ? base.subject.map(s => String(s)).slice(0, 20)
+                                ? base.subject.map(String).slice(0, 20)
                                 : [],
     });
   });
@@ -227,8 +227,9 @@ function buildGenreRecCard(doc, genre, completedInGenre) {
 
   const reason = document.createElement('span');
   reason.className = 'rec-reason';
+  const suffix = completedInGenre === 1 ? t('recs_completed_suffix_sg') : t('recs_completed_suffix_pl');
   reason.textContent = completedInGenre > 0
-    ? `> ${completedInGenre} ${genre} ${completedInGenre === 1 ? t('recs_completed_suffix_sg') : t('recs_completed_suffix_pl')}`
+    ? `> ${completedInGenre} ${genre} ${suffix}`
     : '> Popular in genre';
   meta.appendChild(reason);
 
@@ -249,7 +250,7 @@ function buildGenreRecCard(doc, genre, completedInGenre) {
                                 ? doc.first_sentence?.value || ''
                                 : doc.first_sentence || '',
       subject:                Array.isArray(doc.subject)
-                                ? doc.subject.map(s => String(s)).slice(0, 20)
+                                ? doc.subject.map(String).slice(0, 20)
                                 : [],
     });
   });
@@ -378,8 +379,9 @@ export async function renderRecsPanel() {
     ? topGenres
     : [...new Set([...topGenres, ...DEFAULT_GENRES])].slice(0, 3);
 
+  const completedSuffix = totalCompleted === 1 ? t('recs_completed_suffix_sg') : t('recs_completed_suffix_pl');
   const statsLine = totalCompleted > 0
-    ? `${t('recs_analyzed')} ${totalCompleted} ${totalCompleted === 1 ? t('recs_completed_suffix_sg') : t('recs_completed_suffix_pl')} ${t('recs_genre_loaded')}`
+    ? `${t('recs_analyzed')} ${totalCompleted} ${completedSuffix} ${t('recs_genre_loaded')}`
     : t('recs_no_completed');
 
   content.textContent = '';
@@ -486,7 +488,7 @@ export async function renderRecsPanel() {
     for (const doc of docs) {
       const normalTitle = (doc.title || '').toLowerCase().trim();
       if (!normalTitle || existing.has(normalTitle)) continue;
-      if (collected.find(c => c.doc.title?.toLowerCase().trim() === normalTitle)) continue;
+      if (collected.some(c => c.doc.title?.toLowerCase().trim() === normalTitle)) continue;
       collected.push({ doc, genre, completedInGenre });
       if (collected.length >= 9) break;
     }

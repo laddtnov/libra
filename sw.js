@@ -1,4 +1,4 @@
-const CACHE = 'libra-v7';
+const CACHE = 'libra-v8';
 
 const ASSETS = [
   '/',
@@ -50,23 +50,23 @@ const ASSETS = [
   '/assets/fonts/rajdhani-700-latin.woff2',
 ];
 
-self.addEventListener('install', event => {
+globalThis.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE).then(cache => cache.addAll(ASSETS))
   );
-  self.skipWaiting();
+  globalThis.skipWaiting();
 });
 
-self.addEventListener('activate', event => {
+globalThis.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
       Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))
     )
   );
-  self.clients.claim();
+  globalThis.clients.claim();
 });
 
-self.addEventListener('fetch', event => {
+globalThis.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
 
   // External API calls — network only, fail silently offline

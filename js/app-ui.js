@@ -1,13 +1,13 @@
-import { state, debounce } from './state.js';
+import { state } from './state.js';
 import { openFormModal, closeFormModal } from './ui-form-modal.js';
 import { showBookDetails, closeModal, configureDetailHandlers } from './ui-detail-modal.js';
 import { renderBooks, setFilter, configureRenderHandlers, updateStats } from './ui-render.js';
 import { openListsPanel, closeListsPanel, initListsPanel } from './ui-lists.js';
 import { openRecsPanel, closeRecsPanel, initRecsPanel } from './ui-recommendations.js';
-import { fetchDiscover, clearDiscover, debouncedFetch, closePreviewModal } from './ui-discover.js';
+import { clearDiscover, debouncedFetch, closePreviewModal } from './ui-discover.js';
 import { exportBooks, importBooks } from './ui-backup.js';
 import { openDonatePanel, closeDonatePanel, initDonatePanel } from './ui-donate.js';
-import { initI18n, setLanguage, getLang, applyI18n } from './i18n.js';
+import { initI18n, setLanguage, applyI18n } from './i18n.js';
 
 configureRenderHandlers({ openDetails: showBookDetails });
 configureDetailHandlers({ openFormModal });
@@ -34,12 +34,12 @@ function initApp() {
   const searchInput = document.getElementById('search-input');
   searchInput.addEventListener('input', e => {
     const q = e.target.value.trim();
-    if (!q) {
+    if (q) {
+      debouncedFetch(q);
+    } else {
       clearDiscover();
       state.searchQuery = '';
       renderBooks();
-    } else {
-      debouncedFetch(q);
     }
   });
 

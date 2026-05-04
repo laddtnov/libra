@@ -178,7 +178,7 @@
   display: block;
   text-align: center;
   padding: 14px 20px;
-  background: rgba(255, 215, 0, 0.05);
+  background: #19170c;
   border: 1px solid rgba(255, 215, 0, 0.4);
   border-radius: 8px;
   color: #ffd700;
@@ -323,7 +323,7 @@
 }
 
 .crypto-copy-btn:hover {
-  background: rgba(255, 215, 0, 0.08);
+  background: #19180d;
   border-color: #ffd700;
   color: #ffd700;
 }
