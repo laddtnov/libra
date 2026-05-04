@@ -131,7 +131,7 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Libra <onboarding@resend.dev>',
+        from: 'Libra <libra@laddtnov.xyz>',
         to: email,
         subject: '[ LIBRA ] — Thank you for your support',
         html: buildEmail(typeof name === 'string' ? name.slice(0, 80) : ''),
