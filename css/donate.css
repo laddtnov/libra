@@ -333,6 +333,96 @@
   color: #00ff88;
 }
 
+/* ── Appreciation email section ── */
+
+.donate-email-hint {
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  color: rgba(255, 215, 0, 0.45);
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+}
+
+.donate-email-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.donate-name-input,
+.donate-email-input {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 215, 0, 0.28);
+  border-radius: 4px;
+  color: #ffd700;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  padding: 8px 11px;
+  outline: none;
+  transition: border-color 0.2s ease;
+  min-width: 0;
+}
+
+.donate-name-input {
+  width: 140px;
+  flex-shrink: 0;
+}
+
+.donate-email-input {
+  flex: 1;
+  min-width: 160px;
+}
+
+.donate-name-input::placeholder,
+.donate-email-input::placeholder {
+  color: rgba(255, 215, 0, 0.25);
+}
+
+.donate-name-input:focus,
+.donate-email-input:focus {
+  border-color: rgba(255, 215, 0, 0.65);
+  box-shadow: 0 0 8px rgba(255, 215, 0, 0.12);
+}
+
+.donate-send-btn {
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid rgba(255, 215, 0, 0.45);
+  border-radius: 4px;
+  color: #ffd700;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+}
+
+.donate-send-btn:hover:not(:disabled) {
+  background: rgba(255, 215, 0, 0.1);
+  border-color: #ffd700;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+}
+
+.donate-send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.donate-send-status {
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  min-height: 14px;
+  transition: color 0.2s ease;
+}
+
+.donate-send-status[data-type="success"] { color: #00ff88; }
+.donate-send-status[data-type="error"]   { color: #ff5555; }
+.donate-send-status[data-type="loading"] { color: rgba(255, 215, 0, 0.55); }
+
 /* ── Footer ── */
 
 .donate-footer {

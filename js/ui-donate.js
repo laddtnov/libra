@@ -43,6 +43,19 @@ function buildDonateHTML() {
       ${cryptoRowHTML('SOL', ADDRESSES.SOL)}
     </div>
 
+    <div class="donate-divider">────────────────────────────────────────────</div>
+
+    <div class="donate-section" id="donate-thankyou-section">
+      <div class="donate-section-label">&gt; RECEIVE APPRECIATION MESSAGE</div>
+      <div class="donate-email-hint">&gt; Donated? Drop your email — we'll send a thank-you transmission.</div>
+      <div class="donate-email-row">
+        <input type="text" id="donate-name-input" class="donate-name-input" placeholder="your name (optional)" maxlength="80" autocomplete="name">
+        <input type="email" id="donate-email-input" class="donate-email-input" placeholder="your@email.com" maxlength="320" autocomplete="email">
+        <button class="donate-send-btn" id="donate-send-btn">[ SEND ]</button>
+      </div>
+      <div id="donate-send-status" class="donate-send-status"></div>
+    </div>
+
     <div class="donate-footer">
       &gt; Thank you for supporting this project. Every contribution is appreciated.
     </div>`;
@@ -68,9 +81,62 @@ function bindCopyButtons() {
   });
 }
 
+function setStatus(el, text, type) {
+  el.textContent = text;
+  el.dataset.type = type;
+}
+
+function bindSendButton() {
+  const btn    = document.getElementById('donate-send-btn');
+  const emailEl = document.getElementById('donate-email-input');
+  const nameEl  = document.getElementById('donate-name-input');
+  const status  = document.getElementById('donate-send-status');
+  if (!btn || !emailEl || !status) return;
+
+  btn.addEventListener('click', async () => {
+    const email = emailEl.value.trim();
+    const name  = nameEl?.value.trim() ?? '';
+
+    if (!email || !email.includes('@')) {
+      setStatus(status, '> ERROR — enter a valid email address', 'error');
+      emailEl.focus();
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = '[ SENDING... ]';
+    setStatus(status, '> TRANSMITTING...', 'loading');
+
+    try {
+      const res = await fetch('/api/thank-you', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, name }),
+      });
+
+      if (res.ok) {
+        setStatus(status, '> TRANSMISSION COMPLETE — check your inbox', 'success');
+        btn.textContent = '[ SENT ✓ ]';
+        emailEl.value = '';
+        if (nameEl) nameEl.value = '';
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setStatus(status, `> FAILED — ${data.error ?? 'try again later'}`, 'error');
+        btn.disabled = false;
+        btn.textContent = '[ SEND ]';
+      }
+    } catch {
+      setStatus(status, '> NETWORK ERROR — check connection', 'error');
+      btn.disabled = false;
+      btn.textContent = '[ SEND ]';
+    }
+  });
+}
+
 export function openDonatePanel() {
   document.getElementById('donate-content').innerHTML = buildDonateHTML();
   bindCopyButtons();
+  bindSendButton();
   document.getElementById('donate-panel').style.display = 'flex';
   document.getElementById('modal-overlay').style.display = 'block';
 }
