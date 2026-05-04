@@ -466,6 +466,14 @@ async function tryAIRecs(container, apiKey, completedBooks) {
 
 // ── Genre fallback ─────────────────────────────────────────────────────────────
 
+function tryCollect(doc, genre, completedInGenre, existing, collected) {
+  const normalTitle = (doc.title || '').toLowerCase().trim();
+  if (!normalTitle || existing.has(normalTitle)) return false;
+  if (collected.some(c => c.doc.title?.toLowerCase().trim() === normalTitle)) return false;
+  collected.push({ doc, genre, completedInGenre });
+  return collected.length >= 9;
+}
+
 async function loadGenreRecs(container, genresToFetch, genreCount) {
   const existing  = getExistingTitles();
   const collected = [];
@@ -474,11 +482,7 @@ async function loadGenreRecs(container, genresToFetch, genreCount) {
     const docs             = await fetchForGenre(genre);
     const completedInGenre = genreCount[genre] || 0;
     for (const doc of docs) {
-      const normalTitle = (doc.title || '').toLowerCase().trim();
-      if (!normalTitle || existing.has(normalTitle)) continue;
-      if (collected.some(c => c.doc.title?.toLowerCase().trim() === normalTitle)) continue;
-      collected.push({ doc, genre, completedInGenre });
-      if (collected.length >= 9) break;
+      if (tryCollect(doc, genre, completedInGenre, existing, collected)) break;
     }
     if (collected.length >= 9) break;
   }
