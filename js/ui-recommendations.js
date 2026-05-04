@@ -278,29 +278,65 @@ function buildGenreBars(topGenres, genreCount) {
 
 // ── API key UI ─────────────────────────────────────────────────────────────────
 
-function buildApiKeyHTML(savedKey) {
+function buildApiKeyEl(savedKey) {
   const isSet = Boolean(savedKey);
-  return `
-    <div class="recs-api-section">
-      <div class="recs-api-header" id="recs-api-toggle">
-        <span class="recs-api-label">⚙ CLAUDE API KEY</span>
-        <span class="recs-api-status ${isSet ? 'recs-api-status--set' : 'recs-api-status--unset'}">
-          ${isSet ? '&gt; key saved ✓' : '&gt; not set — using genre search'}
-        </span>
-      </div>
-      <div class="recs-api-body" id="recs-api-body">
-        <div class="recs-api-input-row">
-          <input type="password"
-                 id="recs-api-key-input"
-                 class="recs-api-key-input"
-                 placeholder="sk-ant-api03-..."
-                 value="${isSet ? escHtml(savedKey) : ''}">
-          <button id="recs-api-save-btn" class="recs-api-btn recs-api-btn--save">[ SAVE ]</button>
-          <button id="recs-api-clear-btn" class="recs-api-btn recs-api-btn--clear">[ CLEAR ]</button>
-        </div>
-        <div class="recs-api-hint">&gt; Stored locally · sent only to api.anthropic.com</div>
-      </div>
-    </div>`;
+
+  const wrap   = document.createElement('div');
+  wrap.className = 'recs-api-section';
+
+  const toggle = document.createElement('div');
+  toggle.className = 'recs-api-header';
+  toggle.id = 'recs-api-toggle';
+
+  const lbl = document.createElement('span');
+  lbl.className = 'recs-api-label';
+  lbl.textContent = '⚙ CLAUDE API KEY';
+
+  const status = document.createElement('span');
+  status.className = `recs-api-status ${isSet ? 'recs-api-status--set' : 'recs-api-status--unset'}`;
+  status.textContent = isSet ? '> key saved ✓' : '> not set — using genre search';
+
+  toggle.appendChild(lbl);
+  toggle.appendChild(status);
+  wrap.appendChild(toggle);
+
+  const body = document.createElement('div');
+  body.className = 'recs-api-body';
+  body.id = 'recs-api-body';
+
+  const row = document.createElement('div');
+  row.className = 'recs-api-input-row';
+
+  const input = document.createElement('input');
+  input.type = 'password';
+  input.id = 'recs-api-key-input';
+  input.className = 'recs-api-key-input';
+  input.placeholder = 'sk-ant-api03-...';
+  if (isSet) input.value = savedKey;
+
+  const saveBtn = document.createElement('button');
+  saveBtn.id = 'recs-api-save-btn';
+  saveBtn.className = 'recs-api-btn recs-api-btn--save';
+  saveBtn.textContent = '[ SAVE ]';
+
+  const clearBtn = document.createElement('button');
+  clearBtn.id = 'recs-api-clear-btn';
+  clearBtn.className = 'recs-api-btn recs-api-btn--clear';
+  clearBtn.textContent = '[ CLEAR ]';
+
+  row.appendChild(input);
+  row.appendChild(saveBtn);
+  row.appendChild(clearBtn);
+
+  const hint = document.createElement('div');
+  hint.className = 'recs-api-hint';
+  hint.textContent = '> Stored locally · sent only to api.anthropic.com';
+
+  body.appendChild(row);
+  body.appendChild(hint);
+  wrap.appendChild(body);
+
+  return wrap;
 }
 
 function bindApiKeyUI(onRefresh) {
@@ -346,31 +382,57 @@ export async function renderRecsPanel() {
     ? `${t('recs_analyzed')} ${totalCompleted} ${totalCompleted === 1 ? t('recs_completed_suffix_sg') : t('recs_completed_suffix_pl')} ${t('recs_genre_loaded')}`
     : t('recs_no_completed');
 
-  const barsHTML = topGenres.length
-    ? buildGenreBars(topGenres, genreCount)
-    : `<div class="recs-no-data">${t('recs_no_genre')}</div>`;
+  content.textContent = '';
 
-  const aiModeLabel = apiKey
-    ? ' <span class="recs-ai-badge">AI</span>'
-    : '';
+  content.appendChild(buildApiKeyEl(apiKey));
 
-  const loadingMsg = apiKey && completedBooks.length
-    ? '&gt; Analysing your reading pattern...'
+  const statsEl = document.createElement('div');
+  statsEl.className = 'recs-stats-line';
+  statsEl.textContent = statsLine;
+  content.appendChild(statsEl);
+
+  const genreSection = document.createElement('div');
+  genreSection.className = 'recs-section';
+  const genreTitle = document.createElement('div');
+  genreTitle.className = 'recs-section-title';
+  genreTitle.textContent = t('recs_genre_profile');
+  genreSection.appendChild(genreTitle);
+  const genreBarsEl = document.createElement('div');
+  genreBarsEl.className = 'genre-bars';
+  if (topGenres.length) {
+    genreBarsEl.innerHTML = buildGenreBars(topGenres, genreCount);
+  } else {
+    const noGenre = document.createElement('div');
+    noGenre.className = 'recs-no-data';
+    noGenre.textContent = t('recs_no_genre');
+    genreBarsEl.appendChild(noGenre);
+  }
+  genreSection.appendChild(genreBarsEl);
+  content.appendChild(genreSection);
+
+  const recSection = document.createElement('div');
+  recSection.className = 'recs-section';
+  const recTitle = document.createElement('div');
+  recTitle.className = 'recs-section-title';
+  recTitle.textContent = t('recs_recommended');
+  if (apiKey) {
+    const badge = document.createElement('span');
+    badge.className = 'recs-ai-badge';
+    badge.textContent = 'AI';
+    recTitle.appendChild(badge);
+  }
+  recSection.appendChild(recTitle);
+  const cardsContainer = document.createElement('div');
+  cardsContainer.className = 'rec-cards';
+  cardsContainer.id = 'rec-cards-container';
+  const loadEl = document.createElement('div');
+  loadEl.className = 'recs-loading';
+  loadEl.textContent = apiKey && completedBooks.length
+    ? '> Analysing your reading pattern...'
     : t('recs_loading');
-
-  content.innerHTML = `
-    ${buildApiKeyHTML(apiKey)}
-    <div class="recs-stats-line">${statsLine}</div>
-    <div class="recs-section">
-      <div class="recs-section-title">${t('recs_genre_profile')}</div>
-      <div class="genre-bars">${barsHTML}</div>
-    </div>
-    <div class="recs-section">
-      <div class="recs-section-title">${t('recs_recommended')}${aiModeLabel}</div>
-      <div class="rec-cards" id="rec-cards-container">
-        <div class="recs-loading">${loadingMsg}</div>
-      </div>
-    </div>`;
+  cardsContainer.appendChild(loadEl);
+  recSection.appendChild(cardsContainer);
+  content.appendChild(recSection);
 
   bindApiKeyUI(() => renderRecsPanel());
 
@@ -404,8 +466,13 @@ export async function renderRecsPanel() {
         clearKey();
         showToast('Invalid API key — cleared.', 'delete');
       }
-      if (document.getElementById('rec-cards-container'))
-        container.innerHTML = `<div class="recs-loading">&gt; AI unavailable — loading genre recs...</div>`;
+      if (document.getElementById('rec-cards-container')) {
+        container.textContent = '';
+        const aiErrEl = document.createElement('div');
+        aiErrEl.className = 'recs-loading';
+        aiErrEl.textContent = '> AI unavailable — loading genre recs...';
+        container.appendChild(aiErrEl);
+      }
     }
   }
 
@@ -429,7 +496,11 @@ export async function renderRecsPanel() {
   if (!document.getElementById('rec-cards-container')) return;
 
   if (!collected.length) {
-    container.innerHTML = `<div class="recs-no-data">${t('recs_no_data')}</div>`;
+    container.textContent = '';
+    const noDataEl = document.createElement('div');
+    noDataEl.className = 'recs-no-data';
+    noDataEl.textContent = t('recs_no_data');
+    container.appendChild(noDataEl);
     return;
   }
 
