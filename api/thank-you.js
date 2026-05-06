@@ -1,5 +1,24 @@
+const rateMap = new Map();
+const RATE_LIMIT = 5;
+const RATE_WINDOW_MS = 60_000;
+
+function isRateLimited(ip) {
+  const now = Date.now();
+  const hits = (rateMap.get(ip) ?? []).filter(t => now - t < RATE_WINDOW_MS);
+  if (hits.length >= RATE_LIMIT) return true;
+  hits.push(now);
+  rateMap.set(ip, hits);
+  return false;
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
 function buildEmail(name) {
-  const greeting = name ? `AGENT ${name.toUpperCase()}` : 'AGENT';
+  const safe = name ? escapeHtml(name) : '';
+  const greeting = safe ? `AGENT ${safe.toUpperCase()}` : 'AGENT';
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -110,6 +129,11 @@ function buildEmail(name) {
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const ip = req.headers['x-forwarded-for']?.split(',')[0].trim() ?? req.socket?.remoteAddress ?? 'unknown';
+  if (isRateLimited(ip)) {
+    return res.status(429).json({ error: 'Too many requests — try again later' });
   }
 
   const { email, name } = req.body ?? {};
