@@ -11,6 +11,13 @@ function isRateLimited(ip) {
   return false;
 }
 
+function pruneRateMap() {
+  const cutoff = Date.now() - RATE_WINDOW_MS;
+  for (const [ip, hits] of rateMap) {
+    if (hits[hits.length - 1] < cutoff) rateMap.delete(ip);
+  }
+}
+
 function escapeHtml(str) {
   return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
             .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
@@ -131,7 +138,12 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const ip = req.headers['x-forwarded-for']?.split(',')[0].trim() ?? req.socket?.remoteAddress ?? 'unknown';
+  const fwd = req.headers['x-forwarded-for'];
+  const ip = req.headers['x-real-ip']
+    ?? (fwd ? fwd.split(',').at(-1).trim() : null)
+    ?? req.socket?.remoteAddress
+    ?? 'unknown';
+  pruneRateMap();
   if (isRateLimited(ip)) {
     return res.status(429).json({ error: 'Too many requests — try again later' });
   }
