@@ -21,7 +21,7 @@ export function onAuthChange(callback) {
 export async function sendMagicLink(email) {
   const { error } = await supabase.auth.signInWithOtp({
     email,
-    options: { emailRedirectTo: window.location.origin },
+    options: { emailRedirectTo: globalThis.location.origin },
   });
   return error;
 }

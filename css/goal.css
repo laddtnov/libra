@@ -230,7 +230,7 @@
   color: rgba(255, 85, 85, 0.6);
 }
 .goal-inline-cancel:hover {
-  background: rgba(255, 85, 85, 0.08);
+  background: #201313;
   border-color: #ff5555;
   color: #ff5555;
 }

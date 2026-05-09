@@ -1,6 +1,5 @@
 import { state, saveBooks } from './state.js';
-import { renderBooks } from './ui-render.js';
-import { updateStats } from './ui-render.js';
+import { renderBooks, updateStats } from './ui-render.js';
 
 // ── CSV parser (handles quoted fields with commas) ────────────────────────────
 function parseCSV(text) {
@@ -21,7 +20,7 @@ function parseCSV(text) {
     }
     fields.push(cur.trim());
     return fields;
-  }).filter(r => r.some(f => f));
+  }).filter(r => r.some(Boolean));
 }
 
 // ── Map Goodreads shelf → Libra status ────────────────────────────────────────
@@ -40,6 +39,43 @@ function makeId(title, author) {
     .slice(0, 80);
 }
 
+// ── Parse completed date from "YYYY/MM/DD" ───────────────────────────────────
+function parseCompletedDate(status, dateRead) {
+  if (status !== 'completed' || !dateRead) return undefined;
+  const d = new Date(dateRead.replaceAll('/', '-'));
+  return !Number.isNaN(d.getTime())
+    ? d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+    : undefined;
+}
+
+// ── Build a single book record from a CSV row ─────────────────────────────────
+function buildBook(row, indices, existing) {
+  const { titleIdx, authorIdx, ratingIdx, pagesIdx, dateIdx, shelfIdx, reviewIdx } = indices;
+  const get = i => (i >= 0 ? (row[i] || '').trim() : '');
+
+  const title  = get(titleIdx).slice(0, 160);
+  const author = get(authorIdx).slice(0, 120);
+  if (!title || !author) return null;
+
+  const id = makeId(title, author);
+  if (!id || existing.has(id)) return null;
+
+  const ratingRaw = Number.parseInt(get(ratingIdx), 10);
+  const rating    = ratingRaw >= 1 && ratingRaw <= 5 ? ratingRaw : undefined;
+  const pages     = Number.parseInt(get(pagesIdx), 10) || undefined;
+  const status    = mapStatus(get(shelfIdx));
+  const notes     = get(reviewIdx).slice(0, 2400) || undefined;
+  const completed = parseCompletedDate(status, get(dateIdx));
+
+  const book = { title, author, status, category: 'Other' };
+  if (rating)    book.rating    = rating;
+  if (pages)     book.pages     = pages;
+  if (notes)     book.notes     = [notes];
+  if (completed) book.completed = completed;
+
+  return { id, book };
+}
+
 // ── Import ────────────────────────────────────────────────────────────────────
 export async function importGoodreads(file) {
   if (!file) return { imported: 0, skipped: 0, error: null };
@@ -55,73 +91,35 @@ export async function importGoodreads(file) {
   const headers = rows[0].map(h => h.toLowerCase().trim());
   const col = name => headers.indexOf(name);
 
-  // Required columns
-  const titleIdx  = col('title');
-  const authorIdx = col('author');
+  const titleIdx = col('title'), authorIdx = col('author');
   if (titleIdx < 0 || authorIdx < 0) {
     return { imported: 0, skipped: 0, error: 'Not a valid Goodreads export (missing Title/Author columns)' };
   }
 
-  const ratingIdx  = col('my rating');
-  const pagesIdx   = col('number of pages');
-  const dateIdx    = col('date read');
-  const shelfIdx   = col('exclusive shelf');
-  const reviewIdx  = col('my review');
+  const indices = {
+    titleIdx, authorIdx,
+    ratingIdx: col('my rating'),
+    pagesIdx:  col('number of pages'),
+    dateIdx:   col('date read'),
+    shelfIdx:  col('exclusive shelf'),
+    reviewIdx: col('my review'),
+  };
 
-  // Build existing title+author set for duplicate detection
   const existing = new Set(
-    Object.values(state.booksData).map(b =>
-      makeId(b.title || '', b.author || '')
-    )
+    Object.values(state.booksData).map(b => makeId(b.title || '', b.author || ''))
   );
 
   let imported = 0, skipped = 0;
 
   for (const row of rows.slice(1)) {
-    const get = i => (i >= 0 ? (row[i] || '').trim() : '');
-
-    const title  = get(titleIdx).slice(0, 160);
-    const author = get(authorIdx).slice(0, 120);
-    if (!title || !author) { skipped++; continue; }
-
-    const id = makeId(title, author);
-    if (!id) { skipped++; continue; }
-
-    if (existing.has(id)) { skipped++; continue; }
-
-    const ratingRaw = Number.parseInt(get(ratingIdx), 10);
-    const rating    = ratingRaw >= 1 && ratingRaw <= 5 ? ratingRaw : undefined;
-    const pages     = Number.parseInt(get(pagesIdx), 10) || undefined;
-    const shelf     = get(shelfIdx);
-    const status    = mapStatus(shelf);
-    const dateRead  = get(dateIdx); // "YYYY/MM/DD"
-    const notes     = get(reviewIdx).slice(0, 2400) || undefined;
-
-    // Convert "2024/03/15" → "March 2024" for completed field
-    let completed;
-    if (status === 'completed' && dateRead) {
-      const d = new Date(dateRead.replaceAll('/', '-'));
-      if (!Number.isNaN(d.getTime())) {
-        completed = d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-      }
-    }
-
-    const book = { title, author, status, category: 'Other' };
-    if (rating)    book.rating    = rating;
-    if (pages)     book.pages     = pages;
-    if (notes)     book.notes     = [notes];
-    if (completed) book.completed = completed;
-
-    state.booksData[id] = book;
-    existing.add(id);
+    const result = buildBook(row, indices, existing);
+    if (!result) { skipped++; continue; }
+    state.booksData[result.id] = result.book;
+    existing.add(result.id);
     imported++;
   }
 
-  if (imported > 0) {
-    saveBooks();
-    renderBooks();
-    updateStats();
-  }
+  if (imported > 0) { saveBooks(); renderBooks(); updateStats(); }
 
   return { imported, skipped, error: null };
 }

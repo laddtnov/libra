@@ -25,8 +25,9 @@ export function renderGoal() {
     fillEl.dataset.pct = pct >= 100 ? '100' : '';
   }
   if (metaEl) {
+    const reachedSuffix = pct >= 100 ? '  ✓ GOAL REACHED' : '';
     metaEl.textContent = goal
-      ? `${completed} / ${goal} books — ${pct}%${pct >= 100 ? '  ✓ GOAL REACHED' : ''}`
+      ? `${completed} / ${goal} books — ${pct}%${reachedSuffix}`
       : 'No goal set — click [ SET ] to add one';
   }
   if (editBtn) editBtn.textContent = goal ? '[ EDIT ]' : '[ SET ]';

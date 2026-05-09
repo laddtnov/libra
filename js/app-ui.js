@@ -9,7 +9,7 @@ import { exportBooks, importBooks } from './ui-backup.js';
 import { openDonatePanel, closeDonatePanel, initDonatePanel } from './ui-donate.js';
 import { initI18n, setLanguage, applyI18n } from './i18n.js';
 import { initGoal, renderGoal } from './ui-goal.js';
-import { initStreak, recordSessionToday } from './ui-streak.js';
+import { initStreak } from './ui-streak.js';
 import { openStatsPanel, closeStatsPanel, initStatsPanel } from './ui-stats.js';
 import { importGoodreads } from './ui-goodreads.js';
 import { openWrappedPanel, closeWrappedPanel, initWrappedPanel } from './ui-wrapped.js';
@@ -168,10 +168,8 @@ async function initSync() {
     if (user) {
       // Push existing local data up first, then pull cloud (merge wins for non-empty)
       const localSettings = buildSettings();
-      await Promise.all([
-        pushSettingsToCloud(localSettings).catch(() => {}),
-        saveBooks(),
-      ]);
+      saveBooks();
+      await pushSettingsToCloud(localSettings).catch(() => {});
 
       const [cloudBooks, cloudSettings] = await Promise.all([
         pullBooksFromCloud(),
