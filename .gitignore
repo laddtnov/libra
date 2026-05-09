@@ -1,0 +1,5 @@
+.env
+js/config.js
+.DS_Store
+.obsidian/
+.claude/

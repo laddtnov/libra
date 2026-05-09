@@ -1,4 +1,4 @@
-import { state } from './state.js';
+import { state, saveBooks } from './state.js';
 import { openFormModal, closeFormModal } from './ui-form-modal.js';
 import { showBookDetails, closeModal, configureDetailHandlers } from './ui-detail-modal.js';
 import { renderBooks, setFilter, configureRenderHandlers, updateStats } from './ui-render.js';
@@ -8,6 +8,8 @@ import { clearDiscover, debouncedFetch, closePreviewModal } from './ui-discover.
 import { exportBooks, importBooks } from './ui-backup.js';
 import { openDonatePanel, closeDonatePanel, initDonatePanel } from './ui-donate.js';
 import { initI18n, setLanguage, applyI18n } from './i18n.js';
+import { initAuth, onAuthChange, pullBooksFromCloud } from './auth.js';
+import { showAuthOverlay, hideAuthOverlay, updateAuthBadge, initAuthUI } from './ui-auth.js';
 
 configureRenderHandlers({ openDetails: showBookDetails });
 configureDetailHandlers({ openFormModal });
@@ -93,4 +95,42 @@ function initApp() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', initApp);
+async function initSync() {
+  const user = await initAuth();
+  updateAuthBadge(user);
+
+  // If signed in, pull latest books from cloud
+  if (user) {
+    const cloudBooks = await pullBooksFromCloud();
+    if (cloudBooks && typeof cloudBooks === 'object') {
+      Object.assign(state.booksData, cloudBooks);
+      localStorage.setItem('cyberpunk-books', JSON.stringify(state.booksData));
+      renderBooks();
+      updateStats();
+    }
+  }
+
+  // Auth state changes (after clicking magic link)
+  onAuthChange(async (newUser) => {
+    updateAuthBadge(newUser);
+    if (newUser) {
+      hideAuthOverlay();
+      const cloudBooks = await pullBooksFromCloud();
+      if (cloudBooks && typeof cloudBooks === 'object') {
+        Object.assign(state.booksData, cloudBooks);
+        localStorage.setItem('cyberpunk-books', JSON.stringify(state.booksData));
+        renderBooks();
+        updateStats();
+      }
+      // Push local books to cloud on first sign-in
+      saveBooks();
+    }
+  });
+
+  initAuthUI();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initApp();
+  initSync();
+});

@@ -198,6 +198,10 @@ export const state = {
 
 export function saveBooks() {
   localStorage.setItem('cyberpunk-books', JSON.stringify(state.booksData));
+  // Fire-and-forget cloud sync — doesn't block UI
+  import('./auth.js').then(({ pushBooksToCloud }) => {
+    pushBooksToCloud(state.booksData).catch(() => {});
+  });
 }
 
 export function saveLists() {

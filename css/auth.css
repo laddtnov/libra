@@ -1,0 +1,161 @@
+/* ====================================
+   AUTH OVERLAY
+   ==================================== */
+
+#auth-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(6px);
+}
+
+.auth-container {
+  width: min(420px, 92vw);
+  background: linear-gradient(135deg, #0d0d1a 0%, #0a0a14 100%);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  border-radius: 12px;
+  box-shadow:
+    0 0 40px rgba(245, 158, 11, 0.15),
+    0 0 80px rgba(245, 158, 11, 0.06),
+    inset 0 1px 0 rgba(245, 158, 11, 0.12);
+  padding: 36px 32px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.auth-logo {
+  font-family: 'Orbitron', monospace;
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: var(--neon-orange);
+  text-shadow: 0 0 20px rgba(245, 158, 11, 0.65);
+  letter-spacing: 4px;
+  text-align: center;
+}
+
+.auth-sub {
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  color: rgba(245, 158, 11, 0.4);
+  letter-spacing: 3px;
+  text-align: center;
+  margin-top: -12px;
+}
+
+.auth-divider {
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  color: rgba(245, 158, 11, 0.2);
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.auth-hint {
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+}
+
+.auth-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+#auth-email {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 6px;
+  color: #ffd700;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color 0.2s ease;
+  min-width: 0;
+}
+
+#auth-email::placeholder { color: rgba(245, 158, 11, 0.3); }
+#auth-email:focus { border-color: rgba(245, 158, 11, 0.7); }
+
+#auth-submit {
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  border-radius: 6px;
+  color: var(--neon-orange);
+  font-family: 'Orbitron', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 10px 14px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+#auth-submit:hover:not(:disabled) {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: var(--neon-orange);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.25);
+}
+
+#auth-submit:disabled { opacity: 0.45; cursor: not-allowed; }
+
+#auth-status {
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  min-height: 14px;
+}
+#auth-status[data-type="success"] { color: #00ff88; }
+#auth-status[data-type="error"]   { color: #ff5555; }
+
+#auth-skip {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.2);
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  padding: 0;
+  text-align: center;
+  transition: color 0.2s ease;
+}
+#auth-skip:hover { color: rgba(255, 255, 255, 0.5); }
+
+/* ── Auth badge in toolbar ── */
+#auth-badge {
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  color: rgba(245, 158, 11, 0.5);
+  background: transparent;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
+#auth-badge[data-state="signed-in"] {
+  color: #00ff88;
+  border-color: rgba(0, 255, 136, 0.3);
+}
+
+#auth-badge:hover {
+  border-color: rgba(245, 158, 11, 0.5);
+  color: var(--neon-orange);
+}

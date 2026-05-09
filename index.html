@@ -36,6 +36,7 @@
           <button class="lang-btn" data-lang="ru">RU</button>
           <button class="lang-btn" data-lang="de">DE</button>
           <button class="lang-btn" data-lang="pl">PL</button>
+          <button id="auth-badge" data-state="signed-out" title="Sign in to sync across devices">[ SIGN IN ]</button>
         </div>
       </div>
 
@@ -237,6 +238,24 @@
       <div class="scanlines"></div>
       <button id="close-discover-preview" class="close-btn">✕</button>
       <div id="discover-preview-content"></div>
+    </div>
+  </div>
+
+  <!-- Auth overlay -->
+  <div id="auth-overlay" style="display:none">
+    <div class="auth-container">
+      <div class="auth-logo">&gt;_ LIBRA</div>
+      <div class="auth-sub">SYNC ACROSS ALL DEVICES</div>
+      <div class="auth-divider">────────────────────────────────────</div>
+      <p class="auth-hint">&gt; Enter your email to receive a magic link. No password needed.</p>
+      <form id="auth-form">
+        <div class="auth-input-row">
+          <input type="email" id="auth-email" placeholder="agent@domain.xyz" autocomplete="email" maxlength="320">
+          <button type="submit" id="auth-submit">[ SEND LINK ]</button>
+        </div>
+      </form>
+      <div id="auth-status"></div>
+      <button id="auth-skip">&gt; continue without syncing</button>
     </div>
   </div>
 
