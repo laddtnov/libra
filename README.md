@@ -1,19 +1,19 @@
-# Libra — Cyberpunk Book Tracker
+# Libra — Cyberpunk Reading Tracker
 
 <div align="center">
 
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
 ![PWA](https://img.shields.io/badge/PWA-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 ![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
-A personal reading tracker with a full cyberpunk neon UI — glitch title, status-colored book spines, Open Library auto-fill, AI-powered recommendations, and a Fallout-style detail terminal.
+A personal reading tracker with a full cyberpunk neon UI — glitch title, status-colored book spines, Open Library auto-fill, AI-powered recommendations, cross-device cloud sync, and a full reading stats dashboard.
 
 [🌐 Live Demo](https://libra.laddtnov.xyz/)
-
-![Libra Preview](Screenshot-book-desktop.png)
 
 </div>
 
@@ -22,67 +22,73 @@ A personal reading tracker with a full cyberpunk neon UI — glitch title, statu
 ## ✨ Features
 
 ### Core
-- **Full CRUD** — add, edit, delete books with a neon cyberpunk form modal
-- **localStorage persistence** — your library survives page refresh, no account needed
-- **Open Library auto-fill** — search any title, auto-populate author, pages, cover, synopsis, and genre
-- **Stats dashboard** — Completed / Reading / Queued / Total with count-up animation; re-animates on every filter change
-- **Clickable stat cards** — tap a stat card to instantly filter the grid
+- **Full CRUD** — add, edit, delete books with a cyberpunk form modal
+- **Cloud sync** — sign in with magic link, books sync across all devices via Supabase
+- **Offline first** — localStorage fallback when offline; syncs on reconnect
+- **Open Library auto-fill** — search any title, auto-populate author, pages, cover, synopsis, genre
+- **Stats cards** — Completed / Reading / Queued / Total with count-up animation
+
+### Reading Goal & Streaks
+- **Annual reading goal** — set a target, watch the neon progress bar fill up
+- **Reading streaks** — consecutive days with sessions logged; flame badge with hover animation
+- **Milestone toasts** — fire at 7, 14, 30, 60, 100-day streaks
+
+### Stats Dashboard
+- Pages read per month (bar chart)
+- Books finished per month
+- Average rating by genre
+- Top categories breakdown
+- All-time totals: pages read, books completed, avg rating
 
 ### Book Cards
 - **Status-colored spines** — orange for Reading, green for Completed, purple for Queued
-- **Status-matched hover glow** — each card glows in its own color on hover
-- **3D tilt effect** — cards tilt on mouse move with spring-back on leave
-- **Progress ring** — animated SVG ring on Reading cards, auto-updated by session log
+- **Progress ring** — animated SVG ring on Reading cards, driven by session log
 - **Cover thumbnails** — pulled from Open Library when available
+- **3D tilt effect** — cards tilt on mouse move with spring-back
 - **Star ratings** — gold stars with hover pulse
 
-### Detail Modal (Fallout terminal style)
-- Instant cyberpunk render — dark gradient, cyan border, pink labels
+### Detail Modal
 - Full fields: status, category, pages, progress, dates, synopsis, notes
-- **Quotes & Highlights** — save memorable passages with page numbers per book
-- **Reading Session Log** — log date + pages per session; automatically drives the progress ring
+- **Quotes & Highlights** — save memorable passages with page numbers
+- **Reading Session Log** — log date + pages; drives the progress ring automatically
 - **Where to Find** — 6 one-click links (Open Library, WorldCat, ThriftBooks, AbeBooks, Amazon, Google Books)
-- **Reading Lists** — toggle the book in/out of any named list
-- Edit and Delete with inline confirmation
-- Sound toggle (Web Audio API click effect)
+- **Reading Lists** — toggle book in/out of any named list
 
 ### Toolbar
-- **Live search** — filters by title, author, or category in real time; triggers Open Library web discover
+- **Live search** — filters by title/author/category; triggers Open Library web discover
 - **Filter buttons** — All / Reading / Done / Queued
-- **Sort dropdown** — Title A→Z / Z→A, Rating, Pages, Date Added
-- **Reading Lists** — create and manage named reading lists
-- **Recommend** — AI or genre-based book recommendations
+- **Sort dropdown** — Title, Rating, Pages, Date Added
+- **📊 STATS** — full reading statistics dashboard
+- **🎁 WRAPPED** — shareable year-in-review card, downloadable as PNG
+- **⚡ RECOMMEND** — AI or genre-based book recommendations
+- **⊕ GOODREADS** — import your Goodreads CSV export with duplicate detection
 - **Export / Import** — one-click JSON backup and restore
-- **Support** — Stripe + crypto donation panel
+- **♥ SUPPORT** — Stripe + crypto donation panel with Resend appreciation email
 
 ### AI Recommendations
-- Paste your own **Claude API key** (stored locally, never leaves your browser)
-- Claude analyses your completed books — titles, authors, genres, ratings
-- Returns 6 personalised picks with a one-line reason per book
+- Paste your **Claude API key** (stored locally, never leaves your browser)
+- Claude analyses your completed books and returns 6 personalised picks
 - Open Library enriches each suggestion with cover and metadata
-- Falls back to genre-based Open Library search when no key is set
+- Falls back to genre-based search when no key is set
 
-### Web Discover
-- Search bar activates Open Library search in real time
-- Result cards show cover, title, author, year, pages
-- Click any card to preview full info and synopsis before adding
-- One-click **+ ADD TO ARCHIVE** from the preview modal
+### Reading Wrapped
+- On-demand year-in-review canvas card
+- Shows: books read, pages read, top genre, best streak, favourite book
+- Download as PNG and share
+
+### Goodreads Import
+- Upload your Goodreads CSV export
+- Auto-maps: title, author, rating, pages, status, completed date
+- Skips duplicates with a summary toast
 
 ### Multi-language
 - 6 languages: **EN · UA · ES · RU · DE · PL**
-- Language persisted in localStorage; switch any time from the header
+- Persisted in localStorage; switch any time from the header
 
 ### PWA — Installable & Offline
 - Install on desktop or mobile from the browser address bar
-- Full offline support via service worker cache-first strategy
-- External API calls (Open Library, Claude) fail gracefully when offline
-
-### UI & Animations
-- `LIBRA` glitch title — pink + cyan clip-path layers on hover
-- Scrolling cyber-grid background
-- CRT scanlines on all modals
-- Staggered card entrance (bounce-in, 70 ms per card)
-- Neon toast notifications slide in from top-right
+- Full offline support via service worker (cache-first)
+- External API calls fail gracefully when offline
 
 ---
 
@@ -91,17 +97,31 @@ A personal reading tracker with a full cyberpunk neon UI — glitch title, statu
 ```bash
 git clone https://github.com/laddtnov/book-archive.git
 cd book-archive
-open index.html
 ```
 
-No build step. No dependencies. Just open the file.
+Copy credentials file:
+```bash
+cp js/config.example.js js/config.js
+# fill in your Supabase URL and anon key
+```
+
+Then open `index.html` — no build step, no dependencies.
+
+---
+
+## ☁️ Cloud Sync Setup
+
+1. Create a project at [supabase.com](https://supabase.com)
+2. Run `db/002_user_books.sql` in the Supabase SQL Editor
+3. Fill in `js/config.js` with your project URL and anon key
+4. Click **[ SIGN IN ]** in the header → enter email → click magic link
 
 ---
 
 ## 📊 Book Statuses
 
-| Status | Spine / Glow Color |
-|--------|--------------------|
+| Status | Color |
+|--------|-------|
 | 📖 Reading | Orange — SVG progress ring, session log |
 | ✅ Completed | Green — steady glow |
 | 📌 Queued | Purple — soft glow |
@@ -113,20 +133,21 @@ No build step. No dependencies. Just open the file.
 1. Open the **⚡ RECOMMEND** panel
 2. Click **⚙ CLAUDE API KEY**
 3. Paste your key from [console.anthropic.com](https://console.anthropic.com)
-4. Hit **[ SAVE ]** — the panel re-renders with AI picks instantly
+4. Hit **[ SAVE ]** — AI picks render instantly
 
-Your key is stored only in your browser's localStorage and is sent exclusively to `api.anthropic.com`.
+Your key is stored only in localStorage and sent exclusively to `api.anthropic.com`.
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **HTML5** — semantic single-page shell
-- **CSS3** — Grid, Flexbox, custom properties, keyframe animations; ~20 modular CSS files
-- **JavaScript ES6+** — vanilla, no frameworks; ES modules; Web Audio API
-- **Open Library API** — book search, auto-fill, cover images (no key required)
+- **HTML5 / CSS3 / JavaScript ES6+** — vanilla, no frameworks; ~25 modular ES modules
+- **Supabase** — Postgres + auth (magic link) + cross-device sync
+- **Open Library API** — book search, covers, metadata (no key required)
 - **Claude API** — AI recommendations (user-supplied key, optional)
-- **Service Worker** — PWA offline cache
+- **Resend** — transactional email for donation appreciation
+- **Service Worker** — PWA offline cache (libra-v25)
+- **Vercel** — hosting + serverless functions
 
 ---
 
@@ -157,7 +178,7 @@ Your key is stored only in your browser's localStorage and is sent exclusively t
 
 <div align="center">
 
-**Made with HTML, CSS, and JavaScript**
+**Made with HTML, CSS, JavaScript, and Supabase**
 
 **If you like this project, give it a ⭐**
 
