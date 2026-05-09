@@ -134,3 +134,71 @@
   color: rgba(255, 255, 255, 0.25);
   letter-spacing: 1.5px;
 }
+
+/* ── Inline goal input ── */
+.goal-inline-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.goal-inline-input {
+  flex: 1;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  border-radius: 4px;
+  color: #ffd700;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  padding: 5px 10px;
+  outline: none;
+  min-width: 0;
+  transition: border-color 0.2s ease;
+}
+
+.goal-inline-input:focus { border-color: rgba(245, 158, 11, 0.8); }
+
+.goal-inline-input.goal-input-error {
+  border-color: #ff5555;
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25%      { transform: translateX(-4px); }
+  75%      { transform: translateX(4px); }
+}
+
+.goal-inline-save,
+.goal-inline-cancel {
+  background: transparent;
+  border: 1px solid;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.goal-inline-save {
+  border-color: rgba(0, 255, 136, 0.4);
+  color: #00ff88;
+}
+.goal-inline-save:hover {
+  background: rgba(0, 255, 136, 0.1);
+  border-color: #00ff88;
+}
+
+.goal-inline-cancel {
+  border-color: rgba(255, 85, 85, 0.3);
+  color: rgba(255, 85, 85, 0.6);
+}
+.goal-inline-cancel:hover {
+  background: rgba(255, 85, 85, 0.08);
+  border-color: #ff5555;
+  color: #ff5555;
+}

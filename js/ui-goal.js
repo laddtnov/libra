@@ -22,7 +22,7 @@ export function renderGoal() {
   if (yearEl) yearEl.textContent = YEAR;
   if (fillEl) {
     fillEl.style.width = `${pct}%`;
-    fillEl.dataset.pct = pct;
+    fillEl.dataset.pct = pct >= 100 ? '100' : '';
   }
   if (metaEl) {
     metaEl.textContent = goal
@@ -32,15 +32,54 @@ export function renderGoal() {
   if (editBtn) editBtn.textContent = goal ? '[ EDIT ]' : '[ SET ]';
 }
 
+function showGoalInput() {
+  const wrap = document.getElementById('goal-bar-wrap');
+  if (!wrap || wrap.querySelector('.goal-inline-input')) return;
+
+  const goal = getGoal();
+
+  const row = document.createElement('div');
+  row.className = 'goal-inline-row';
+
+  const input = document.createElement('input');
+  input.type = 'number';
+  input.className = 'goal-inline-input';
+  input.placeholder = `target books for ${YEAR}`;
+  input.min = '1';
+  input.max = '999';
+  input.value = goal || '';
+
+  const saveBtn = document.createElement('button');
+  saveBtn.className = 'goal-inline-save';
+  saveBtn.textContent = '[ SAVE ]';
+
+  const cancelBtn = document.createElement('button');
+  cancelBtn.className = 'goal-inline-cancel';
+  cancelBtn.textContent = '[ × ]';
+
+  row.appendChild(input);
+  row.appendChild(saveBtn);
+  row.appendChild(cancelBtn);
+  wrap.appendChild(row);
+  input.focus();
+
+  function close() { row.remove(); }
+
+  saveBtn.addEventListener('click', () => {
+    const n = parseInt(input.value, 10);
+    if (n > 0) { setGoal(n); renderGoal(); close(); }
+    else { input.classList.add('goal-input-error'); setTimeout(() => input.classList.remove('goal-input-error'), 600); }
+  });
+
+  cancelBtn.addEventListener('click', close);
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') saveBtn.click();
+    if (e.key === 'Escape') close();
+  });
+}
+
 export function initGoal() {
   renderGoal();
-  document.getElementById('goal-edit-btn')?.addEventListener('click', () => {
-    const goal    = getGoal();
-    const current = goal ? String(goal) : '';
-    const raw     = prompt(`Reading goal for ${YEAR} (books):`, current);
-    if (raw === null) return;
-    const n = parseInt(raw, 10);
-    if (n > 0) { setGoal(n); renderGoal(); }
-    else if (raw.trim() === '' || n === 0) { localStorage.removeItem(KEY); renderGoal(); }
-  });
+  document.getElementById('goal-edit-btn')?.addEventListener('click', showGoalInput);
 }
