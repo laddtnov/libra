@@ -93,7 +93,16 @@ function initApp() {
   });
 }
 
+function initOverlayUI() {
+  const overlay = document.getElementById('auth-overlay');
+  const badge   = document.getElementById('auth-badge');
+  const skip    = document.getElementById('auth-skip');
+  badge?.addEventListener('click', () => { if (overlay) overlay.style.display = 'flex'; });
+  skip?.addEventListener('click',  () => { if (overlay) overlay.style.display = 'none'; });
+}
+
 async function initSync() {
+  initOverlayUI();
   try {
     const [authMod, uiAuthMod] = await Promise.all([
       import('./auth.js'),
