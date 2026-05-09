@@ -1,4 +1,4 @@
-const CACHE = 'libra-v18';
+const CACHE = 'libra-v19';
 
 const ASSETS = [
   '/',
