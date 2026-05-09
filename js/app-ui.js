@@ -8,8 +8,6 @@ import { clearDiscover, debouncedFetch, closePreviewModal } from './ui-discover.
 import { exportBooks, importBooks } from './ui-backup.js';
 import { openDonatePanel, closeDonatePanel, initDonatePanel } from './ui-donate.js';
 import { initI18n, setLanguage, applyI18n } from './i18n.js';
-import { initAuth, onAuthChange, pullBooksFromCloud } from './auth.js';
-import { showAuthOverlay, hideAuthOverlay, updateAuthBadge, initAuthUI } from './ui-auth.js';
 
 configureRenderHandlers({ openDetails: showBookDetails });
 configureDetailHandlers({ openFormModal });
@@ -96,25 +94,18 @@ function initApp() {
 }
 
 async function initSync() {
-  const user = await initAuth();
-  updateAuthBadge(user);
+  try {
+    const [authMod, uiAuthMod] = await Promise.all([
+      import('./auth.js'),
+      import('./ui-auth.js'),
+    ]);
+    const { initAuth, onAuthChange, pullBooksFromCloud } = authMod;
+    const { hideAuthOverlay, updateAuthBadge, initAuthUI } = uiAuthMod;
 
-  // If signed in, pull latest books from cloud
-  if (user) {
-    const cloudBooks = await pullBooksFromCloud();
-    if (cloudBooks && typeof cloudBooks === 'object') {
-      Object.assign(state.booksData, cloudBooks);
-      localStorage.setItem('cyberpunk-books', JSON.stringify(state.booksData));
-      renderBooks();
-      updateStats();
-    }
-  }
+    const user = await initAuth();
+    updateAuthBadge(user);
 
-  // Auth state changes (after clicking magic link)
-  onAuthChange(async (newUser) => {
-    updateAuthBadge(newUser);
-    if (newUser) {
-      hideAuthOverlay();
+    if (user) {
       const cloudBooks = await pullBooksFromCloud();
       if (cloudBooks && typeof cloudBooks === 'object') {
         Object.assign(state.booksData, cloudBooks);
@@ -122,12 +113,27 @@ async function initSync() {
         renderBooks();
         updateStats();
       }
-      // Push local books to cloud on first sign-in
-      saveBooks();
     }
-  });
 
-  initAuthUI();
+    onAuthChange(async (newUser) => {
+      updateAuthBadge(newUser);
+      if (newUser) {
+        hideAuthOverlay();
+        const cloudBooks = await pullBooksFromCloud();
+        if (cloudBooks && typeof cloudBooks === 'object') {
+          Object.assign(state.booksData, cloudBooks);
+          localStorage.setItem('cyberpunk-books', JSON.stringify(state.booksData));
+          renderBooks();
+          updateStats();
+        }
+        saveBooks();
+      }
+    });
+
+    initAuthUI();
+  } catch (err) {
+    console.warn('Sync unavailable:', err);
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

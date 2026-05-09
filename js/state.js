@@ -201,7 +201,7 @@ export function saveBooks() {
   // Fire-and-forget cloud sync — doesn't block UI
   import('./auth.js').then(({ pushBooksToCloud }) => {
     pushBooksToCloud(state.booksData).catch(() => {});
-  });
+  }).catch(() => {});
 }
 
 export function saveLists() {
