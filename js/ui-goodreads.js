@@ -43,9 +43,9 @@ function makeId(title, author) {
 function parseCompletedDate(status, dateRead) {
   if (status !== 'completed' || !dateRead) return undefined;
   const d = new Date(dateRead.replaceAll('/', '-'));
-  return !Number.isNaN(d.getTime())
-    ? d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
-    : undefined;
+  return Number.isNaN(d.getTime())
+    ? undefined
+    : d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 }
 
 // ── Build a single book record from a CSV row ─────────────────────────────────
