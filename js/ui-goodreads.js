@@ -4,7 +4,7 @@ import { updateStats } from './ui-render.js';
 
 // ── CSV parser (handles quoted fields with commas) ────────────────────────────
 function parseCSV(text) {
-  const lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+  const lines = text.replaceAll('\r\n', '\n').replaceAll('\r', '\n').split('\n');
   return lines.map(line => {
     const fields = [];
     let cur = '', inQuotes = false;
@@ -89,9 +89,9 @@ export async function importGoodreads(file) {
 
     if (existing.has(id)) { skipped++; continue; }
 
-    const ratingRaw = parseInt(get(ratingIdx), 10);
+    const ratingRaw = Number.parseInt(get(ratingIdx), 10);
     const rating    = ratingRaw >= 1 && ratingRaw <= 5 ? ratingRaw : undefined;
-    const pages     = parseInt(get(pagesIdx), 10) || undefined;
+    const pages     = Number.parseInt(get(pagesIdx), 10) || undefined;
     const shelf     = get(shelfIdx);
     const status    = mapStatus(shelf);
     const dateRead  = get(dateIdx); // "YYYY/MM/DD"
@@ -101,7 +101,7 @@ export async function importGoodreads(file) {
     let completed;
     if (status === 'completed' && dateRead) {
       const d = new Date(dateRead.replaceAll('/', '-'));
-      if (!isNaN(d)) {
+      if (!Number.isNaN(d.getTime())) {
         completed = d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
       }
     }

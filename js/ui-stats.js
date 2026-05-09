@@ -26,7 +26,7 @@ function booksPerMonth() {
     const raw = String(b.completed || '');
     // handle "March 2025", "2025-03-15", "March 15, 2025" etc.
     const parsed = new Date(raw);
-    if (!isNaN(parsed)) {
+    if (!Number.isNaN(parsed.getTime())) {
       const m = `${parsed.getFullYear()}-${String(parsed.getMonth() + 1).padStart(2, '0')}`;
       map[m] = (map[m] || 0) + 1;
     }
@@ -112,7 +112,7 @@ function buildBarChart(title, dataMap, unit) {
     const lbl = makeEl('div', 'stats-bar-lbl');
     // show "Mar" or "03" from "2025-03"
     const parts = key.split('-');
-    lbl.textContent = parts.length === 2 ? (MONTHS[parseInt(parts[1], 10) - 1] ?? parts[1]) : key;
+    lbl.textContent = parts.length === 2 ? (MONTHS[Number.parseInt(parts[1], 10) - 1] ?? parts[1]) : key;
 
     col.appendChild(valEl);
     col.appendChild(bar);

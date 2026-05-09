@@ -1,7 +1,8 @@
 import { supabase } from './supabase.js';
 
 // ── Current session user ──────────────────────────────────────────────────────
-export let currentUser = null;
+let currentUser = null;
+export function getCurrentUser() { return currentUser; }
 
 export async function initAuth() {
   const { data: { session } } = await supabase.auth.getSession();

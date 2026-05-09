@@ -3,7 +3,7 @@ import { state } from './state.js';
 const YEAR = new Date().getFullYear();
 const KEY  = `libra-goal-${YEAR}`;
 
-function getGoal()        { return parseInt(localStorage.getItem(KEY) || '0', 10); }
+function getGoal()        { return Number.parseInt(localStorage.getItem(KEY) || '0', 10); }
 function setGoal(n)       { localStorage.setItem(KEY, String(n)); }
 function completedCount() {
   return Object.values(state.booksData).filter(b => b.status === 'completed').length;
@@ -66,7 +66,7 @@ function showGoalInput() {
   function close() { row.remove(); }
 
   saveBtn.addEventListener('click', () => {
-    const n = parseInt(input.value, 10);
+    const n = Number.parseInt(input.value, 10);
     if (n > 0) {
       setGoal(n); renderGoal(); close();
       import('./auth.js').then(({ pushSettingsToCloud, buildSettings }) => {

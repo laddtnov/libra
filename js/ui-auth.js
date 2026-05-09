@@ -1,4 +1,4 @@
-import { sendMagicLink, signOut, currentUser } from './auth.js';
+import { sendMagicLink, signOut } from './auth.js';
 import { t } from './i18n.js';
 
 function getOverlay() { return document.getElementById('auth-overlay'); }
