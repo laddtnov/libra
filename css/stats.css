@@ -56,7 +56,7 @@
 }
 
 .stats-summary-card {
-  background: rgba(245, 158, 11, 0.05);
+  background: #0f0e15;
   border: 1px solid rgba(245, 158, 11, 0.18);
   border-radius: 8px;
   padding: 14px 10px;
@@ -65,7 +65,7 @@
 }
 
 .stats-summary-card:hover {
-  background: rgba(245, 158, 11, 0.09);
+  background: #121118;
   border-color: rgba(245, 158, 11, 0.4);
 }
 
@@ -198,7 +198,7 @@
 
 .stats-genre-bar-wrap {
   height: 6px;
-  background: rgba(245, 158, 11, 0.08);
+  background: #131113;
   border-radius: 3px;
   overflow: hidden;
 }

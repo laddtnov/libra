@@ -92,7 +92,7 @@
   padding: 8px 14px;
   border: 1px solid rgba(245, 158, 11, 0.2);
   border-radius: 8px;
-  background: rgba(245, 158, 11, 0.04);
+  background: #0e0d15;
   flex-shrink: 0;
   transition: all 0.3s ease;
   min-width: 64px;
@@ -100,7 +100,7 @@
 
 .streak-badge[data-active="true"] {
   border-color: rgba(255, 100, 0, 0.5);
-  background: rgba(255, 100, 0, 0.07);
+  background: #110d0c;
   box-shadow: 0 0 14px rgba(255, 100, 0, 0.15);
 }
 
@@ -150,7 +150,7 @@
   font-family: 'Orbitron', monospace;
   font-size: 1rem;
   font-weight: 900;
-  color: rgba(245, 158, 11, 0.4);
+  color: rgba(245, 158, 11, 0.65);
   line-height: 1;
   transition: color 0.3s ease;
 }
@@ -163,7 +163,7 @@
 .streak-label {
   font-family: 'Orbitron', monospace;
   font-size: 0.45rem;
-  color: rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.5);
   letter-spacing: 1.5px;
 }
 
