@@ -356,11 +356,17 @@ function bindApiKeyUI(onRefresh) {
       return;
     }
     saveKey(key);
+    import('./auth.js').then(({ pushSettingsToCloud, buildSettings }) => {
+      pushSettingsToCloud(buildSettings()).catch(() => {});
+    }).catch(() => {});
     onRefresh();
   });
 
   document.getElementById('recs-api-clear-btn')?.addEventListener('click', () => {
     clearKey();
+    import('./auth.js').then(({ pushSettingsToCloud, buildSettings }) => {
+      pushSettingsToCloud(buildSettings()).catch(() => {});
+    }).catch(() => {});
     onRefresh();
   });
 }

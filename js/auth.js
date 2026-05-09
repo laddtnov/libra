@@ -51,3 +51,41 @@ export async function pullBooksFromCloud() {
   if (error || !data) return null;
   return data.data;
 }
+
+// ── Settings sync ─────────────────────────────────────────────────────────────
+export async function pushSettingsToCloud(settings) {
+  if (!currentUser) return;
+  await supabase.from('user_books').upsert({
+    user_id:  currentUser.id,
+    settings,
+    updated_at: new Date().toISOString(),
+  }, { onConflict: 'user_id' });
+}
+
+export async function pullSettingsFromCloud() {
+  if (!currentUser) return null;
+  const { data, error } = await supabase
+    .from('user_books')
+    .select('settings')
+    .eq('user_id', currentUser.id)
+    .single();
+  if (error || !data?.settings) return null;
+  return data.settings;
+}
+
+export function buildSettings() {
+  const year    = new Date().getFullYear();
+  const goal    = localStorage.getItem(`libra-goal-${year}`);
+  const apiKey  = localStorage.getItem('libra-claude-key');
+  const settings = {};
+  if (goal)   settings[`goal_${year}`] = goal;
+  if (apiKey) settings.claude_key      = apiKey;
+  return settings;
+}
+
+export function applySettings(settings) {
+  if (!settings || typeof settings !== 'object') return;
+  const year = new Date().getFullYear();
+  if (settings[`goal_${year}`]) localStorage.setItem(`libra-goal-${year}`, settings[`goal_${year}`]);
+  if (settings.claude_key)      localStorage.setItem('libra-claude-key', settings.claude_key);
+}

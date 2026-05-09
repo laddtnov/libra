@@ -159,34 +159,43 @@ async function initSync() {
       import('./auth.js'),
       import('./ui-auth.js'),
     ]);
-    const { initAuth, onAuthChange, pullBooksFromCloud } = authMod;
+    const { initAuth, onAuthChange, pullBooksFromCloud, pullSettingsFromCloud, applySettings, buildSettings, pushSettingsToCloud } = authMod;
     const { hideAuthOverlay, updateAuthBadge, initAuthUI } = uiAuthMod;
 
     const user = await initAuth();
     updateAuthBadge(user);
 
     if (user) {
-      const cloudBooks = await pullBooksFromCloud();
+      const [cloudBooks, cloudSettings] = await Promise.all([
+        pullBooksFromCloud(),
+        pullSettingsFromCloud(),
+      ]);
       if (cloudBooks && typeof cloudBooks === 'object') {
         Object.assign(state.booksData, cloudBooks);
         localStorage.setItem('cyberpunk-books', JSON.stringify(state.booksData));
         renderBooks();
         updateStats();
       }
+      if (cloudSettings) { applySettings(cloudSettings); renderGoal(); }
     }
 
     onAuthChange(async (newUser) => {
       updateAuthBadge(newUser);
       if (newUser) {
         hideAuthOverlay();
-        const cloudBooks = await pullBooksFromCloud();
+        const [cloudBooks, cloudSettings] = await Promise.all([
+          pullBooksFromCloud(),
+          pullSettingsFromCloud(),
+        ]);
         if (cloudBooks && typeof cloudBooks === 'object') {
           Object.assign(state.booksData, cloudBooks);
           localStorage.setItem('cyberpunk-books', JSON.stringify(state.booksData));
           renderBooks();
           updateStats();
         }
+        if (cloudSettings) { applySettings(cloudSettings); renderGoal(); }
         saveBooks();
+        pushSettingsToCloud(buildSettings()).catch(() => {});
       }
     });
 

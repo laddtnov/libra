@@ -67,7 +67,12 @@ function showGoalInput() {
 
   saveBtn.addEventListener('click', () => {
     const n = parseInt(input.value, 10);
-    if (n > 0) { setGoal(n); renderGoal(); close(); }
+    if (n > 0) {
+      setGoal(n); renderGoal(); close();
+      import('./auth.js').then(({ pushSettingsToCloud, buildSettings }) => {
+        pushSettingsToCloud(buildSettings()).catch(() => {});
+      }).catch(() => {});
+    }
     else { input.classList.add('goal-input-error'); setTimeout(() => input.classList.remove('goal-input-error'), 600); }
   });
 
