@@ -166,6 +166,13 @@ async function initSync() {
     updateAuthBadge(user);
 
     if (user) {
+      // Push existing local data up first, then pull cloud (merge wins for non-empty)
+      const localSettings = buildSettings();
+      await Promise.all([
+        pushSettingsToCloud(localSettings).catch(() => {}),
+        saveBooks(),
+      ]);
+
       const [cloudBooks, cloudSettings] = await Promise.all([
         pullBooksFromCloud(),
         pullSettingsFromCloud(),
