@@ -1,4 +1,4 @@
-const CACHE = 'libra-v23';
+const CACHE = 'libra-v24';
 
 const ASSETS = [
   '/',
@@ -49,6 +49,7 @@ const ASSETS = [
   '/js/ui-auth.js',
   '/js/ui-goal.js',
   '/js/ui-streak.js',
+  '/js/ui-stats.js',
   '/assets/icons/icon.svg',
   '/assets/fonts/orbitron-latin.woff2',
   '/assets/fonts/rajdhani-400-latin.woff2',

@@ -10,6 +10,7 @@ import { openDonatePanel, closeDonatePanel, initDonatePanel } from './ui-donate.
 import { initI18n, setLanguage, applyI18n } from './i18n.js';
 import { initGoal, renderGoal } from './ui-goal.js';
 import { initStreak, recordSessionToday } from './ui-streak.js';
+import { openStatsPanel, closeStatsPanel, initStatsPanel } from './ui-stats.js';
 
 configureRenderHandlers({ openDetails: showBookDetails });
 configureDetailHandlers({ openFormModal });
@@ -22,6 +23,8 @@ function initApp() {
   renderBooks();
   initGoal();
   initStreak();
+  initStatsPanel();
+  document.getElementById('stats-btn')?.addEventListener('click', openStatsPanel);
 
   document.getElementById('add-book-btn').addEventListener('click', () => openFormModal());
 
@@ -62,6 +65,7 @@ function initApp() {
     closeListsPanel();
     closeRecsPanel();
     closeDonatePanel();
+    closeStatsPanel();
   });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
@@ -71,6 +75,7 @@ function initApp() {
       closeListsPanel();
       closeRecsPanel();
       closeDonatePanel();
+      closeStatsPanel();
     }
   });
 
