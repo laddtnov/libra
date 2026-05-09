@@ -11,6 +11,8 @@ import { initI18n, setLanguage, applyI18n } from './i18n.js';
 import { initGoal, renderGoal } from './ui-goal.js';
 import { initStreak, recordSessionToday } from './ui-streak.js';
 import { openStatsPanel, closeStatsPanel, initStatsPanel } from './ui-stats.js';
+import { importGoodreads } from './ui-goodreads.js';
+import { openWrappedPanel, closeWrappedPanel, initWrappedPanel } from './ui-wrapped.js';
 
 configureRenderHandlers({ openDetails: showBookDetails });
 configureDetailHandlers({ openFormModal });
@@ -24,7 +26,9 @@ function initApp() {
   initGoal();
   initStreak();
   initStatsPanel();
+  initWrappedPanel();
   document.getElementById('stats-btn')?.addEventListener('click', openStatsPanel);
+  document.getElementById('wrapped-btn')?.addEventListener('click', openWrappedPanel);
 
   document.getElementById('add-book-btn').addEventListener('click', () => openFormModal());
 
@@ -66,6 +70,7 @@ function initApp() {
     closeRecsPanel();
     closeDonatePanel();
     closeStatsPanel();
+      closeWrappedPanel();
   });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
@@ -76,6 +81,7 @@ function initApp() {
       closeRecsPanel();
       closeDonatePanel();
       closeStatsPanel();
+      closeWrappedPanel();
     }
   });
 
@@ -83,6 +89,16 @@ function initApp() {
   document.getElementById('import-input').addEventListener('change', e => {
     importBooks(e.target.files[0]);
     e.target.value = '';
+  });
+  document.getElementById('goodreads-input')?.addEventListener('change', async e => {
+    const file = e.target.files[0];
+    e.target.value = '';
+    if (!file) return;
+    const { showToast } = await import('./ui-feedback.js');
+    showToast('> IMPORTING FROM GOODREADS...', 'info');
+    const { imported, skipped, error } = await importGoodreads(file);
+    if (error) { showToast(`> ERROR — ${error}`, 'delete'); }
+    else { showToast(`> IMPORTED ${imported} books, skipped ${skipped} duplicates`, 'success'); }
   });
 
   document.getElementById('lists-btn').addEventListener('click', openListsPanel);

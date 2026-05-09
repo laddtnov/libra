@@ -36,3 +36,17 @@
 .import-btn {
   cursor: pointer;
 }
+
+.goodreads-btn {
+  cursor: pointer;
+  border-color: rgba(99, 188, 80, 0.4);
+  color: rgba(99, 188, 80, 0.7);
+}
+
+.goodreads-btn:hover {
+  border-color: #63bc50;
+  color: #63bc50;
+  background: rgba(99, 188, 80, 0.07);
+  box-shadow: 0 0 12px rgba(99, 188, 80, 0.2);
+}
+

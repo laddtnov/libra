@@ -1,4 +1,4 @@
-const CACHE = 'libra-v24';
+const CACHE = 'libra-v25';
 
 const ASSETS = [
   '/',
@@ -50,6 +50,8 @@ const ASSETS = [
   '/js/ui-goal.js',
   '/js/ui-streak.js',
   '/js/ui-stats.js',
+  '/js/ui-goodreads.js',
+  '/js/ui-wrapped.js',
   '/assets/icons/icon.svg',
   '/assets/fonts/orbitron-latin.woff2',
   '/assets/fonts/rajdhani-400-latin.woff2',

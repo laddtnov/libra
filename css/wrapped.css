@@ -1,0 +1,104 @@
+/* ====================================
+   READING WRAPPED PANEL
+   ==================================== */
+
+#wrapped-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.wrapped-container {
+  pointer-events: all;
+  background: linear-gradient(135deg, #0d0d1a 0%, #0a0a14 100%);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  border-radius: 12px;
+  box-shadow:
+    0 0 40px rgba(245, 158, 11, 0.15),
+    0 0 80px rgba(245, 158, 11, 0.06);
+  width: min(680px, 95vw);
+  max-height: 92vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+}
+
+.wrapped-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.wrapped-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--neon-orange);
+  text-shadow: 0 0 12px rgba(245, 158, 11, 0.55);
+  letter-spacing: 2px;
+}
+
+.wrapped-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.wrapped-download-btn {
+  background: transparent;
+  border: 1px solid rgba(0, 255, 136, 0.45);
+  border-radius: 5px;
+  color: #00ff88;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.6rem;
+  font-weight: 700;
+  padding: 7px 14px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.wrapped-download-btn:hover {
+  background: rgba(0, 255, 136, 0.1);
+  border-color: #00ff88;
+  box-shadow: 0 0 12px rgba(0, 255, 136, 0.25);
+}
+
+#wrapped-canvas {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  display: block;
+}
+
+/* ── Toolbar button ── */
+.wrapped-btn {
+  background: transparent;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: rgba(245, 158, 11, 0.7);
+  font-family: 'Orbitron', monospace;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.wrapped-btn:hover {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: var(--neon-orange);
+  color: var(--neon-orange);
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.25);
+}
