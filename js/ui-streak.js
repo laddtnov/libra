@@ -1,4 +1,4 @@
-const KEY = 'libra-streak';
+const STREAK_STORAGE_KEY = 'libra-streak';
 
 function getTodayStr() {
   return new Date().toISOString().split('T')[0];

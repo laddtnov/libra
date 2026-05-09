@@ -1,4 +1,17 @@
 import { SUPABASE_URL, SUPABASE_ANON } from './config.js';
 
 if (!window.supabase) throw new Error('Supabase SDK not loaded');
-export const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+// Local config used for dev; on Vercel fetch from /api/config when placeholders present
+let url = SUPABASE_URL, anon = SUPABASE_ANON;
+
+if (!url?.startsWith('http')) {
+  try {
+    const r = await fetch('/api/config');
+    const cfg = await r.json();
+    url  = cfg.supabaseUrl;
+    anon = cfg.supabaseAnon;
+  } catch { /* stay silent — auth will be skipped */ }
+}
+
+export const supabase = window.supabase.createClient(url, anon);
