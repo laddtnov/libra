@@ -1,4 +1,4 @@
-const CACHE = 'libra-v20';
+const CACHE = 'libra-v21';
 
 const ASSETS = [
   '/',
@@ -47,6 +47,8 @@ const ASSETS = [
   '/js/supabase.js',
   '/js/auth.js',
   '/js/ui-auth.js',
+  '/js/ui-goal.js',
+  '/js/ui-streak.js',
   '/assets/icons/icon.svg',
   '/assets/fonts/orbitron-latin.woff2',
   '/assets/fonts/rajdhani-400-latin.woff2',

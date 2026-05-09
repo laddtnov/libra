@@ -104,6 +104,7 @@ export function updateStats(filteredEntries) {
   countUp(document.getElementById('stat-reading'), books.filter(b => b.status === 'reading').length);
   countUp(document.getElementById('stat-queued'), books.filter(b => b.status === 'to-read').length);
   countUp(document.getElementById('stat-total'), books.length);
+  import('./ui-goal.js').then(({ renderGoal }) => renderGoal()).catch(() => {});
 }
 
 function getStatusClass(status) {

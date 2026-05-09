@@ -100,6 +100,7 @@ export function initSessionsSection(bookId) {
     renderBooks();
     updateStats();
     refreshList(bookId);
+    import('./ui-streak.js').then(({ recordSessionToday }) => recordSessionToday()).catch(() => {});
 
     pagesEl.value = '';
     pagesEl.focus();

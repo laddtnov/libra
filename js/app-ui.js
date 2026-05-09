@@ -8,6 +8,8 @@ import { clearDiscover, debouncedFetch, closePreviewModal } from './ui-discover.
 import { exportBooks, importBooks } from './ui-backup.js';
 import { openDonatePanel, closeDonatePanel, initDonatePanel } from './ui-donate.js';
 import { initI18n, setLanguage, applyI18n } from './i18n.js';
+import { initGoal, renderGoal } from './ui-goal.js';
+import { initStreak, recordSessionToday } from './ui-streak.js';
 
 configureRenderHandlers({ openDetails: showBookDetails });
 configureDetailHandlers({ openFormModal });
@@ -18,6 +20,8 @@ function initApp() {
 
   updateStats();
   renderBooks();
+  initGoal();
+  initStreak();
 
   document.getElementById('add-book-btn').addEventListener('click', () => openFormModal());
 
