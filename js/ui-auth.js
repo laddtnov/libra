@@ -1,9 +1,8 @@
-import { sendMagicLink, signOut, pushSettingsToCloud, buildSettings } from './auth.js';
+import { signUpWithPassword, signInWithPassword, signOut, pushSettingsToCloud, buildSettings } from './auth.js';
 
 // ── State machine ─────────────────────────────────────────────────────────────
-const S = { IDLE: 'idle', SIGNUP: 'signup', LOGIN: 'login', EMAIL_SENT: 'email-sent', SYNCING: 'syncing', LOGGED_IN: 'logged-in' };
+const S = { IDLE: 'idle', SIGNUP: 'signup', LOGIN: 'login', SYNCING: 'syncing', LOGGED_IN: 'logged-in' };
 let state = S.IDLE;
-let sentEmail = '';
 let displayName = localStorage.getItem('libra-display-name') || '';
 
 function el(tag, cls, text) {
@@ -16,7 +15,7 @@ function el(tag, cls, text) {
 function getStreak() {
   try {
     const d = JSON.parse(localStorage.getItem('libra-streak') || '{}');
-    const today = new Date().toISOString().split('T')[0];
+    const today     = new Date().toISOString().split('T')[0];
     const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
     const active = d.lastDate === today || d.lastDate === yesterday;
     return active ? (d.streak || 0) : 0;
@@ -46,14 +45,16 @@ export function updateAuthBadge(user) {
   if (user) {
     const name   = displayName || user.email?.split('@')[0] || 'agent';
     const streak = getStreak();
-    badge.textContent = `${name}${streak > 0 ? ` 🔥${streak}` : ''}`;
-    badge.title       = `${user.email} — click to manage account`;
+    badge.textContent   = `${name}${streak > 0 ? ` 🔥${streak}` : ''}`;
+    badge.title         = `${user.email} — click to manage account`;
     badge.dataset.state = 'signed-in';
+    badge.dataset.email = user.email ?? '';
     state = S.LOGGED_IN;
   } else {
     badge.textContent   = '[ SIGN IN ]';
     badge.title         = 'Sign in to sync across devices';
     badge.dataset.state = 'signed-out';
+    badge.dataset.email = '';
     state = S.IDLE;
   }
 }
@@ -84,50 +85,61 @@ function renderSignup(c) {
 
   const nameLabel = el('label', 'auth-field-label', 'DISPLAY NAME (optional)');
   const nameInput = el('input', 'auth-input');
-  nameInput.type        = 'text';
-  nameInput.placeholder = 'agent codename';
-  nameInput.maxLength   = 40;
-  nameInput.value       = displayName;
+  nameInput.type         = 'text';
+  nameInput.placeholder  = 'agent codename';
+  nameInput.maxLength    = 40;
+  nameInput.value        = displayName;
   nameInput.autocomplete = 'name';
 
   const emailLabel = el('label', 'auth-field-label', 'EMAIL');
   const emailInput = el('input', 'auth-input');
-  emailInput.type        = 'email';
-  emailInput.placeholder = 'agent@domain.xyz';
-  emailInput.maxLength   = 320;
+  emailInput.type         = 'email';
+  emailInput.placeholder  = 'agent@domain.xyz';
+  emailInput.maxLength    = 320;
   emailInput.autocomplete = 'email';
 
-  const statusEl = el('div', 'auth-status');
+  const passLabel = el('label', 'auth-field-label', 'PASSWORD');
+  const passInput = el('input', 'auth-input');
+  passInput.type         = 'password';
+  passInput.placeholder  = 'min 6 characters';
+  passInput.autocomplete = 'new-password';
+
+  const statusEl  = el('div', 'auth-status');
   const createBtn = el('button', 'auth-primary-btn', '[ CREATE ACCOUNT ]');
 
   createBtn.addEventListener('click', async () => {
-    const email = emailInput.value.trim();
-    const name  = nameInput.value.trim();
-    if (!email?.includes('@')) {
-      statusEl.textContent = '> INVALID EMAIL'; statusEl.dataset.type = 'error'; return;
-    }
+    const email    = emailInput.value.trim();
+    const password = passInput.value;
+    const name     = nameInput.value.trim();
+
+    if (!email?.includes('@'))   { statusEl.textContent = '> INVALID EMAIL';         statusEl.dataset.type = 'error'; return; }
+    if (password.length < 6)     { statusEl.textContent = '> PASSWORD TOO SHORT';    statusEl.dataset.type = 'error'; return; }
+
     createBtn.disabled = true;
-    createBtn.textContent = '[ TRANSMITTING... ]';
-    if (name) {
-      displayName = name;
-      localStorage.setItem('libra-display-name', name);
-    }
-    const error = await sendMagicLink(email);
+    createBtn.textContent = '[ CREATING... ]';
+    statusEl.textContent = '';
+
+    const error = await signUpWithPassword(email, password);
     createBtn.disabled = false;
     createBtn.textContent = '[ CREATE ACCOUNT ]';
+
     if (error) {
       statusEl.textContent = `> ERROR — ${error.message}`; statusEl.dataset.type = 'error';
     } else {
-      sentEmail = email; state = S.EMAIL_SENT; renderOverlay();
+      if (name) { displayName = name; localStorage.setItem('libra-display-name', name); }
+      statusEl.textContent = '> ACCOUNT CREATED — signing you in...'; statusEl.dataset.type = 'success';
     }
   });
+
+  [nameInput, emailInput, passInput].forEach(i => i.addEventListener('keydown', e => { if (e.key === 'Enter') createBtn.click(); }));
 
   const back = el('button', 'auth-back-btn', '< BACK');
   back.addEventListener('click', () => { state = S.IDLE; renderOverlay(); });
 
-  c.appendChild(nameLabel); c.appendChild(nameInput);
+  c.appendChild(nameLabel);  c.appendChild(nameInput);
   c.appendChild(emailLabel); c.appendChild(emailInput);
-  c.appendChild(statusEl); c.appendChild(createBtn); c.appendChild(back);
+  c.appendChild(passLabel);  c.appendChild(passInput);
+  c.appendChild(statusEl);   c.appendChild(createBtn); c.appendChild(back);
   setTimeout(() => emailInput.focus(), 50);
 }
 
@@ -137,57 +149,51 @@ function renderLogin(c) {
 
   const emailLabel = el('label', 'auth-field-label', 'EMAIL');
   const emailInput = el('input', 'auth-input');
-  emailInput.type        = 'email';
-  emailInput.placeholder = 'agent@domain.xyz';
-  emailInput.maxLength   = 320;
+  emailInput.type         = 'email';
+  emailInput.placeholder  = 'agent@domain.xyz';
+  emailInput.maxLength    = 320;
   emailInput.autocomplete = 'email';
 
-  const statusEl  = el('div', 'auth-status');
+  const passLabel = el('label', 'auth-field-label', 'PASSWORD');
+  const passInput = el('input', 'auth-input');
+  passInput.type         = 'password';
+  passInput.placeholder  = 'your password';
+  passInput.autocomplete = 'current-password';
+
+  const statusEl   = el('div', 'auth-status');
   const connectBtn = el('button', 'auth-primary-btn', '[ CONNECT ]');
 
   connectBtn.addEventListener('click', async () => {
-    const email = emailInput.value.trim();
-    if (!email?.includes('@')) {
-      statusEl.textContent = '> INVALID EMAIL'; statusEl.dataset.type = 'error'; return;
-    }
+    const email    = emailInput.value.trim();
+    const password = passInput.value;
+
+    if (!email?.includes('@')) { statusEl.textContent = '> INVALID EMAIL';    statusEl.dataset.type = 'error'; return; }
+    if (!password)             { statusEl.textContent = '> PASSWORD REQUIRED'; statusEl.dataset.type = 'error'; return; }
+
     connectBtn.disabled = true;
-    connectBtn.textContent = '[ TRANSMITTING... ]';
-    const error = await sendMagicLink(email);
+    connectBtn.textContent = '[ CONNECTING... ]';
+    statusEl.textContent = '';
+
+    const error = await signInWithPassword(email, password);
     connectBtn.disabled = false;
     connectBtn.textContent = '[ CONNECT ]';
+
     if (error) {
       statusEl.textContent = `> ERROR — ${error.message}`; statusEl.dataset.type = 'error';
     } else {
-      sentEmail = email; state = S.EMAIL_SENT; renderOverlay();
+      state = S.SYNCING; renderOverlay();
     }
   });
 
-  emailInput.addEventListener('keydown', e => { if (e.key === 'Enter') connectBtn.click(); });
+  [emailInput, passInput].forEach(i => i.addEventListener('keydown', e => { if (e.key === 'Enter') connectBtn.click(); }));
 
   const back = el('button', 'auth-back-btn', '< BACK');
   back.addEventListener('click', () => { state = S.IDLE; renderOverlay(); });
 
   c.appendChild(emailLabel); c.appendChild(emailInput);
-  c.appendChild(statusEl); c.appendChild(connectBtn); c.appendChild(back);
+  c.appendChild(passLabel);  c.appendChild(passInput);
+  c.appendChild(statusEl);   c.appendChild(connectBtn); c.appendChild(back);
   setTimeout(() => emailInput.focus(), 50);
-}
-
-function renderEmailSent(c) {
-  c.appendChild(el('div', 'auth-screen-title', '>_ TRANSMISSION SENT'));
-  c.appendChild(el('div', 'auth-divider', '────────────────────────────────────'));
-
-  const info = el('div', 'auth-email-sent-info');
-  info.appendChild(el('p', 'auth-hint', `> Link sent to ${sentEmail}`));
-  info.appendChild(el('p', 'auth-hint', '> Check your inbox and click the magic link to sign in.'));
-  c.appendChild(info);
-
-  const loginNow = el('button', 'auth-secondary-btn', '[ LOG IN NOW ]');
-  loginNow.addEventListener('click', () => { state = S.LOGIN; renderOverlay(); });
-  c.appendChild(loginNow);
-
-  const skip = el('button', 'auth-skip-btn', '> continue without syncing');
-  skip.addEventListener('click', hideAuthOverlay);
-  c.appendChild(skip);
 }
 
 function renderSyncing(c) {
@@ -206,7 +212,7 @@ function renderLoggedIn(c, user) {
   const infoGrid = el('div', 'auth-info-grid');
   infoGrid.appendChild(el('div', 'auth-info-row', `> AGENT    ${name.toUpperCase()}`));
   infoGrid.appendChild(el('div', 'auth-info-row', `> EMAIL    ${user?.email ?? '—'}`));
-  infoGrid.appendChild(el('div', 'auth-info-row', `> STREAK   ${streak > 0 ? `🔥 ${streak} day${streak === 1 ? '' : 's'}` : '— start a session to begin'}`));
+  infoGrid.appendChild(el('div', 'auth-info-row', `> STREAK   ${streak > 0 ? `🔥 ${streak} day${streak === 1 ? '' : 's'}` : '— log a session to begin'}`));
   infoGrid.appendChild(el('div', 'auth-info-row auth-status-synced', '> STATUS   ✓ SYNCED'));
   c.appendChild(infoGrid);
 
@@ -249,16 +255,16 @@ function renderOverlay() {
   if (!c) return;
   c.textContent = '';
 
-  const badge  = document.getElementById('auth-badge');
-  const user   = badge?.dataset.state === 'signed-in' ? { email: badge.title.replace(' — click to manage account', '') } : null;
+  const badge = document.getElementById('auth-badge');
+  const email = badge?.dataset.email ?? '';
+  const user  = badge?.dataset.state === 'signed-in' ? { email } : null;
 
   switch (state) {
-    case S.IDLE:       renderIdle(c); break;
-    case S.SIGNUP:     renderSignup(c); break;
-    case S.LOGIN:      renderLogin(c); break;
-    case S.EMAIL_SENT: renderEmailSent(c); break;
-    case S.SYNCING:    renderSyncing(c); break;
-    case S.LOGGED_IN:  renderLoggedIn(c, user); break;
+    case S.IDLE:      renderIdle(c); break;
+    case S.SIGNUP:    renderSignup(c); break;
+    case S.LOGIN:     renderLogin(c); break;
+    case S.SYNCING:   renderSyncing(c); break;
+    case S.LOGGED_IN: renderLoggedIn(c, user); break;
   }
 }
 

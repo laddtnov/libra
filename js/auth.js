@@ -17,12 +17,14 @@ export function onAuthChange(callback) {
   });
 }
 
-// ── Magic link ────────────────────────────────────────────────────────────────
-export async function sendMagicLink(email) {
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
-    options: { emailRedirectTo: globalThis.location.origin },
-  });
+// ── Email + password auth ─────────────────────────────────────────────────────
+export async function signUpWithPassword(email, password) {
+  const { error } = await supabase.auth.signUp({ email, password });
+  return error;
+}
+
+export async function signInWithPassword(email, password) {
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
   return error;
 }
 
