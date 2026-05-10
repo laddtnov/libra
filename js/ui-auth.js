@@ -40,7 +40,8 @@ export function hideAuthOverlay() {
 
 // ── Badge ─────────────────────────────────────────────────────────────────────
 export function updateAuthBadge(user) {
-  const badge = document.getElementById('auth-badge');
+  const badge     = document.getElementById('auth-badge');
+  const logoutBtn = document.getElementById('logout-btn');
   if (!badge) return;
   if (user) {
     const name   = displayName || user.email?.split('@')[0] || 'agent';
@@ -49,12 +50,14 @@ export function updateAuthBadge(user) {
     badge.title         = `${user.email} — click to manage account`;
     badge.dataset.state = 'signed-in';
     badge.dataset.email = user.email ?? '';
+    if (logoutBtn) logoutBtn.style.display = '';
     state = S.LOGGED_IN;
   } else {
     badge.textContent   = '[ SIGN IN ]';
     badge.title         = 'Sign in to sync across devices';
     badge.dataset.state = 'signed-out';
     badge.dataset.email = '';
+    if (logoutBtn) logoutBtn.style.display = 'none';
     state = S.IDLE;
   }
 }
@@ -270,9 +273,17 @@ function renderOverlay() {
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 export function initAuthUI() {
-  const badge = document.getElementById('auth-badge');
+  const badge     = document.getElementById('auth-badge');
+  const logoutBtn = document.getElementById('logout-btn');
+
   badge?.addEventListener('click', () => {
     state = badge.dataset.state === 'signed-in' ? S.LOGGED_IN : S.IDLE;
     showAuthOverlay(state);
+  });
+
+  logoutBtn?.addEventListener('click', async () => {
+    await signOut();
+    state = S.IDLE;
+    updateAuthBadge(null);
   });
 }

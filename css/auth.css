@@ -282,3 +282,24 @@
   color: var(--neon-orange);
   background: #0d0d1a;
 }
+
+.logout-btn {
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 85, 85, 0.35);
+  color: rgba(255, 85, 85, 0.7);
+  background: #0d0d1a;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.logout-btn:hover {
+  background: #201313;
+  border-color: #ff5555;
+  color: #ff5555;
+}
