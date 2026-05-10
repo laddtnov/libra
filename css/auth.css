@@ -1,5 +1,5 @@
 /* ====================================
-   AUTH OVERLAY
+   AUTH OVERLAY — 6-state machine
    ==================================== */
 
 #auth-overlay {
@@ -22,29 +22,27 @@
     0 0 40px rgba(245, 158, 11, 0.15),
     0 0 80px rgba(245, 158, 11, 0.06),
     inset 0 1px 0 rgba(245, 158, 11, 0.12);
-  padding: 36px 32px 28px;
+  padding: 32px 28px 24px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 0;
 }
 
-.auth-logo {
+#auth-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ── Common elements ─────────────────────────────────── */
+
+.auth-screen-title {
   font-family: 'Orbitron', monospace;
-  font-size: 1.4rem;
+  font-size: 1rem;
   font-weight: 900;
   color: var(--neon-orange);
-  text-shadow: 0 0 20px rgba(245, 158, 11, 0.65);
-  letter-spacing: 4px;
-  text-align: center;
-}
-
-.auth-sub {
-  font-family: 'Courier New', monospace;
-  font-size: 9px;
-  color: rgba(245, 158, 11, 0.4);
+  text-shadow: 0 0 18px rgba(245, 158, 11, 0.6);
   letter-spacing: 3px;
-  text-align: center;
-  margin-top: -12px;
 }
 
 .auth-divider {
@@ -52,24 +50,29 @@
   font-size: 9px;
   color: rgba(245, 158, 11, 0.2);
   letter-spacing: 1px;
-  text-align: center;
+  margin: -4px 0;
 }
 
 .auth-hint {
   font-family: 'Courier New', monospace;
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(255, 255, 255, 0.65);
   letter-spacing: 0.5px;
-  line-height: 1.6;
+  line-height: 1.7;
+  margin: 0;
 }
 
-.auth-input-row {
-  display: flex;
-  gap: 8px;
+.auth-field-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 9px;
+  color: rgba(245, 158, 11, 0.6);
+  letter-spacing: 2px;
+  display: block;
+  margin-bottom: -8px;
 }
 
-#auth-email {
-  flex: 1;
+.auth-input {
+  width: 100%;
   background: rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(245, 158, 11, 0.3);
   border-radius: 6px;
@@ -79,49 +82,113 @@
   padding: 10px 12px;
   outline: none;
   transition: border-color 0.2s ease;
-  min-width: 0;
 }
 
-#auth-email::placeholder { color: rgba(245, 158, 11, 0.3); }
-#auth-email:focus { border-color: rgba(245, 158, 11, 0.7); }
+.auth-input::placeholder { color: rgba(245, 158, 11, 0.3); }
+.auth-input:focus { border-color: rgba(245, 158, 11, 0.7); box-shadow: 0 0 8px rgba(245, 158, 11, 0.12); }
 
-#auth-submit {
-  flex-shrink: 0;
+.auth-status {
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  min-height: 14px;
+  margin-top: -4px;
+}
+.auth-status[data-type="error"]   { color: #ff5555; }
+.auth-status[data-type="success"] { color: #00ff88; }
+
+/* ── Buttons ─────────────────────────────────────────── */
+
+.auth-btn-row {
+  display: flex;
+  gap: 10px;
+}
+
+.auth-primary-btn {
+  flex: 1;
+  padding: 11px;
   background: transparent;
-  border: 1px solid rgba(245, 158, 11, 0.5);
+  border: 1px solid rgba(245, 158, 11, 0.55);
   border-radius: 6px;
   color: var(--neon-orange);
   font-family: 'Orbitron', monospace;
   font-size: 10px;
   font-weight: 700;
-  padding: 10px 14px;
+  letter-spacing: 1.5px;
   cursor: pointer;
-  letter-spacing: 1px;
   transition: all 0.2s ease;
-  white-space: nowrap;
 }
 
-#auth-submit:hover:not(:disabled) {
+.auth-primary-btn:hover:not(:disabled) {
   background: rgba(245, 158, 11, 0.1);
   border-color: var(--neon-orange);
-  box-shadow: 0 0 12px rgba(245, 158, 11, 0.25);
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.25);
 }
 
-#auth-submit:disabled { opacity: 0.45; cursor: not-allowed; }
+.auth-primary-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
-#auth-status {
-  font-family: 'Courier New', monospace;
+.auth-secondary-btn {
+  flex: 1;
+  padding: 11px;
+  background: transparent;
+  border: 1px solid rgba(0, 242, 255, 0.4);
+  border-radius: 6px;
+  color: #00f2ff;
+  font-family: 'Orbitron', monospace;
   font-size: 10px;
-  letter-spacing: 0.5px;
-  min-height: 14px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
-#auth-status[data-type="success"] { color: #00ff88; }
-#auth-status[data-type="error"]   { color: #ff5555; }
 
-#auth-skip {
+.auth-secondary-btn:hover:not(:disabled) {
+  background: rgba(0, 242, 255, 0.08);
+  border-color: #00f2ff;
+  box-shadow: 0 0 12px rgba(0, 242, 255, 0.2);
+}
+
+.auth-secondary-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.auth-logout-btn {
+  flex: 1;
+  padding: 11px;
+  background: transparent;
+  border: 1px solid rgba(255, 85, 85, 0.35);
+  border-radius: 6px;
+  color: rgba(255, 85, 85, 0.75);
+  font-family: 'Orbitron', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.auth-logout-btn:hover {
+  background: #201313;
+  border-color: #ff5555;
+  color: #ff5555;
+}
+
+.auth-back-btn {
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.2);
+  color: rgba(245, 158, 11, 0.45);
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  transition: color 0.2s ease;
+}
+.auth-back-btn:hover { color: var(--neon-orange); }
+
+.auth-skip-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.3);
   font-family: 'Courier New', monospace;
   font-size: 9px;
   letter-spacing: 1px;
@@ -130,32 +197,88 @@
   text-align: center;
   transition: color 0.2s ease;
 }
-#auth-skip:hover { color: rgba(255, 255, 255, 0.5); }
+.auth-skip-btn:hover { color: rgba(255, 255, 255, 0.6); }
 
-/* ── Auth badge in toolbar ── */
+/* ── Email sent screen ───────────────────────────────── */
+
+.auth-email-sent-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  background: rgba(0, 255, 136, 0.05);
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  border-radius: 6px;
+}
+
+.auth-email-sent-info .auth-hint { color: rgba(0, 255, 136, 0.85); }
+
+/* ── Syncing spinner ─────────────────────────────────── */
+
+.auth-spinner {
+  width: 36px;
+  height: 36px;
+  border: 2px solid rgba(245, 158, 11, 0.2);
+  border-top-color: var(--neon-orange);
+  border-radius: 50%;
+  animation: auth-spin 0.8s linear infinite;
+  align-self: center;
+  margin: 12px 0;
+}
+
+@keyframes auth-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Logged-in info grid ─────────────────────────────── */
+
+.auth-info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  background: rgba(245, 158, 11, 0.04);
+  border: 1px solid rgba(245, 158, 11, 0.15);
+  border-radius: 6px;
+}
+
+.auth-info-row {
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 0.5px;
+}
+
+.auth-status-synced { color: #00ff88; }
+
+/* ── Badge in toolbar ────────────────────────────────── */
+
 #auth-badge {
   font-family: 'Courier New', monospace;
   font-size: 9px;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   cursor: pointer;
   padding: 5px 10px;
   border-radius: 4px;
-  border: 1px solid rgba(245, 158, 11, 0.2);
+  border: 1px solid rgba(245, 158, 11, 0.25);
   color: rgba(245, 158, 11, 0.75);
   background: #0d0d1a;
   transition: all 0.2s ease;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 160px;
+  max-width: 180px;
+  flex-shrink: 0;
 }
 
 #auth-badge[data-state="signed-in"] {
   color: #00ff88;
-  border-color: rgba(0, 255, 136, 0.3);
+  border-color: rgba(0, 255, 136, 0.35);
+  background: #0c130f;
 }
 
 #auth-badge:hover {
-  border-color: rgba(245, 158, 11, 0.5);
+  border-color: rgba(245, 158, 11, 0.6);
   color: var(--neon-orange);
+  background: #0d0d1a;
 }

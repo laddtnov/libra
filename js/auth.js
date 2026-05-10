@@ -75,12 +75,16 @@ export async function pullSettingsFromCloud() {
 }
 
 export function buildSettings() {
-  const year    = new Date().getFullYear();
-  const goal    = localStorage.getItem(`libra-goal-${year}`);
-  const apiKey  = localStorage.getItem('libra-claude-key');
-  const settings = {};
-  if (goal)   settings[`goal_${year}`] = goal;
-  if (apiKey) settings.claude_key      = apiKey;
+  const year        = new Date().getFullYear();
+  const goal        = localStorage.getItem(`libra-goal-${year}`);
+  const apiKey      = localStorage.getItem('libra-claude-key');
+  const streak      = localStorage.getItem('libra-streak');
+  const displayName = localStorage.getItem('libra-display-name');
+  const settings    = {};
+  if (goal)        settings[`goal_${year}`] = goal;
+  if (apiKey)      settings.claude_key      = apiKey;
+  if (streak)      settings.streak          = streak;
+  if (displayName) settings.display_name    = displayName;
   return settings;
 }
 
@@ -88,5 +92,7 @@ export function applySettings(settings) {
   if (!settings || typeof settings !== 'object') return;
   const year = new Date().getFullYear();
   if (settings[`goal_${year}`]) localStorage.setItem(`libra-goal-${year}`, settings[`goal_${year}`]);
-  if (settings.claude_key)      localStorage.setItem('libra-claude-key', settings.claude_key);
+  if (settings.claude_key)      localStorage.setItem('libra-claude-key',   settings.claude_key);
+  if (settings.streak)          localStorage.setItem('libra-streak',        settings.streak);
+  if (settings.display_name)    localStorage.setItem('libra-display-name',  settings.display_name);
 }

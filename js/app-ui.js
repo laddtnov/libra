@@ -119,37 +119,7 @@ function initApp() {
 }
 
 function initOverlayUI() {
-  const overlay = document.getElementById('auth-overlay');
-  const badge   = document.getElementById('auth-badge');
-  const skip    = document.getElementById('auth-skip');
-  const form    = document.getElementById('auth-form');
-  const input   = document.getElementById('auth-email');
-  const btn     = document.getElementById('auth-submit');
-  const status  = document.getElementById('auth-status');
-
-  badge?.addEventListener('click', () => { if (overlay) overlay.style.display = 'flex'; });
-  skip?.addEventListener('click',  () => { if (overlay) overlay.style.display = 'none'; });
-
-  form?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const email = input?.value.trim() ?? '';
-    if (!email?.includes('@')) {
-      if (status) { status.textContent = '> INVALID EMAIL'; status.dataset.type = 'error'; }
-      return;
-    }
-    if (btn) { btn.disabled = true; btn.textContent = '[ TRANSMITTING... ]'; }
-    try {
-      const { sendMagicLink } = await import('./auth.js');
-      const error = await sendMagicLink(email);
-      if (error) throw error;
-      if (status) { status.textContent = `> LINK SENT — CHECK YOUR INBOX`; status.dataset.type = 'success'; }
-      if (input) input.value = '';
-    } catch (err) {
-      if (status) { status.textContent = `> ERROR — ${err.message ?? 'Failed to send'}`;  status.dataset.type = 'error'; }
-    } finally {
-      if (btn) { btn.disabled = false; btn.textContent = '[ SEND LINK ]'; }
-    }
-  });
+  // Badge click + overlay close now fully handled by initAuthUI() in ui-auth.js
 }
 
 async function initSync() {
