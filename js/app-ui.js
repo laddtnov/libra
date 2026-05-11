@@ -130,7 +130,7 @@ async function initSync() {
       import('./ui-auth.js'),
     ]);
     const { initAuth, onAuthChange, pullBooksFromCloud, pullSettingsFromCloud, applySettings, buildSettings, pushSettingsToCloud } = authMod;
-    const { hideAuthOverlay, updateAuthBadge, initAuthUI } = uiAuthMod;
+    const { hideAuthOverlay, updateAuthBadge, initAuthUI, triggerResetScreen } = uiAuthMod;
 
     const user = await initAuth();
     updateAuthBadge(user);
@@ -154,7 +154,11 @@ async function initSync() {
       if (cloudSettings) { applySettings(cloudSettings); renderGoal(); }
     }
 
-    onAuthChange(async (newUser) => {
+    onAuthChange(async (newUser, event) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        triggerResetScreen();
+        return;
+      }
       updateAuthBadge(newUser);
       if (newUser) {
         hideAuthOverlay();

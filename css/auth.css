@@ -283,6 +283,20 @@
   background: #0d0d1a;
 }
 
+.auth-forgot-btn {
+  background: transparent;
+  border: none;
+  color: rgba(245, 158, 11, 0.45);
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  transition: color 0.2s ease;
+}
+.auth-forgot-btn:hover { color: var(--neon-orange); }
+
 .logout-btn {
   font-family: 'Courier New', monospace;
   font-size: 9px;

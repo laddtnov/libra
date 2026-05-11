@@ -1,7 +1,7 @@
-import { signUpWithPassword, signInWithPassword, signOut, pushSettingsToCloud, buildSettings } from './auth.js';
+import { signUpWithPassword, signInWithPassword, signOut, resetPassword, updatePassword, pushSettingsToCloud, buildSettings } from './auth.js';
 
 // ── State machine ─────────────────────────────────────────────────────────────
-const S = { IDLE: 'idle', SIGNUP: 'signup', LOGIN: 'login', SYNCING: 'syncing', LOGGED_IN: 'logged-in' };
+const S = { IDLE: 'idle', SIGNUP: 'signup', LOGIN: 'login', FORGOT: 'forgot', RESET: 'reset', SYNCING: 'syncing', LOGGED_IN: 'logged-in' };
 let state = S.IDLE;
 let displayName = localStorage.getItem('libra-display-name') || '';
 
@@ -193,10 +193,104 @@ function renderLogin(c) {
   const back = el('button', 'auth-back-btn', '< BACK');
   back.addEventListener('click', () => { state = S.IDLE; renderOverlay(); });
 
+  const forgot = el('button', 'auth-forgot-btn', '> forgot password?');
+  forgot.addEventListener('click', () => { state = S.FORGOT; renderOverlay(); });
+
   c.appendChild(emailLabel); c.appendChild(emailInput);
   c.appendChild(passLabel);  c.appendChild(passInput);
-  c.appendChild(statusEl);   c.appendChild(connectBtn); c.appendChild(back);
+  c.appendChild(statusEl);   c.appendChild(connectBtn);
+  c.appendChild(forgot);     c.appendChild(back);
   setTimeout(() => emailInput.focus(), 50);
+}
+
+function renderForgot(c) {
+  c.appendChild(el('div', 'auth-screen-title', '>_ RESET PASSWORD'));
+  c.appendChild(el('div', 'auth-divider', '────────────────────────────────────'));
+  c.appendChild(el('p', 'auth-hint', '> Enter your email — we\'ll send a reset link.'));
+
+  const emailLabel = el('label', 'auth-field-label', 'EMAIL');
+  const emailInput = el('input', 'auth-input');
+  emailInput.type         = 'email';
+  emailInput.placeholder  = 'agent@domain.xyz';
+  emailInput.maxLength    = 320;
+  emailInput.autocomplete = 'email';
+
+  const statusEl  = el('div', 'auth-status');
+  const sendBtn   = el('button', 'auth-primary-btn', '[ SEND RESET LINK ]');
+
+  sendBtn.addEventListener('click', async () => {
+    const email = emailInput.value.trim();
+    if (!email?.includes('@')) { statusEl.textContent = '> INVALID EMAIL'; statusEl.dataset.type = 'error'; return; }
+
+    sendBtn.disabled = true; sendBtn.textContent = '[ SENDING... ]';
+    const error = await resetPassword(email);
+    sendBtn.disabled = false; sendBtn.textContent = '[ SEND RESET LINK ]';
+
+    if (error) {
+      statusEl.textContent = `> ERROR — ${error.message}`; statusEl.dataset.type = 'error';
+    } else {
+      statusEl.textContent = `> LINK SENT TO ${email.toUpperCase()} — CHECK YOUR INBOX`;
+      statusEl.dataset.type = 'success';
+      sendBtn.disabled = true;
+    }
+  });
+
+  emailInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendBtn.click(); });
+
+  const back = el('button', 'auth-back-btn', '< BACK TO LOGIN');
+  back.addEventListener('click', () => { state = S.LOGIN; renderOverlay(); });
+
+  c.appendChild(emailLabel); c.appendChild(emailInput);
+  c.appendChild(statusEl);   c.appendChild(sendBtn); c.appendChild(back);
+  setTimeout(() => emailInput.focus(), 50);
+}
+
+function renderReset(c) {
+  c.appendChild(el('div', 'auth-screen-title', '>_ SET NEW PASSWORD'));
+  c.appendChild(el('div', 'auth-divider', '────────────────────────────────────'));
+
+  const passLabel    = el('label', 'auth-field-label', 'NEW PASSWORD');
+  const passInput    = el('input', 'auth-input');
+  passInput.type         = 'password';
+  passInput.placeholder  = 'min 6 characters';
+  passInput.autocomplete = 'new-password';
+
+  const confirmLabel = el('label', 'auth-field-label', 'CONFIRM PASSWORD');
+  const confirmInput = el('input', 'auth-input');
+  confirmInput.type         = 'password';
+  confirmInput.placeholder  = 'repeat password';
+  confirmInput.autocomplete = 'new-password';
+
+  const statusEl  = el('div', 'auth-status');
+  const saveBtn   = el('button', 'auth-primary-btn', '[ SET PASSWORD ]');
+
+  saveBtn.addEventListener('click', async () => {
+    const pass    = passInput.value;
+    const confirm = confirmInput.value;
+
+    if (pass.length < 6)   { statusEl.textContent = '> PASSWORD TOO SHORT';      statusEl.dataset.type = 'error'; return; }
+    if (pass !== confirm)  { statusEl.textContent = '> PASSWORDS DO NOT MATCH';   statusEl.dataset.type = 'error'; return; }
+
+    saveBtn.disabled = true; saveBtn.textContent = '[ SAVING... ]';
+    const error = await updatePassword(pass);
+
+    if (error) {
+      saveBtn.disabled = false; saveBtn.textContent = '[ SET PASSWORD ]';
+      statusEl.textContent = `> ERROR — ${error.message}`; statusEl.dataset.type = 'error';
+    } else {
+      statusEl.textContent = '> PASSWORD UPDATED — please log in again';
+      statusEl.dataset.type = 'success';
+      await signOut();
+      setTimeout(() => { state = S.LOGIN; renderOverlay(); hideAuthOverlay(); }, 1800);
+    }
+  });
+
+  [passInput, confirmInput].forEach(i => i.addEventListener('keydown', e => { if (e.key === 'Enter') saveBtn.click(); }));
+
+  c.appendChild(passLabel);    c.appendChild(passInput);
+  c.appendChild(confirmLabel); c.appendChild(confirmInput);
+  c.appendChild(statusEl);     c.appendChild(saveBtn);
+  setTimeout(() => passInput.focus(), 50);
 }
 
 function renderSyncing(c) {
@@ -266,9 +360,16 @@ function renderOverlay() {
     case S.IDLE:      renderIdle(c); break;
     case S.SIGNUP:    renderSignup(c); break;
     case S.LOGIN:     renderLogin(c); break;
+    case S.FORGOT:    renderForgot(c); break;
+    case S.RESET:     renderReset(c); break;
     case S.SYNCING:   renderSyncing(c); break;
     case S.LOGGED_IN: renderLoggedIn(c, user); break;
   }
+}
+
+export function triggerResetScreen() {
+  state = S.RESET;
+  showAuthOverlay(S.RESET);
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────

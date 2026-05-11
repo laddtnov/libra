@@ -11,10 +11,23 @@ export async function initAuth() {
 }
 
 export function onAuthChange(callback) {
-  supabase.auth.onAuthStateChange((_event, session) => {
+  supabase.auth.onAuthStateChange((event, session) => {
     currentUser = session?.user ?? null;
-    callback(currentUser);
+    callback(currentUser, event);
   });
+}
+
+// ── Password reset ────────────────────────────────────────────────────────────
+export async function resetPassword(email) {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: globalThis.location.origin,
+  });
+  return error;
+}
+
+export async function updatePassword(newPassword) {
+  const { error } = await supabase.auth.updateUser({ password: newPassword });
+  return error;
 }
 
 // ── Email + password auth ─────────────────────────────────────────────────────
