@@ -374,6 +374,13 @@ export function triggerResetScreen() {
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 export function initAuthUI() {
+  // Check if we arrived via a password reset email (flag set synchronously before modules loaded)
+  if (sessionStorage.getItem('libra-recovery')) {
+    sessionStorage.removeItem('libra-recovery');
+    // Give Supabase a moment to exchange the code for a session
+    setTimeout(() => triggerResetScreen(), 400);
+  }
+
   const badge     = document.getElementById('auth-badge');
   const logoutBtn = document.getElementById('logout-btn');
 

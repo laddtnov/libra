@@ -300,6 +300,12 @@
   </div>
 
   <div class="toast-container" id="toast-container"></div>
+  <!-- Detect password reset redirect before modules load -->
+  <script>
+    if (new URLSearchParams(location.search).get('code')) {
+      sessionStorage.setItem('libra-recovery', '1');
+    }
+  </script>
   <script src="js/vendor/supabase.min.js"></script>
   <script type="module" src="js/app-ui.js"></script>
   <script>
