@@ -218,20 +218,38 @@ function renderForgot(c) {
   const statusEl  = el('div', 'auth-status');
   const sendBtn   = el('button', 'auth-primary-btn', '[ SEND RESET LINK ]');
 
+  let cooldownTimer = null;
+
+  function startCooldown() {
+    let secs = 60;
+    sendBtn.disabled = true;
+    sendBtn.textContent = `[ RESEND IN ${secs}s ]`;
+    cooldownTimer = setInterval(() => {
+      secs--;
+      if (secs <= 0) {
+        clearInterval(cooldownTimer);
+        sendBtn.disabled = false;
+        sendBtn.textContent = '[ RESEND LINK ]';
+      } else {
+        sendBtn.textContent = `[ RESEND IN ${secs}s ]`;
+      }
+    }, 1000);
+  }
+
   sendBtn.addEventListener('click', async () => {
     const email = emailInput.value.trim();
     if (!email?.includes('@')) { statusEl.textContent = '> INVALID EMAIL'; statusEl.dataset.type = 'error'; return; }
 
     sendBtn.disabled = true; sendBtn.textContent = '[ SENDING... ]';
     const error = await resetPassword(email);
-    sendBtn.disabled = false; sendBtn.textContent = '[ SEND RESET LINK ]';
 
     if (error) {
+      sendBtn.disabled = false; sendBtn.textContent = '[ SEND RESET LINK ]';
       statusEl.textContent = `> ERROR — ${error.message}`; statusEl.dataset.type = 'error';
     } else {
       statusEl.textContent = `> LINK SENT TO ${email.toUpperCase()} — CHECK YOUR INBOX`;
       statusEl.dataset.type = 'success';
-      sendBtn.disabled = true;
+      startCooldown();
     }
   });
 
