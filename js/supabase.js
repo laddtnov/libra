@@ -15,3 +15,11 @@ if (!url?.startsWith('http')) {
 }
 
 export const supabase = globalThis.supabase.createClient(url, anon);
+
+// Catch PASSWORD_RECOVERY the instant the client processes the ?code= in the URL.
+// This fires before app-ui.js has a chance to register its own listener.
+supabase.auth.onAuthStateChange((event) => {
+  if (event === 'PASSWORD_RECOVERY') {
+    sessionStorage.setItem('libra-recovery-active', '1');
+  }
+});
