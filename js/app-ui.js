@@ -154,11 +154,17 @@ async function initSync() {
       if (cloudSettings) { applySettings(cloudSettings); renderGoal(); }
     }
 
+    // initAuthUI first — opens reset form if ?reset=1 is in the URL
+    initAuthUI();
+
     onAuthChange(async (newUser, event) => {
       if (event === 'PASSWORD_RECOVERY') {
         triggerResetScreen();
         return;
       }
+      // Don't hide overlay if reset form is active (would close it)
+      if (sessionStorage.getItem('libra-recovery')) return;
+
       updateAuthBadge(newUser);
       if (newUser) {
         hideAuthOverlay();
@@ -177,8 +183,6 @@ async function initSync() {
         pushSettingsToCloud(buildSettings()).catch(() => {});
       }
     });
-
-    initAuthUI();
   } catch (err) {
     console.warn('Sync unavailable:', err);
   }
