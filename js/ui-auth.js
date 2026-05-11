@@ -374,13 +374,9 @@ export function triggerResetScreen() {
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 export function initAuthUI() {
-  // Check both flags: one set before modules load (?code= in URL),
-  // one set the moment PASSWORD_RECOVERY fires in supabase.js
-  const isRecovery = sessionStorage.getItem('libra-recovery') ||
-                     sessionStorage.getItem('libra-recovery-active');
-  if (isRecovery) {
+  // Hash flag set synchronously before modules loaded (#type=recovery)
+  if (sessionStorage.getItem('libra-recovery')) {
     sessionStorage.removeItem('libra-recovery');
-    sessionStorage.removeItem('libra-recovery-active');
     triggerResetScreen();
   }
 

@@ -14,12 +14,8 @@ if (!url?.startsWith('http')) {
   } catch { /* stay silent — auth will be skipped */ }
 }
 
-export const supabase = globalThis.supabase.createClient(url, anon);
-
-// Catch PASSWORD_RECOVERY the instant the client processes the ?code= in the URL.
-// This fires before app-ui.js has a chance to register its own listener.
-supabase.auth.onAuthStateChange((event) => {
-  if (event === 'PASSWORD_RECOVERY') {
-    sessionStorage.setItem('libra-recovery-active', '1');
-  }
+// Use implicit flow so password-reset links contain #type=recovery in the hash —
+// detectable synchronously before any async code runs.
+export const supabase = globalThis.supabase.createClient(url, anon, {
+  auth: { flowType: 'implicit' },
 });

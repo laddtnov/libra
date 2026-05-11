@@ -300,9 +300,9 @@
   </div>
 
   <div class="toast-container" id="toast-container"></div>
-  <!-- Detect password reset redirect before modules load -->
+  <!-- Detect password reset redirect before modules load (implicit flow uses hash) -->
   <script>
-    if (new URLSearchParams(location.search).get('code')) {
+    if (location.hash.includes('type=recovery')) {
       sessionStorage.setItem('libra-recovery', '1');
     }
   </script>
