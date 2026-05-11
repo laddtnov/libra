@@ -372,6 +372,8 @@ export function triggerResetScreen() {
   showAuthOverlay(S.RESET);
 }
 
+export function isResetActive() { return state === S.RESET; }
+
 // ── Init ──────────────────────────────────────────────────────────────────────
 export function initAuthUI() {
   // Hash flag set synchronously before modules loaded (?reset=1)

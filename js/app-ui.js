@@ -130,7 +130,7 @@ async function initSync() {
       import('./ui-auth.js'),
     ]);
     const { initAuth, onAuthChange, pullBooksFromCloud, pullSettingsFromCloud, applySettings, buildSettings, pushSettingsToCloud } = authMod;
-    const { hideAuthOverlay, updateAuthBadge, initAuthUI, triggerResetScreen } = uiAuthMod;
+    const { hideAuthOverlay, updateAuthBadge, initAuthUI, triggerResetScreen, isResetActive } = uiAuthMod;
 
     const user = await initAuth();
     updateAuthBadge(user);
@@ -162,8 +162,8 @@ async function initSync() {
         triggerResetScreen();
         return;
       }
-      // Don't hide overlay if reset form is active (would close it)
-      if (sessionStorage.getItem('libra-recovery')) return;
+      // Don't touch the overlay if the reset form is showing
+      if (isResetActive()) return;
 
       updateAuthBadge(newUser);
       if (newUser) {
