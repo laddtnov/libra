@@ -1,4 +1,4 @@
-import { signUpWithPassword, signInWithPassword, signOut, resetPassword, updatePassword, pushSettingsToCloud, buildSettings } from './auth.js';
+import { signUpWithPassword, signInWithPassword, signOut, resetPassword, updatePassword, establishRecoverySession, pushSettingsToCloud, buildSettings } from './auth.js';
 
 // ── State machine ─────────────────────────────────────────────────────────────
 const S = { IDLE: 'idle', SIGNUP: 'signup', LOGIN: 'login', FORGOT: 'forgot', RESET: 'reset', SYNCING: 'syncing', LOGGED_IN: 'logged-in' };
@@ -374,10 +374,12 @@ export function triggerResetScreen() {
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 export function initAuthUI() {
-  // Hash flag set synchronously before modules loaded (#type=recovery)
+  // Hash flag set synchronously before modules loaded (?reset=1)
   if (sessionStorage.getItem('libra-recovery')) {
     sessionStorage.removeItem('libra-recovery');
-    triggerResetScreen();
+    // Force-establish the recovery session from hash tokens
+    // (needed on desktop where user may already have an active session)
+    establishRecoverySession().finally(() => triggerResetScreen());
   }
 
   const badge     = document.getElementById('auth-badge');

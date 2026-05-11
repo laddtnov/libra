@@ -30,6 +30,16 @@ export async function updatePassword(newPassword) {
   return error;
 }
 
+// Establish recovery session from hash tokens (needed when user is already signed in)
+export async function establishRecoverySession() {
+  const hash  = new URLSearchParams(globalThis.location.hash.replace('#', ''));
+  const at    = hash.get('access_token');
+  const rt    = hash.get('refresh_token');
+  if (!at || !rt) return false;
+  const { error } = await supabase.auth.setSession({ access_token: at, refresh_token: rt });
+  return !error;
+}
+
 // ── Email + password auth ─────────────────────────────────────────────────────
 export async function signUpWithPassword(email, password) {
   const { error } = await supabase.auth.signUp({ email, password });
