@@ -46,7 +46,8 @@ export function updateAuthBadge(user) {
   if (user) {
     const name   = displayName || user.email?.split('@')[0] || 'agent';
     const streak = getStreak();
-    badge.textContent   = `${name}${streak > 0 ? ` 🔥${streak}` : ''}`;
+    const streakSuffix  = streak > 0 ? ` 🔥${streak}` : '';
+    badge.textContent   = `${name}${streakSuffix}`;
     badge.title         = `${user.email} — click to manage account`;
     badge.dataset.state = 'signed-in';
     badge.dataset.email = user.email ?? '';
@@ -327,7 +328,9 @@ function renderLoggedIn(c, user) {
   const infoGrid = el('div', 'auth-info-grid');
   infoGrid.appendChild(el('div', 'auth-info-row', `> AGENT    ${name.toUpperCase()}`));
   infoGrid.appendChild(el('div', 'auth-info-row', `> EMAIL    ${user?.email ?? '—'}`));
-  infoGrid.appendChild(el('div', 'auth-info-row', `> STREAK   ${streak > 0 ? `🔥 ${streak} day${streak === 1 ? '' : 's'}` : '— log a session to begin'}`));
+  const dayLabel   = streak === 1 ? 'day' : 'days';
+  const streakText = streak > 0 ? `🔥 ${streak} ${dayLabel}` : '— log a session to begin';
+  infoGrid.appendChild(el('div', 'auth-info-row', `> STREAK   ${streakText}`));
   infoGrid.appendChild(el('div', 'auth-info-row auth-status-synced', '> STATUS   ✓ SYNCED'));
   c.appendChild(infoGrid);
 
