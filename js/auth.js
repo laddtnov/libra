@@ -20,7 +20,7 @@ export function onAuthChange(callback) {
 // ── Password reset ────────────────────────────────────────────────────────────
 export async function resetPassword(email) {
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: globalThis.location.origin,
+    redirectTo: `${globalThis.location.origin}?reset=1`,
   });
   return error;
 }
