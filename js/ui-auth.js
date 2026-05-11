@@ -418,4 +418,12 @@ export function initAuthUI() {
     state = S.IDLE;
     updateAuthBadge(null);
   });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const overlay = getOverlay();
+    if (overlay?.style.display !== 'none' && overlay?.style.display !== '') {
+      hideAuthOverlay();
+    }
+  });
 }
