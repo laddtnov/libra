@@ -363,7 +363,7 @@ function renderLoggedIn(c, user) {
   c.appendChild(btns);
 
   // Push notifications
-  if ('Notification' in window && 'serviceWorker' in navigator) {
+  if ('Notification' in globalThis && 'serviceWorker' in navigator) {
     const notifBtn = el('button', 'auth-secondary-btn', '');
     const perm = Notification.permission;
     notifBtn.textContent = perm === 'granted' ? '[ 🔔 NOTIFICATIONS ON ]' : '[ 🔔 ENABLE NOTIFICATIONS ]';
