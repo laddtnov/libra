@@ -362,6 +362,46 @@ function renderLoggedIn(c, user) {
   btns.appendChild(logoutBtn);
   c.appendChild(btns);
 
+  // Push notifications
+  if ('Notification' in window && 'serviceWorker' in navigator) {
+    const notifBtn = el('button', 'auth-secondary-btn', '');
+    const perm = Notification.permission;
+    notifBtn.textContent = perm === 'granted' ? '[ 🔔 NOTIFICATIONS ON ]' : '[ 🔔 ENABLE NOTIFICATIONS ]';
+    if (perm === 'granted') notifBtn.style.opacity = '0.5';
+
+    notifBtn.addEventListener('click', async () => {
+      if (Notification.permission === 'granted') return;
+      notifBtn.disabled = true; notifBtn.textContent = '[ REQUESTING... ]';
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') {
+        notifBtn.disabled = false; notifBtn.textContent = '[ NOTIFICATIONS BLOCKED ]';
+        return;
+      }
+      try {
+        const reg = await navigator.serviceWorker.ready;
+        const cfg = await fetch('/api/config').then(r => r.json());
+        if (!cfg.vapidPublicKey) { notifBtn.textContent = '[ NOT CONFIGURED ]'; return; }
+
+        const sub = await reg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: cfg.vapidPublicKey,
+        });
+
+        const badge = document.getElementById('auth-badge');
+        await fetch('/api/push-subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ subscription: sub.toJSON(), userId: badge?.dataset.email }),
+        });
+        notifBtn.textContent = '[ 🔔 NOTIFICATIONS ON ]';
+        notifBtn.style.opacity = '0.5';
+      } catch {
+        notifBtn.disabled = false; notifBtn.textContent = '[ FAILED — TRY AGAIN ]';
+      }
+    });
+    c.appendChild(notifBtn);
+  }
+
   const close = el('button', 'auth-skip-btn', '> close');
   close.addEventListener('click', hideAuthOverlay);
   c.appendChild(close);
