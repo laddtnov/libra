@@ -83,6 +83,69 @@
   letter-spacing: 0.5px;
 }
 
+/* ── Genre goals ── */
+#genre-goals-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 6px;
+}
+
+.genre-goal-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 36px 18px;
+  align-items: center;
+  gap: 8px;
+}
+
+.genre-goal-lbl {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.55rem;
+  color: rgba(245, 158, 11, 0.65);
+  letter-spacing: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.genre-goal-track {
+  height: 4px;
+  background: rgba(245, 158, 11, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.genre-goal-fill {
+  height: 100%;
+  background: linear-gradient(90deg, rgba(245,158,11,0.7), #ffd700);
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+.genre-goal-fill[data-done="1"] {
+  background: linear-gradient(90deg, #00ff88, #00f2ff);
+}
+
+.genre-goal-meta {
+  font-family: 'Courier New', monospace;
+  font-size: 8px;
+  color: rgba(245, 158, 11, 0.5);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.genre-goal-del {
+  background: transparent;
+  border: none;
+  color: rgba(255, 85, 85, 0.4);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.15s ease;
+}
+.genre-goal-del:hover { color: #ff5555; }
+
 /* ── Streak badge ── */
 .streak-badge {
   display: flex;

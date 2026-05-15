@@ -120,12 +120,16 @@
         <div class="goal-bar-wrap" id="goal-bar-wrap">
           <div class="goal-bar-header">
             <span class="goal-label" id="goal-label">&gt; READING GOAL <span id="goal-year"></span></span>
-            <button class="goal-edit-btn" id="goal-edit-btn">[ SET ]</button>
+            <div style="display:flex;gap:5px;">
+              <button class="goal-edit-btn" id="goal-edit-btn">[ SET ]</button>
+              <button class="goal-edit-btn" id="genre-goal-btn" title="Add per-genre goal">[ + GENRE ]</button>
+            </div>
           </div>
           <div class="goal-track">
             <div class="goal-fill" id="goal-fill"></div>
           </div>
           <div class="goal-meta" id="goal-meta"></div>
+          <div id="genre-goals-container"></div>
         </div>
         <div class="streak-badge" id="streak-badge">
           <span class="streak-icon">🔥</span>

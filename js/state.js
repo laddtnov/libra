@@ -122,6 +122,11 @@ function normalizeBookRecord(rawBook) {
   applyOptionalBookFields(book, { subtitle, pages, rating, coverId, synopsis });
   applyStatusFields(book, { status, pages, currentPage, started, completed });
 
+  if (Array.isArray(rawBook.tags)) {
+    const tags = rawBook.tags.map(t => cleanText(String(t), 30).toLowerCase()).filter(Boolean).slice(0, 20);
+    if (tags.length) book.tags = tags;
+  }
+
   return book;
 }
 

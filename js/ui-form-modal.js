@@ -40,6 +40,9 @@ function buildBookPayload({ title, author, status, pages, currentPage, rating, c
   const completed = document.getElementById('f-completed').value.trim();
   const synopsis = document.getElementById('f-synopsis').value.trim();
 
+  const tagsRaw = document.getElementById('f-tags')?.value || '';
+  const tags = tagsRaw.split(',').map(t => t.trim()).filter(Boolean);
+
   const book = {
     title,
     author,
@@ -47,6 +50,7 @@ function buildBookPayload({ title, author, status, pages, currentPage, rating, c
     category: document.getElementById('f-category').value,
     notes: document.getElementById('f-notes').value.split('\n').map(n => n.trim()).filter(Boolean),
   };
+  if (tags.length) book.tags = tags;
 
   if (subtitle) book.subtitle = subtitle;
   if (pages) book.pages = pages;
@@ -197,11 +201,58 @@ export function openFormModal(bookId = null) {
         <textarea id="f-notes" class="terminal-textarea" placeholder="${t('form_ph_notes')}">${escHtml((book?.notes || []).join('\n'))}</textarea>
       </div>
 
+      <div class="form-field">
+        <label class="terminal-label">&gt; TAGS</label>
+        <div class="tags-input-wrap" id="tags-wrap">
+          ${(book?.tags || []).map(tag => `<span class="tag-chip" data-tag="${escHtml(tag)}">${escHtml(tag)} <span class="tag-chip-x">×</span></span>`).join('')}
+          <input id="f-tag-input" class="tag-text-input" placeholder="add tag + Enter" maxlength="30" autocomplete="off">
+        </div>
+        <input type="hidden" id="f-tags" value="${escHtml((book?.tags || []).join(','))}">
+      </div>
+
       <div class="form-actions">
         <button class="terminal-action-btn save-btn" id="save-book-btn">[ ${isEdit ? t('form_btn_update') : t('form_btn_create')} ]</button>
         <button class="terminal-action-btn cancel-btn" id="cancel-form-btn">[ ${t('form_btn_cancel')} ]</button>
       </div>
     </div>`;
+
+  // ── Tag chip interactions ─────────────────────────────────────────────────
+  const tagsWrap  = document.getElementById('tags-wrap');
+  const tagsHidden = document.getElementById('f-tags');
+  const tagInput   = document.getElementById('f-tag-input');
+
+  function getTags()    { return tagsHidden.value.split(',').map(t => t.trim()).filter(Boolean); }
+  function setTags(arr) { tagsHidden.value = [...new Set(arr)].join(','); }
+
+  function addTagChip(tag) {
+    const chip = document.createElement('span');
+    chip.className = 'tag-chip';
+    chip.dataset.tag = tag;
+    chip.innerHTML = `${tag} <span class="tag-chip-x">×</span>`;
+    chip.querySelector('.tag-chip-x').addEventListener('click', () => {
+      chip.remove();
+      setTags(getTags().filter(t => t !== tag));
+    });
+    tagsWrap.insertBefore(chip, tagInput);
+  }
+
+  tagInput?.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ',') return;
+    e.preventDefault();
+    const val = tagInput.value.trim().toLowerCase().replaceAll(/[^a-z0-9-_ ]/g, '').slice(0, 30);
+    if (!val || getTags().includes(val)) { tagInput.value = ''; return; }
+    setTags([...getTags(), val]);
+    addTagChip(val);
+    tagInput.value = '';
+  });
+
+  tagsWrap?.querySelectorAll('.tag-chip').forEach(chip => {
+    chip.querySelector('.tag-chip-x')?.addEventListener('click', () => {
+      const tag = chip.dataset.tag;
+      chip.remove();
+      setTags(getTags().filter(t => t !== tag));
+    });
+  });
 
   const statusSel = document.getElementById('f-status');
   statusSel.addEventListener('change', () => {

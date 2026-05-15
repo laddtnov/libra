@@ -190,6 +190,7 @@ function buildCardHTML(book) {
       <div class="book-tags">
         ${genreTag}
         <span class="tag">${safePages || '?'} pages</span>
+        ${(book.tags || []).map(tag => `<span class="tag tag-custom">${escHtml(tag)}</span>`).join('')}
       </div>
     </div>`;
 }
@@ -204,7 +205,8 @@ function getFilteredEntries() {
     const matchSearch = !q
       || book.title.toLowerCase().includes(q)
       || book.author.toLowerCase().includes(q)
-      || (book.category || '').toLowerCase().includes(q);
+      || (book.category || '').toLowerCase().includes(q)
+      || (book.tags || []).some(tag => tag.includes(q));
     return matchFilter && matchList && matchSearch;
   });
 
