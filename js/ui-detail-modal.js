@@ -8,6 +8,23 @@ import { renderAvailabilitySection } from './ui-availability.js';
 
 let onOpenFormModal = () => {};
 
+function calcPace(sessions, totalPages, currentPage) {
+  if (!sessions?.length || !totalPages) return null;
+  const sorted = [...sessions].sort((a, b) => a.date.localeCompare(b.date));
+  const firstDate = new Date(sorted[0].date);
+  const lastDate  = new Date(sorted.at(-1).date);
+  const daySpan   = Math.max(1, Math.round((lastDate - firstDate) / 86400000) + 1);
+  const pagesRead = sessions.reduce((s, x) => s + x.pages, 0);
+  const avgPerDay = pagesRead / daySpan;
+  if (avgPerDay < 0.5) return null;
+  const remaining = totalPages - currentPage;
+  if (remaining <= 0) return null;
+  const daysLeft  = Math.ceil(remaining / avgPerDay);
+  const finish    = new Date(Date.now() + daysLeft * 86400000);
+  const finishStr = finish.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  return { avgPerDay: Math.round(avgPerDay), daysLeft, finishStr };
+}
+
 export function configureDetailHandlers({ openFormModal }) {
   onOpenFormModal = openFormModal;
 }
@@ -91,24 +108,6 @@ export function showBookDetails(bookId) {
     ? `<img class="detail-cover" src="https://covers.openlibrary.org/b/id/${safeCoverId}-M.jpg" alt="cover" loading="lazy">`
     : `<div class="detail-cover-placeholder">${escHtml((book.title || '?').charAt(0).toUpperCase())}</div>`;
 
-  // ── Pace estimator ───────────────────────────────────────────────────────
-  function calcPace(sessions, totalPages, currentPage) {
-    if (!sessions?.length || !totalPages) return null;
-    const sorted = [...sessions].sort((a, b) => a.date.localeCompare(b.date));
-    const firstDate = new Date(sorted[0].date);
-    const lastDate  = new Date(sorted.at(-1).date);
-    const daySpan   = Math.max(1, Math.round((lastDate - firstDate) / 86400000) + 1);
-    const pagesRead = sessions.reduce((s, x) => s + x.pages, 0);
-    const avgPerDay = pagesRead / daySpan;
-    if (avgPerDay < 0.5) return null;
-    const remaining = totalPages - currentPage;
-    if (remaining <= 0) return null;
-    const daysLeft  = Math.ceil(remaining / avgPerDay);
-    const finish    = new Date(Date.now() + daysLeft * 86400000);
-    const finishStr = finish.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    return { avgPerDay: Math.round(avgPerDay), daysLeft, finishStr };
-  }
-
   const pace = book.status === 'reading'
     ? calcPace(book.sessions, safePages, safeCurrentPage) : null;
 
@@ -127,8 +126,9 @@ export function showBookDetails(bookId) {
       <div class="detail-row"><span class="detail-key">&gt; COMPLETED</span><span class="detail-val">${safeCompleted}</span></div>`;
   }
 
-  const tagsRow = book.tags?.length
-    ? `<div class="detail-row"><span class="detail-key">&gt; TAGS</span><span class="detail-val">${book.tags.map(t => `<span class="detail-tag">${escHtml(t)}</span>`).join(' ')}</span></div>`
+  const tagChips = (book.tags || []).map(t => `<span class="detail-tag">${escHtml(t)}</span>`).join(' ');
+  const tagsRow  = book.tags?.length
+    ? `<div class="detail-row"><span class="detail-key">&gt; TAGS</span><span class="detail-val">${tagChips}</span></div>`
     : '';
 
   const notesHTML = book.notes?.length

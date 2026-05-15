@@ -4,7 +4,7 @@
 
 /* ── Card tag variant ── */
 .tag-custom {
-  background: rgba(0, 242, 255, 0.08);
+  background: #0c1f2c;
   border-color: rgba(0, 242, 255, 0.35);
   color: #00f2ff;
 }
@@ -32,7 +32,7 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  background: rgba(0, 242, 255, 0.1);
+  background: #0c2431;
   border: 1px solid rgba(0, 242, 255, 0.4);
   border-radius: 3px;
   color: #00f2ff;
@@ -70,7 +70,7 @@
 /* ── Detail panel tags ── */
 .detail-tag {
   display: inline-block;
-  background: rgba(0, 242, 255, 0.08);
+  background: #0c1f2c;
   border: 1px solid rgba(0, 242, 255, 0.3);
   border-radius: 3px;
   color: #00f2ff;

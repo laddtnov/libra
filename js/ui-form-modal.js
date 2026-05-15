@@ -233,7 +233,7 @@ export function openFormModal(bookId = null) {
       chip.remove();
       setTags(getTags().filter(t => t !== tag));
     });
-    tagsWrap.insertBefore(chip, tagInput);
+    tagInput.before(chip);
   }
 
   tagInput?.addEventListener('keydown', e => {

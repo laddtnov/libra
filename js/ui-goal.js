@@ -148,7 +148,7 @@ function showGenreGoalInput() {
   const wrap = document.getElementById('goal-bar-wrap');
   if (!wrap || wrap.querySelector('.goal-inline-input')) return;
 
-  const categories = [...new Set(Object.values(state.booksData).map(b => b.category).filter(Boolean))].sort();
+  const categories = [...new Set(Object.values(state.booksData).map(b => b.category).filter(Boolean))].sort((a, b) => a.localeCompare(b));
   if (!categories.length) return;
 
   const row = document.createElement('div');
@@ -189,7 +189,7 @@ function showGenreGoalInput() {
   saveBtn.addEventListener('click', () => {
     const genre = sel.value;
     const n     = Number.parseInt(numInput.value, 10);
-    if (!genre || !(n > 0)) {
+    if (!genre || n <= 0) {
       numInput.classList.add('goal-input-error');
       setTimeout(() => numInput.classList.remove('goal-input-error'), 600);
       return;
