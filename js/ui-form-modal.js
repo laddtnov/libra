@@ -228,7 +228,7 @@ export function openFormModal(bookId = null) {
     const chip = document.createElement('span');
     chip.className = 'tag-chip';
     chip.dataset.tag = tag;
-    chip.innerHTML = `${tag} <span class="tag-chip-x">×</span>`;
+    chip.innerHTML = `${escHtml(tag)} <span class="tag-chip-x">×</span>`;
     chip.querySelector('.tag-chip-x').addEventListener('click', () => {
       chip.remove();
       setTags(getTags().filter(t => t !== tag));
