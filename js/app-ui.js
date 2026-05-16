@@ -188,6 +188,27 @@ async function initSync() {
   }
 }
 
+async function syncFromCloud() {
+  try {
+    const { pullBooksFromCloud, pullSettingsFromCloud, getCurrentUser } = await import('./auth.js');
+    if (!getCurrentUser()) return;
+    const [cloudBooks, cloudSettings] = await Promise.all([pullBooksFromCloud(), pullSettingsFromCloud()]);
+    if (cloudBooks && typeof cloudBooks === 'object') {
+      Object.assign(state.booksData, cloudBooks);
+      localStorage.setItem('cyberpunk-books', JSON.stringify(state.booksData));
+      renderBooks();
+      updateStats();
+    }
+    const { applySettings } = await import('./auth.js');
+    if (cloudSettings) { applySettings(cloudSettings); renderGoal(); }
+  } catch { /* offline or not signed in */ }
+}
+
+// Pull fresh data from cloud when tab becomes visible again
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') syncFromCloud();
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   initApp();
   initSync();
