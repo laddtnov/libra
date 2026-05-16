@@ -188,6 +188,17 @@ export function initSessionsSection(bookId) {
     book.sessions.push(session);
 
     syncProgress(book);
+
+    // Auto-complete when all pages are read
+    if (book.pages && book.currentPage >= book.pages && book.status === 'reading') {
+      book.status   = 'completed';
+      book.progress = 100;
+      if (!book.completed) book.completed = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      import('./ui-feedback.js').then(({ showToast }) => {
+        showToast(`✓ "${book.title}" marked as completed!`, 'success');
+      }).catch(() => {});
+    }
+
     saveBooks();
     renderBooks();
     updateStats();
