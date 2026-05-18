@@ -73,14 +73,14 @@ async function _encryptKey(userId, plaintext) {
   const key = await _deriveEncKey(userId);
   const iv  = crypto.getRandomValues(new Uint8Array(12));
   const ct  = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, new TextEncoder().encode(plaintext));
-  const b64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf)));
+  const b64 = buf => btoa(String.fromCodePoint(...new Uint8Array(buf)));
   return `${b64(iv)}:${b64(ct)}`;
 }
 
 async function _decryptKey(userId, encrypted) {
   try {
     const [ivB64, ctB64] = encrypted.split(':');
-    const fb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+    const fb64 = s => Uint8Array.from(atob(s), c => c.codePointAt(0));
     const key  = await _deriveEncKey(userId);
     const dec  = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: fb64(ivB64) }, key, fb64(ctB64));
     return new TextDecoder().decode(dec);
