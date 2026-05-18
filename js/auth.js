@@ -57,6 +57,36 @@ export async function signOut() {
   currentUser = null;
 }
 
+// ── API-key encryption (AES-GCM, key derived from user id via HKDF) ──────────
+const _KEY_ALGO = { name: 'AES-GCM', length: 256 };
+
+async function _deriveEncKey(userId) {
+  const raw  = new TextEncoder().encode(userId);
+  const base = await crypto.subtle.importKey('raw', raw, 'HKDF', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    { name: 'HKDF', hash: 'SHA-256', salt: new Uint8Array(16), info: new TextEncoder().encode('libra-claude-key-v1') },
+    base, _KEY_ALGO, false, ['encrypt', 'decrypt']
+  );
+}
+
+async function _encryptKey(userId, plaintext) {
+  const key = await _deriveEncKey(userId);
+  const iv  = crypto.getRandomValues(new Uint8Array(12));
+  const ct  = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, new TextEncoder().encode(plaintext));
+  const b64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf)));
+  return `${b64(iv)}:${b64(ct)}`;
+}
+
+async function _decryptKey(userId, encrypted) {
+  try {
+    const [ivB64, ctB64] = encrypted.split(':');
+    const fb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+    const key  = await _deriveEncKey(userId);
+    const dec  = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: fb64(ivB64) }, key, fb64(ctB64));
+    return new TextDecoder().decode(dec);
+  } catch { return null; }
+}
+
 // ── Cloud sync ────────────────────────────────────────────────────────────────
 export async function pushBooksToCloud(booksData) {
   if (!currentUser) return;
@@ -81,9 +111,13 @@ export async function pullBooksFromCloud() {
 // ── Settings sync ─────────────────────────────────────────────────────────────
 export async function pushSettingsToCloud(settings) {
   if (!currentUser) return;
+  const payload = { ...settings };
+  if (payload.claude_key) {
+    payload.claude_key = await _encryptKey(currentUser.id, payload.claude_key);
+  }
   await supabase.from('user_books').upsert({
-    user_id:  currentUser.id,
-    settings,
+    user_id:    currentUser.id,
+    settings:   payload,
     updated_at: new Date().toISOString(),
   }, { onConflict: 'user_id' });
 }
@@ -96,7 +130,11 @@ export async function pullSettingsFromCloud() {
     .eq('user_id', currentUser.id)
     .single();
   if (error || !data?.settings) return null;
-  return data.settings;
+  const s = { ...data.settings };
+  if (s.claude_key) {
+    s.claude_key = await _decryptKey(currentUser.id, s.claude_key) ?? s.claude_key;
+  }
+  return s;
 }
 
 export function buildSettings() {

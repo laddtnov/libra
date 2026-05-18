@@ -204,9 +204,14 @@ async function syncFromCloud() {
   } catch { /* offline or not signed in */ }
 }
 
-// Pull fresh data from cloud when tab becomes visible again
+// Pull fresh data from cloud when tab becomes visible again (max once per 30s)
+let _lastCloudPull = 0;
 document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible') syncFromCloud();
+  if (document.visibilityState !== 'visible') return;
+  const now = Date.now();
+  if (now - _lastCloudPull < 30_000) return;
+  _lastCloudPull = now;
+  syncFromCloud();
 });
 
 document.addEventListener('DOMContentLoaded', () => {
