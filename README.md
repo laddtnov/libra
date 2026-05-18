@@ -95,8 +95,8 @@ A personal reading tracker with a full cyberpunk neon UI — glitch title, statu
 ## 🚀 Quick Start
 
 ```bash
-git clone https://github.com/laddtnov/book-archive.git
-cd book-archive
+git clone https://github.com/laddtnov/libra.git
+cd libra
 ```
 
 Copy credentials file:
@@ -172,7 +172,7 @@ Your key is stored only in localStorage and sent exclusively to `api.anthropic.c
 
 1. [🌌 Interactive Solar System](https://github.com/laddtnov/solar-system)
 2. [💼 Cyberpunk Portfolio](https://github.com/laddtnov/laddtnov-hub)
-3. [📚 Libra — Book Tracker](https://github.com/laddtnov/book-archive) — this project
+3. [📚 Libra — Book Tracker](https://github.com/laddtnov/libra) — this project
 
 ---
 
