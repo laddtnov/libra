@@ -23,15 +23,24 @@ A personal reading tracker with a full cyberpunk neon UI — glitch title, statu
 
 ### Core
 - **Full CRUD** — add, edit, delete books with a cyberpunk form modal
-- **Cloud sync** — sign in with magic link, books sync across all devices via Supabase
-- **Offline first** — localStorage fallback when offline; syncs on reconnect
+- **Cloud sync** — sign in with email + password, books sync across all devices via Supabase
+- **Offline first** — localStorage fallback when offline; syncs on reconnect; auto-pulls on tab focus
 - **Open Library auto-fill** — search any title, auto-populate author, pages, cover, synopsis, genre
 - **Stats cards** — Completed / Reading / Queued / Total with count-up animation
+- **Custom tags** — tag books freely; search by tag name
+- **Auto-complete** — book auto-marks as completed when session pages reach total
 
 ### Reading Goal & Streaks
 - **Annual reading goal** — set a target, watch the neon progress bar fill up
+- **Per-genre goals** — e.g. "Read 5 Fantasy books this year" with mini progress bars
 - **Reading streaks** — consecutive days with sessions logged; flame badge with hover animation
 - **Milestone toasts** — fire at 7, 14, 30, 60, 100-day streaks
+- **Web Push notifications** — daily reminder if no session logged (opt-in)
+
+### Reading Timer & Sessions
+- **Reading timer** — start/pause/stop timer in session log; elapsed minutes saved with session
+- **Reading Session Log** — log date + pages; drives the progress ring automatically
+- **Pace estimator** — calculates avg pages/day from sessions → estimated finish date
 
 ### Stats Dashboard
 - Pages read per month (bar chart)
@@ -46,16 +55,17 @@ A personal reading tracker with a full cyberpunk neon UI — glitch title, statu
 - **Cover thumbnails** — pulled from Open Library when available
 - **3D tilt effect** — cards tilt on mouse move with spring-back
 - **Star ratings** — gold stars with hover pulse
+- **Custom tags** — cyan chips displayed on cards
 
 ### Detail Modal
-- Full fields: status, category, pages, progress, dates, synopsis, notes
+- Full fields: status, category, pages, progress, dates, synopsis, notes, tags
 - **Quotes & Highlights** — save memorable passages with page numbers
-- **Reading Session Log** — log date + pages; drives the progress ring automatically
 - **Where to Find** — 6 one-click links (Open Library, WorldCat, ThriftBooks, AbeBooks, Amazon, Google Books)
 - **Reading Lists** — toggle book in/out of any named list
+- **Pace estimator** — EST. FINISH date shown for reading books
 
 ### Toolbar
-- **Live search** — filters by title/author/category; triggers Open Library web discover
+- **Live search** — filters by title/author/category/tags; triggers Open Library web discover
 - **Filter buttons** — All / Reading / Done / Queued
 - **Sort dropdown** — Title, Rating, Pages, Date Added
 - **📊 STATS** — full reading statistics dashboard
@@ -64,6 +74,11 @@ A personal reading tracker with a full cyberpunk neon UI — glitch title, statu
 - **⊕ GOODREADS** — import your Goodreads CSV export with duplicate detection
 - **Export / Import** — one-click JSON backup and restore
 - **♥ SUPPORT** — Stripe + crypto donation panel with Resend appreciation email
+
+### Auth
+- Email + password sign up / sign in
+- Forgot password → reset link via email (cyberpunk-styled email template)
+- Settings sync across devices (goal, API key, streak, display name)
 
 ### AI Recommendations
 - Paste your **Claude API key** (stored locally, never leaves your browser)
@@ -105,16 +120,19 @@ cp js/config.example.js js/config.js
 # fill in your Supabase URL and anon key
 ```
 
-Then open `index.html` — no build step, no dependencies.
+Then open `index.html` — no build step needed for the frontend.
 
 ---
 
 ## ☁️ Cloud Sync Setup
 
 1. Create a project at [supabase.com](https://supabase.com)
-2. Run `db/002_user_books.sql` in the Supabase SQL Editor
+2. Run all migrations in order in the Supabase SQL Editor:
+   - `db/002_user_books.sql`
+   - `db/003_user_settings.sql`
+   - `db/004_push_subscriptions.sql`
 3. Fill in `js/config.js` with your project URL and anon key
-4. Click **[ SIGN IN ]** in the header → enter email → click magic link
+4. Click **[ SIGN IN ]** in the header → create an account or log in
 
 ---
 
@@ -141,13 +159,14 @@ Your key is stored only in localStorage and sent exclusively to `api.anthropic.c
 
 ## 🛠️ Tech Stack
 
-- **HTML5 / CSS3 / JavaScript ES6+** — vanilla, no frameworks; ~25 modular ES modules
-- **Supabase** — Postgres + auth (magic link) + cross-device sync
+- **HTML5 / CSS3 / JavaScript ES6+** — vanilla, no frameworks; ~30 modular ES modules
+- **Supabase** — Postgres + email+password auth + cross-device sync
 - **Open Library API** — book search, covers, metadata (no key required)
 - **Claude API** — AI recommendations (user-supplied key, optional)
-- **Resend** — transactional email for donation appreciation
-- **Service Worker** — PWA offline cache (libra-v25)
-- **Vercel** — hosting + serverless functions
+- **Resend** — transactional email (donation appreciation + password reset)
+- **web-push** — Web Push / VAPID notifications via Vercel serverless
+- **Service Worker** — PWA offline cache
+- **Vercel** — hosting + serverless functions + daily cron (streak reminders)
 
 ---
 
