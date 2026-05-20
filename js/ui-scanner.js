@@ -93,18 +93,21 @@ async function startCamera() {
     const reader = new ZXingBrowser.BrowserMultiFormatReader();
     _reader = reader;
 
-    // undefined deviceId = browser picks rear/environment camera
-    await reader.decodeFromVideoDevice(undefined, video, (result, _err) => {
-      if (_reader === null) return; // modal was closed during camera init
-      if (!result) return; // NotFoundException fires every frame with no barcode — ignore
-      const code = result.getText();
-      if (!isIsbn13(code)) return; // ignore non-ISBN-13 EAN codes
+    // ideal facingMode requests rear camera on mobile, falls back to any camera on desktop
+    await reader.decodeFromConstraints(
+      { video: { facingMode: { ideal: 'environment' } } },
+      video,
+      (result, _err) => {
+        if (_reader === null) return; // modal was closed during camera init
+        if (!result) return; // NotFoundException fires every frame with no barcode — ignore
+        const code = result.getText();
+        if (!isIsbn13(code)) return; // ignore non-ISBN-13 EAN codes
 
-      // Stop scanning immediately — avoid duplicate handleIsbn calls
-      _reader.reset();
-      _reader = null;
-      handleIsbn(code);
-    });
+        // Stop scanning immediately — avoid duplicate handleIsbn calls
+        _reader.reset();
+        _reader = null;
+        handleIsbn(code);
+      });
 
     // If modal was closed while camera was initialising, clean up and bail
     if (_reader === null) {
