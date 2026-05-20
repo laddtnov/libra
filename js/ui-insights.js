@@ -43,10 +43,12 @@ function aggregateLibraryData() {
       `${cat}: ${(ratings.reduce((s, r) => s + r, 0) / ratings.length).toFixed(1)}`
     ).join(', ') || 'N/A';
 
-  // Completed books by month (YYYY-MM)
+  // Completed books by month (YYYY-MM) — validate date before slicing
   const byMonth = {};
   completed.forEach(b => {
     if (!b.completed) return;
+    const d = new Date(b.completed);
+    if (isNaN(d.getTime())) return;
     const month = b.completed.slice(0, 7);
     byMonth[month] = (byMonth[month] || 0) + 1;
   });
@@ -82,7 +84,9 @@ function aggregateLibraryData() {
   let avgPagesPerDay = 'N/A';
   if (allMonths.length >= 2) {
     const first = new Date(allMonths[0] + '-01');
+    // Add 30 days to last month start to approximate end of that month
     const last  = new Date(allMonths[allMonths.length - 1] + '-01');
+    last.setDate(last.getDate() + 30);
     const days  = Math.max(1, Math.round((last - first) / 86_400_000));
     avgPagesPerDay = Math.round(totalPages / days);
   } else if (allMonths.length === 1) {
@@ -160,8 +164,7 @@ export function renderInsightsSection(container) {
   title.textContent = 'AI INSIGHTS';
   section.appendChild(title);
 
-  const apiKey         = getSavedKey();
-  const completedCount = Object.values(state.booksData).filter(b => b.status === 'completed').length;
+  const apiKey = getSavedKey();
 
   if (!apiKey) {
     const hint = document.createElement('div');
@@ -172,7 +175,9 @@ export function renderInsightsSection(container) {
     return;
   }
 
-  if (completedCount === 0) {
+  const summary = aggregateLibraryData();
+
+  if (summary.completedCount === 0) {
     const hint = document.createElement('div');
     hint.className = 'stats-empty insights-hint';
     hint.textContent = '> No completed books yet — finish a book to unlock insights';
@@ -197,7 +202,6 @@ export function renderInsightsSection(container) {
     output.style.display = 'none';
 
     try {
-      const summary = aggregateLibraryData();
       const prompt  = buildPrompt(summary);
       const text    = await callClaude(prompt, apiKey);
       output.textContent   = text;
