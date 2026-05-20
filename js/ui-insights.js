@@ -206,8 +206,10 @@ export function renderInsightsSection(container) {
       const text    = await callClaude(prompt, apiKey);
       output.textContent   = text;
       output.style.display = 'block';
-    } catch (_err) {
-      output.textContent   = '> AI unavailable — check your API key';
+    } catch (err) {
+      output.textContent   = err.message === 'invalid_key'
+        ? '> Invalid API key — update it in ⚡ RECOMMEND'
+        : '> AI unavailable — try again later';
       output.style.display = 'block';
     } finally {
       btn.textContent = '[ ANALYSE MY LIBRARY ]';
