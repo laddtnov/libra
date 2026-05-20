@@ -48,7 +48,7 @@ function aggregateLibraryData() {
   completed.forEach(b => {
     if (!b.completed) return;
     const d = new Date(b.completed);
-    if (isNaN(d.getTime())) return;
+    if (Number.isNaN(d.getTime())) return;
     const month = b.completed.slice(0, 7);
     byMonth[month] = (byMonth[month] || 0) + 1;
   });
@@ -80,12 +80,12 @@ function aggregateLibraryData() {
     .sort((a, b) => b[1] - a[1])[0]?.[0] ?? 'N/A';
 
   // Avg pages/day estimated from first to last session month
-  const allMonths = Object.keys(pagesByMonth).sort();
+  const allMonths = Object.keys(pagesByMonth).sort((a, b) => a.localeCompare(b));
   let avgPagesPerDay = 'N/A';
   if (allMonths.length >= 2) {
     const first = new Date(allMonths[0] + '-01');
     // Add 30 days to last month start to approximate end of that month
-    const last  = new Date(allMonths[allMonths.length - 1] + '-01');
+    const last  = new Date(allMonths.at(-1) + '-01');
     last.setDate(last.getDate() + 30);
     const days  = Math.max(1, Math.round((last - first) / 86_400_000));
     avgPagesPerDay = Math.round(totalPages / days);
