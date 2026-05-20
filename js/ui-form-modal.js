@@ -102,7 +102,7 @@ export function closeFormModal() {
   state.editingBookId = null;
 }
 
-export function openFormModal(bookId = null) {
+export function openFormModal(bookId = null, prefill = null) {
   state.editingBookId = bookId;
   const book = bookId ? state.booksData[bookId] : null;
   const isEdit = !!book;
@@ -215,6 +215,20 @@ export function openFormModal(bookId = null) {
         <button class="terminal-action-btn cancel-btn" id="cancel-form-btn">[ ${t('form_btn_cancel')} ]</button>
       </div>
     </div>`;
+
+  // Populate fields from ISBN scan data (new book only)
+  if (!bookId && prefill) {
+    if (prefill.title)    document.getElementById('f-title').value    = prefill.title;
+    if (prefill.author)   document.getElementById('f-author').value   = prefill.author;
+    if (prefill.pages)    document.getElementById('f-pages').value    = prefill.pages;
+    if (prefill.synopsis) document.getElementById('f-synopsis').value = prefill.synopsis;
+    if (prefill.coverId)  document.getElementById('f-cover-id').value = prefill.coverId;
+    if (prefill.category) {
+      const sel = document.getElementById('f-category');
+      const match = [...sel.options].find(o => o.value === prefill.category);
+      if (match) sel.value = prefill.category;
+    }
+  }
 
   // ── Tag chip interactions ─────────────────────────────────────────────────
   const tagsWrap  = document.getElementById('tags-wrap');
