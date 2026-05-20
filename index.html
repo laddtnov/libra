@@ -175,6 +175,7 @@
       <button class="stats-btn" id="stats-btn">📊 STATS</button>
       <button class="wrapped-btn" id="wrapped-btn">🎁 WRAPPED</button>
       <button class="recs-btn" id="recommend-btn" data-i18n="btn_recommend">⚡ RECOMMEND</button>
+      <button class="scan-isbn-btn" id="scan-isbn-btn">⊞ SCAN ISBN</button>
       <button class="add-book-btn" id="add-book-btn" data-i18n="btn_add_book">&gt; ADD BOOK</button>
       <div class="backup-btns">
         <button class="backup-btn export-btn" id="export-btn" data-i18n="btn_export">↓ EXPORT</button>
@@ -219,6 +220,37 @@
       <div class="scanlines"></div>
       <button id="close-form-modal" class="close-btn">✕</button>
       <div id="form-modal-content"></div>
+    </div>
+  </div>
+
+  <!-- Scanner Modal -->
+  <div id="scanner-modal" style="display:none">
+    <div class="scanner-modal-container">
+      <div class="scanner-header">
+        <span class="scanner-title">⊞ ISBN SCANNER</span>
+        <button id="close-scanner-modal" class="close-btn">✕</button>
+      </div>
+      <div class="scanner-viewfinder-wrap" id="scanner-viewfinder-wrap">
+        <video id="scanner-video" class="scanner-video" playsinline muted></video>
+        <div class="scanner-corners">
+          <span class="sc-corner tl"></span>
+          <span class="sc-corner tr"></span>
+          <span class="sc-corner bl"></span>
+          <span class="sc-corner br"></span>
+        </div>
+        <div class="scanner-line" id="scanner-line"></div>
+        <div class="scanner-status" id="scanner-status">▸ REQUESTING CAMERA...</div>
+      </div>
+      <div class="scanner-fallback">
+        <span class="scanner-fallback-label">ISBN:</span>
+        <input id="scanner-isbn-input" class="terminal-input scanner-isbn-input"
+               placeholder="9780000000000" maxlength="20" autocomplete="off" spellcheck="false">
+        <button id="scanner-go-btn" class="terminal-action-btn scanner-go-btn">GO</button>
+      </div>
+      <div class="scanner-footer">
+        <span id="scanner-cam-label">INITIALISING</span>
+        <span>OPEN LIBRARY API</span>
+      </div>
     </div>
   </div>
 
@@ -311,6 +343,8 @@
     }
   </script>
   <script src="js/vendor/supabase.min.js"></script>
+  <!-- ZXing barcode scanner (ISBN support) -->
+  <script src="https://cdn.jsdelivr.net/npm/@zxing/browser@0.1.5/umd/index.min.js"></script>
   <script type="module" src="js/app-ui.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
