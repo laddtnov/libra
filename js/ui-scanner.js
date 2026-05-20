@@ -81,12 +81,13 @@ function handleManualIsbn(raw) {
 async function startCamera() {
   const video = document.getElementById('scanner-video');
   try {
-    _reader = new ZXingBrowser.BrowserMultiFormatReader();
+    const reader = new ZXingBrowser.BrowserMultiFormatReader();
+    _reader = reader;
 
     // undefined deviceId = browser picks rear/environment camera
-    await _reader.decodeFromVideoDevice(undefined, video, (result, _err) => {
+    await reader.decodeFromVideoDevice(undefined, video, (result, _err) => {
+      if (_reader === null) return; // modal was closed during camera init
       if (!result) return; // NotFoundException fires every frame with no barcode — ignore
-      if (_reader === null) return; // already handled — guard against duplicate frames
       const code = result.getText();
       if (!isIsbn13(code)) return; // ignore non-ISBN-13 EAN codes
 
@@ -95,6 +96,12 @@ async function startCamera() {
       _reader = null;
       handleIsbn(code);
     });
+
+    // If modal was closed while camera was initialising, clean up and bail
+    if (_reader === null) {
+      try { reader.reset(); } catch (_) {}
+      return;
+    }
 
     setStatus('▸ SCANNING FOR BARCODE...');
     setCamLabel('CAMERA ACTIVE');
@@ -126,7 +133,8 @@ async function handleIsbn(isbn) {
     } else {
       showToast('Network error — check connection', 'delete');
       setStatus('▸ SCANNING FOR BARCODE...');
-      setScanLine(true);
+      if (_reader) { try { _reader.reset(); } catch (_) {} _reader = null; }
+      startCamera();
     }
   }
 }
