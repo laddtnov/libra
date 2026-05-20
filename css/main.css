@@ -102,13 +102,14 @@
 .sc-corner.br { bottom: 12px; right: 12px;   border-width: 0 2px 2px 0; }
 
 @keyframes isbn-scan {
-  0%   { top: 15%; opacity: 1; }
+  0%   { transform: translateY(0);    opacity: 1; }
   85%  { opacity: 1; }
-  100% { top: 82%; opacity: 0.4; }
+  100% { transform: translateY(350%); opacity: 0.4; }
 }
 
 .scanner-line {
   position: absolute;
+  top: 15%;
   left: 0;
   right: 0;
   height: 2px;
@@ -117,6 +118,7 @@
   z-index: 3;
   animation: isbn-scan 1.8s ease-in-out infinite alternate;
   pointer-events: none;
+  will-change: transform;
 }
 
 .scanner-line.hidden { display: none; }
