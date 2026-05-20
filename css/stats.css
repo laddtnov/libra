@@ -276,7 +276,7 @@
 .insights-output {
   font-family: 'Space Mono', monospace;
   font-size: 0.85rem;
-  color: rgba(0, 242, 255, 0.9);
+  color: #00f2ff;
   line-height: 1.8;
   margin-top: 16px;
   padding: 14px 16px;
