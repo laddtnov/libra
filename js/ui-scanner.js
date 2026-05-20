@@ -25,12 +25,21 @@ function isIsbn13(code) {
   return /^(978|979)\d{10}$/.test(code);
 }
 
+// Calls reader.reset(), logging rather than silently swallowing if it throws
+// (e.g. stream already closed by the browser before cleanup runs).
+function tryResetReader(reader) {
+  try {
+    reader.reset();
+  } catch (err) {
+    console.warn('ZXing reader reset failed:', err);
+  }
+}
+
 // ── Close / cleanup ────────────────────────────────────────────────────────
 
 export function closeScannerModal() {
   if (_reader) {
-    // _reader.reset() releases the camera stream ZXing acquired internally
-    try { _reader.reset(); } catch (_) {}
+    tryResetReader(_reader);
     _reader = null;
   }
   const video = document.getElementById('scanner-video');
@@ -99,7 +108,7 @@ async function startCamera() {
 
     // If modal was closed while camera was initialising, clean up and bail
     if (_reader === null) {
-      try { reader.reset(); } catch (_) {}
+      tryResetReader(reader);
       return;
     }
 
@@ -107,11 +116,20 @@ async function startCamera() {
     setCamLabel('CAMERA ACTIVE');
     setScanLine(true);
 
-  } catch (_err) {
+  } catch (err) {
+    console.warn('Camera unavailable:', err);
     setScanLine(false);
     setStatus('CAMERA UNAVAILABLE — enter ISBN manually');
     setCamLabel('NO CAMERA');
   }
+}
+
+function resetReaderAndRestartCamera() {
+  if (_reader) {
+    tryResetReader(_reader);
+    _reader = null;
+  }
+  startCamera();
 }
 
 async function handleIsbn(isbn) {
@@ -127,15 +145,11 @@ async function handleIsbn(isbn) {
     if (err.message === 'NOT_FOUND') {
       setStatus('ISBN NOT FOUND — try manual entry');
       setCamLabel('NOT FOUND');
-      // Stop any running reader before restarting camera
-      if (_reader) { try { _reader.reset(); } catch (_) {} _reader = null; }
-      startCamera();
     } else {
       showToast('Network error — check connection', 'delete');
       setStatus('▸ SCANNING FOR BARCODE...');
-      if (_reader) { try { _reader.reset(); } catch (_) {} _reader = null; }
-      startCamera();
     }
+    resetReaderAndRestartCamera();
   }
 }
 
@@ -149,15 +163,15 @@ async function fetchBookByIsbn(isbn) {
 
   let authorName = '';
   const authorKey = data.authors?.[0]?.key;
-  if (authorKey) {
+  if (authorKey && /^\/authors\/OL\w+A$/.test(authorKey)) {
     try {
       const aRes = await fetch(`https://openlibrary.org${authorKey}.json`);
       if (aRes.ok) {
         const aData = await aRes.json();
         authorName = aData.name ?? '';
       }
-    } catch (_) {
-      // Author lookup failed — continue without author name
+    } catch (err) {
+      console.warn('Author lookup failed:', err);
     }
   }
 

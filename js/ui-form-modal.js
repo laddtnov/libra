@@ -102,21 +102,12 @@ export function closeFormModal() {
   state.editingBookId = null;
 }
 
-export function openFormModal(bookId = null, prefill = null) {
-  state.editingBookId = bookId;
-  const book = bookId ? state.booksData[bookId] : null;
-  const isEdit = !!book;
+// ── openFormModal sub-routines ─────────────────────────────────────────────
+// All dynamic values interpolated into the template go through escHtml() —
+// no raw user content reaches innerHTML.
 
-  const formModal = document.getElementById('form-modal');
-  const content = document.getElementById('form-modal-content');
-  const overlay = document.getElementById('modal-overlay');
-
-  formModal.style.display = 'flex';
-  overlay.style.display = 'block';
-
-  const rv = book?.rating || 0;
-
-  content.innerHTML = `
+function buildFormHtml(book, isEdit, rv) {
+  return `
     <div class="terminal-form">
       <div class="terminal-line">&gt; ${isEdit ? t('form_modify_record') : t('form_new_record')}</div>
       <div class="terminal-line form-divider-line">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
@@ -215,32 +206,32 @@ export function openFormModal(bookId = null, prefill = null) {
         <button class="terminal-action-btn cancel-btn" id="cancel-form-btn">[ ${t('form_btn_cancel')} ]</button>
       </div>
     </div>`;
+}
 
-  // Populate fields from ISBN scan data (new book only)
-  if (!bookId && prefill) {
-    if (prefill.title)    document.getElementById('f-title').value    = prefill.title;
-    if (prefill.author)   document.getElementById('f-author').value   = prefill.author;
-    if (prefill.pages)    document.getElementById('f-pages').value    = prefill.pages;
-    if (prefill.synopsis) document.getElementById('f-synopsis').value = prefill.synopsis;
-    if (prefill.coverId) {
-      let coverInput = document.getElementById('f-cover-id');
-      if (!coverInput) {
-        coverInput = document.createElement('input');
-        coverInput.type = 'hidden';
-        coverInput.id = 'f-cover-id';
-        document.getElementById('form-modal-content').appendChild(coverInput);
-      }
-      coverInput.value = prefill.coverId;
+function applyPrefill(prefill) {
+  if (prefill.title)    document.getElementById('f-title').value    = prefill.title;
+  if (prefill.author)   document.getElementById('f-author').value   = prefill.author;
+  if (prefill.pages)    document.getElementById('f-pages').value    = prefill.pages;
+  if (prefill.synopsis) document.getElementById('f-synopsis').value = prefill.synopsis;
+  if (prefill.coverId) {
+    let coverInput = document.getElementById('f-cover-id');
+    if (!coverInput) {
+      coverInput = document.createElement('input');
+      coverInput.type = 'hidden';
+      coverInput.id = 'f-cover-id';
+      document.getElementById('form-modal-content').appendChild(coverInput);
     }
-    if (prefill.category) {
-      const sel = document.getElementById('f-category');
-      const match = [...sel.options].find(o => o.value === prefill.category);
-      if (match) sel.value = prefill.category;
-    }
+    coverInput.value = prefill.coverId;
   }
+  if (prefill.category) {
+    const sel = document.getElementById('f-category');
+    const match = [...sel.options].find(o => o.value === prefill.category);
+    if (match) sel.value = prefill.category;
+  }
+}
 
-  // ── Tag chip interactions ─────────────────────────────────────────────────
-  const tagsWrap  = document.getElementById('tags-wrap');
+function initTagChips() {
+  const tagsWrap   = document.getElementById('tags-wrap');
   const tagsHidden = document.getElementById('f-tags');
   const tagInput   = document.getElementById('f-tag-input');
 
@@ -276,15 +267,12 @@ export function openFormModal(bookId = null, prefill = null) {
       setTags(getTags().filter(t => t !== tag));
     });
   });
+}
 
-  const statusSel = document.getElementById('f-status');
-  statusSel.addEventListener('change', () => {
-    document.getElementById('reading-fields').style.display = statusSel.value === 'reading' ? 'block' : 'none';
-    document.getElementById('completed-fields').style.display = statusSel.value === 'completed' ? 'block' : 'none';
-  });
-
-  const picker = document.getElementById('star-picker');
+function initStarPicker() {
+  const picker       = document.getElementById('star-picker');
   const ratingHidden = document.getElementById('f-rating');
+
   picker.addEventListener('click', e => {
     if (!e.target.classList.contains('star-pick')) return;
     const val = Number.parseInt(e.target.dataset.val, 10);
@@ -299,23 +287,55 @@ export function openFormModal(bookId = null, prefill = null) {
   picker.addEventListener('mouseleave', () => {
     picker.querySelectorAll('.star-pick').forEach(s => s.classList.remove('hover'));
   });
+}
 
-  if (!isEdit) {
-    const searchInput = document.getElementById('book-api-search');
-    const statusEl = document.getElementById('search-status');
-    const resultsEl = document.getElementById('api-search-results');
+function initStatusToggle() {
+  const statusSel = document.getElementById('f-status');
+  statusSel.addEventListener('change', () => {
+    document.getElementById('reading-fields').style.display   = statusSel.value === 'reading'   ? 'block' : 'none';
+    document.getElementById('completed-fields').style.display = statusSel.value === 'completed' ? 'block' : 'none';
+  });
+}
 
-    const debouncedSearch = debounce(async (q) => {
-      if (q.length < 3) {
-        statusEl.textContent = '';
-        resultsEl.innerHTML = '';
-        return;
-      }
-      await searchOpenLibrary(q, resultsEl, statusEl);
-    }, 420);
+function initSearchWiring() {
+  const searchInput = document.getElementById('book-api-search');
+  const statusEl    = document.getElementById('search-status');
+  const resultsEl   = document.getElementById('api-search-results');
 
-    searchInput.addEventListener('input', e => debouncedSearch(e.target.value.trim()));
-  }
+  const debouncedSearch = debounce(async (q) => {
+    if (q.length < 3) {
+      statusEl.textContent = '';
+      resultsEl.innerHTML = '';
+      return;
+    }
+    await searchOpenLibrary(q, resultsEl, statusEl);
+  }, 420);
+
+  searchInput.addEventListener('input', e => debouncedSearch(e.target.value.trim()));
+}
+
+// ── Public API ─────────────────────────────────────────────────────────────
+
+export function openFormModal(bookId = null, prefill = null) {
+  state.editingBookId = bookId;
+  const book   = bookId ? state.booksData[bookId] : null;
+  const isEdit = !!book;
+
+  const formModal = document.getElementById('form-modal');
+  const content   = document.getElementById('form-modal-content');
+  const overlay   = document.getElementById('modal-overlay');
+
+  formModal.style.display = 'flex';
+  overlay.style.display   = 'block';
+
+  content.innerHTML = buildFormHtml(book, isEdit, book?.rating || 0);
+
+  if (!bookId && prefill) applyPrefill(prefill);
+
+  initTagChips();
+  initStarPicker();
+  initStatusToggle();
+  if (!isEdit) initSearchWiring();
 
   ['f-title', 'f-author'].forEach(id => {
     document.getElementById(id)?.addEventListener('input', e => e.target.classList.remove('input-error'));
