@@ -87,27 +87,37 @@ function handleManualIsbn(raw) {
 
 // ── Camera + ZXing ────────────────────────────────────────────────────────
 
+function cameraErrorStatus(err) {
+  if (err.name === 'NotAllowedError')  return 'PERMISSION DENIED — allow camera in browser settings';
+  if (err.name === 'NotFoundError')    return 'NO CAMERA FOUND ON THIS DEVICE';
+  if (err.name === 'SecurityError' ||
+      err.name === 'NotSupportedError') return 'CAMERA REQUIRES HTTPS';
+  return `CAMERA ERROR (${err.name}) — enter ISBN manually`;
+}
+
 async function startCamera() {
   const video = document.getElementById('scanner-video');
   try {
     const reader = new ZXingBrowser.BrowserMultiFormatReader();
     _reader = reader;
 
-    // ideal facingMode requests rear camera on mobile, falls back to any camera on desktop
-    await reader.decodeFromConstraints(
-      { video: { facingMode: { ideal: 'environment' } } },
-      video,
-      (result, _err) => {
-        if (_reader === null) return; // modal was closed during camera init
-        if (!result) return; // NotFoundException fires every frame with no barcode — ignore
-        const code = result.getText();
-        if (!isIsbn13(code)) return; // ignore non-ISBN-13 EAN codes
+    // Acquire stream directly so facingMode is explicit (rear camera on mobile,
+    // any camera on desktop). Then hand the stream to ZXing for decoding.
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: 'environment' } }
+    });
 
-        // Stop scanning immediately — avoid duplicate handleIsbn calls
-        _reader.reset();
-        _reader = null;
-        handleIsbn(code);
-      });
+    await reader.decodeFromStream(stream, video, (result, _err) => {
+      if (_reader === null) return; // modal was closed during camera init
+      if (!result) return; // NotFoundException fires every frame — ignore
+      const code = result.getText();
+      if (!isIsbn13(code)) return; // ignore non-ISBN-13 EAN codes
+
+      // Stop scanning immediately — avoid duplicate handleIsbn calls
+      _reader.reset();
+      _reader = null;
+      handleIsbn(code);
+    });
 
     // If modal was closed while camera was initialising, clean up and bail
     if (_reader === null) {
@@ -122,7 +132,7 @@ async function startCamera() {
   } catch (err) {
     console.warn('Camera unavailable:', err);
     setScanLine(false);
-    setStatus('CAMERA UNAVAILABLE — enter ISBN manually');
+    setStatus(cameraErrorStatus(err));
     setCamLabel('NO CAMERA');
   }
 }
