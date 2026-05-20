@@ -1,4 +1,5 @@
 import { state } from './state.js';
+import { renderInsightsSection } from './ui-insights.js';
 
 const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 
@@ -187,6 +188,7 @@ export function openStatsPanel() {
   content.appendChild(buildBarChart('BOOKS FINISHED / MONTH', booksPerMonth(), 'books'));
   content.appendChild(buildGenreRatings());
   content.appendChild(buildTopCategories());
+  renderInsightsSection(content);
 
   panel.style.display   = 'flex';
   overlay.style.display = 'block';
