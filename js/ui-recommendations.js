@@ -64,26 +64,20 @@ Rules:
 - Prioritise their strongest genres but include 1 genre discovery
 - Reason must be specific to their taste, not generic`;
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await fetch('/api/claude', {
     method: 'POST',
     headers: {
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
       'content-type': 'application/json',
+      'x-claude-key': apiKey,
     },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 1024,
-      messages: [{ role: 'user', content: prompt }],
-    }),
+    body: JSON.stringify({ prompt, max_tokens: 1024 }),
   });
 
   if (res.status === 401) throw new Error('invalid_key');
   if (!res.ok) throw new Error(`api_error_${res.status}`);
 
   const data = await res.json();
-  const raw  = data.content[0].text.trim();
+  const raw  = data.text;
   const json = raw.replace(/^```json?\n?/, '').replace(/\n?```$/, '');
   return JSON.parse(json);
 }
@@ -331,7 +325,7 @@ function buildApiKeyEl(savedKey) {
 
   const hint = document.createElement('div');
   hint.className = 'recs-api-hint';
-  hint.textContent = '> Stored locally · sent only to api.anthropic.com';
+  hint.textContent = '> Stored locally · forwarded to Anthropic via this app\'s server';
 
   body.appendChild(row);
   body.appendChild(hint);
