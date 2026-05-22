@@ -2,6 +2,8 @@ import { state } from './state.js';
 
 const API_KEY_STORAGE = 'libra-claude-key';
 
+// localStorage is readable by any JS on the page, so XSS could expose this key.
+// Acceptable for a single-user personal app; a backend-held key would eliminate the risk.
 function getSavedKey() {
   return localStorage.getItem(API_KEY_STORAGE) || '';
 }
@@ -131,26 +133,20 @@ Library summary:
 // ── Claude fetch ──────────────────────────────────────────────────────────────
 
 async function callClaude(prompt, apiKey) {
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await fetch('/api/claude', {
     method: 'POST',
     headers: {
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-      'content-type': 'application/json',
+      'content-type':  'application/json',
+      'x-claude-key':  apiKey,
     },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 512,
-      messages: [{ role: 'user', content: prompt }],
-    }),
+    body: JSON.stringify({ prompt, max_tokens: 512 }),
   });
 
   if (res.status === 401) throw new Error('invalid_key');
   if (!res.ok) throw new Error(`api_error_${res.status}`);
 
   const data = await res.json();
-  return data.content[0].text.trim();
+  return data.text;
 }
 
 // ── Section render ────────────────────────────────────────────────────────────
