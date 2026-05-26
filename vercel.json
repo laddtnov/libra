@@ -1,4 +1,5 @@
 {
+  "outputDirectory": ".",
   "github": {
     "enabled": true,
     "autoAlias": true
