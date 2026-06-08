@@ -324,9 +324,6 @@
   text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
 }
 
-.book-card:hover .star.filled {
-}
-
 @keyframes starPulse {
   50% {
     transform: scale(1.3);

@@ -136,9 +136,6 @@
   transition: color 0.2s ease;
 }
 
-.timer-display.running {
-}
-
 @keyframes timer-pulse {
   0%,100% { text-shadow: 0 0 18px rgba(0, 255, 136, 0.5); }
   50%     { text-shadow: 0 0 30px rgba(0, 255, 136, 0.9); }

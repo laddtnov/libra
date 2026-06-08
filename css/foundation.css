@@ -41,6 +41,18 @@
   box-sizing: border-box;
 }
 
+/* Reset browser-default <dialog> styles — our modals handle all styling. */
+dialog {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  max-width: unset;
+  max-height: unset;
+  width: unset;
+  height: unset;
+}
+
 :root {
   --neon-cyan: #00f2ff;
   --neon-pink: #ff00ff;

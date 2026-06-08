@@ -31,18 +31,16 @@ export function trapFocus(container, onEscape) {
       return;
     }
     const first = focusable[0];
-    const last = focusable[focusable.length - 1];
+    const last = focusable.at(-1);
 
     if (e.shiftKey) {
       if (document.activeElement === first || !container.contains(document.activeElement)) {
         e.preventDefault();
         last.focus();
       }
-    } else {
-      if (document.activeElement === last || !container.contains(document.activeElement)) {
-        e.preventDefault();
-        first.focus();
-      }
+    } else if (document.activeElement === last || !container.contains(document.activeElement)) {
+      e.preventDefault();
+      first.focus();
     }
   }
 
