@@ -71,13 +71,16 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: 
+  background-image:
     linear-gradient(rgba(0, 242, 255, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 242, 255, 0.03) 1px, transparent 1px);
   background-size: 50px 50px;
-  animation: grid-move 20s linear infinite;
   pointer-events: none;
   z-index: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cyber-grid { animation: grid-move 20s linear infinite; }
 }
 
 @keyframes grid-move {
@@ -117,8 +120,11 @@ h1 {
 
 .glitch {
   position: relative;
-  animation: glitch-skew 5s infinite;
   cursor: default;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .glitch { animation: glitch-skew 5s infinite; }
 }
 
 /* Pseudo-element layers for hover glitch */
@@ -200,4 +206,42 @@ h1 {
 }
 
 .tagline:hover::after { width: 100%; }
+
+/* ── Accessibility: keyboard focus indicator (WCAG 2.4.7) ── */
+:focus-visible {
+  outline: 2px solid var(--neon-cyan);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(0, 242, 255, 0.2);
+}
+
+/* ── Accessibility: skip navigation link (WCAG 2.4.1) ── */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--neon-cyan);
+  color: #000000;
+  padding: 8px 16px;
+  z-index: 10000;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 0 0 4px 0;
+  transition: top 0.2s;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* ── Accessibility: screen-reader-only utility (WCAG) ── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 
