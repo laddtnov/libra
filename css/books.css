@@ -73,7 +73,6 @@
   width: 48px;
   height: 48px;
   transition: filter 0.3s ease, transform 0.3s ease;
-  animation: stat-icon-pulse 3s ease-in-out infinite;
 }
 
 /* Per-card icon color */
@@ -405,10 +404,9 @@
   border-radius: 10px;
   position: relative;
   transition: width 0.5s ease;
-  box-shadow: 
+  box-shadow:
     0 0 10px var(--neon-orange),
     0 0 20px var(--neon-cyan);
-  animation: progressPulse 2s ease-in-out infinite;
 }
 
 @keyframes progressPulse {
@@ -492,7 +490,6 @@
   stroke-linecap: round;
   filter: drop-shadow(0 0 4px var(--neon-orange));
   transition: stroke-dasharray 0.6s ease;
-  animation: ringPulse 2.5s ease-in-out infinite;
 }
 
 @keyframes ringPulse {
@@ -511,4 +508,10 @@
   font-weight: 700;
   color: var(--neon-orange);
   text-shadow: 0 0 6px var(--neon-orange);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .stat-svg { animation: stat-icon-pulse 3s ease-in-out infinite; }
+  .progress-fill { animation: progressPulse 2s ease-in-out infinite; }
+  .ring-fill { animation: ringPulse 2.5s ease-in-out infinite; }
 }

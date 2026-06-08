@@ -41,7 +41,6 @@
   letter-spacing: 1px;
   padding: 30px 0;
   text-align: center;
-  animation: discoverPulse 1.4s ease-in-out infinite;
 }
 
 @keyframes discoverPulse {

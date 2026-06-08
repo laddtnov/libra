@@ -175,7 +175,6 @@
 }
 
 .streak-badge:hover .streak-icon {
-  animation: flame-flicker 0.4s steps(2) infinite;
   filter: none;
 }
 
@@ -201,7 +200,6 @@
 
 .streak-badge[data-active="true"] .streak-icon {
   filter: none;
-  animation: flame-pulse 2s ease-in-out infinite;
 }
 
 @keyframes flame-pulse {
@@ -296,4 +294,9 @@
   background: #201313;
   border-color: #ff5555;
   color: #ff5555;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .streak-badge:hover .streak-icon { animation: flame-flicker 0.4s steps(2) infinite; }
+  .streak-badge[data-active="true"] .streak-icon { animation: flame-pulse 2s ease-in-out infinite; }
 }

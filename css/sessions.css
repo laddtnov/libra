@@ -138,7 +138,6 @@
 }
 
 .timer-display.running {
-  animation: timer-pulse 1s ease-in-out infinite;
 }
 
 @keyframes timer-pulse {
@@ -197,4 +196,8 @@
   color: #00f2ff;
   letter-spacing: 0.5px;
   min-height: 12px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .timer-display.running { animation: timer-pulse 1s ease-in-out infinite; }
 }

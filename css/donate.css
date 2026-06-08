@@ -76,7 +76,6 @@
 
 .glitch-gold {
   position: relative;
-  animation: glitch-skew 5s infinite;
   cursor: default;
 }
 
@@ -96,14 +95,12 @@
   opacity: 1;
   color: #ff6a00;
   text-shadow: -3px 0 #ff6a00, 0 0 10px #ff6a00;
-  animation: glitch-clip-1 0.32s steps(1) infinite;
 }
 
 .glitch-gold:hover::after {
   opacity: 1;
   color: #ffff55;
   text-shadow: 3px 0 #ffff55, 0 0 10px #ffff55;
-  animation: glitch-clip-2 0.32s steps(1) infinite;
 }
 
 /* ── Intro text ── */
@@ -131,7 +128,6 @@
 .donate-tagline:hover::after {
   content: '_';
   color: #ffd700;
-  animation: cursor-blink 0.7s step-end infinite;
   margin-left: 2px;
 }
 
@@ -440,4 +436,11 @@
 .donate-footer:hover {
   color: rgba(255, 215, 0, 0.7);
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.18);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .glitch-gold { animation: glitch-skew 5s infinite; }
+  .glitch-gold:hover::before { animation: glitch-clip-1 0.32s steps(1) infinite; }
+  .glitch-gold:hover::after  { animation: glitch-clip-2 0.32s steps(1) infinite; }
+  .donate-tagline:hover::after { animation: cursor-blink 0.7s step-end infinite; }
 }
