@@ -2,12 +2,18 @@ import { debounce, cleanText, toPositiveInt } from './state.js';
 import { openFormModal } from './ui-form-modal.js';
 import { applyBookFromAPI } from './ui-search.js';
 import { t } from './i18n.js';
+import { trapFocus, focusFirst } from './ui-utils.js';
 
 let discoverActive = false;
+let _releaseTrap = null;
+let _triggerEl = null;
 
 export function closePreviewModal() {
   document.getElementById('discover-preview').style.display = 'none';
   document.getElementById('modal-overlay').style.display = 'none';
+
+  if (_releaseTrap) { _releaseTrap(); _releaseTrap = null; }
+  if (_triggerEl) { _triggerEl.focus?.(); _triggerEl = null; }
 }
 
 function openPreviewModal(doc) {
@@ -130,6 +136,10 @@ function openPreviewModal(doc) {
 
   modal.style.display = 'flex';
   overlay.style.display = 'block';
+
+  _triggerEl = document.activeElement;
+  _releaseTrap = trapFocus(modal, closePreviewModal);
+  focusFirst(modal);
 
   addBtn.addEventListener('click', () => {
     closePreviewModal();

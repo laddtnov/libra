@@ -3,6 +3,10 @@ import { searchOpenLibrary } from './ui-search.js';
 import { renderBooks } from './ui-render.js';
 import { showToast } from './ui-feedback.js';
 import { t } from './i18n.js';
+import { trapFocus, focusFirst } from './ui-utils.js';
+
+let _releaseTrap = null;   // focus-trap cleanup fn
+let _triggerEl = null;     // element to restore focus to on close
 
 const CATEGORIES = ['History', 'Fantasy', 'Adventure', 'Historical Fiction', 'Biography', 'Economics', 'Science', 'Philosophy', 'Other'];
 
@@ -100,6 +104,9 @@ export function closeFormModal() {
   document.getElementById('form-modal').style.display = 'none';
   document.getElementById('modal-overlay').style.display = 'none';
   state.editingBookId = null;
+
+  if (_releaseTrap) { _releaseTrap(); _releaseTrap = null; }
+  if (_triggerEl) { _triggerEl.focus?.(); _triggerEl = null; }
 }
 
 // ── openFormModal sub-routines ─────────────────────────────────────────────
@@ -343,4 +350,8 @@ export function openFormModal(bookId = null, prefill = null) {
 
   document.getElementById('save-book-btn').addEventListener('click', saveBook);
   document.getElementById('cancel-form-btn').addEventListener('click', closeFormModal);
+
+  _triggerEl = document.activeElement;
+  _releaseTrap = trapFocus(formModal, closeFormModal);
+  focusFirst(formModal);
 }

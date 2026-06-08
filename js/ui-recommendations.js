@@ -3,6 +3,10 @@ import { openFormModal } from './ui-form-modal.js';
 import { applyBookFromAPI } from './ui-search.js';
 import { showToast } from './ui-feedback.js';
 import { t } from './i18n.js';
+import { trapFocus, focusFirst } from './ui-utils.js';
+
+let _releaseTrap = null;
+let _triggerEl = null;
 
 const API_KEY_STORAGE = 'libra-claude-key';
 const DEFAULT_GENRES  = ['Fantasy', 'History', 'Science', 'Biography', 'Economics'];
@@ -533,13 +537,21 @@ export async function renderRecsPanel() {
 
 export function openRecsPanel() {
   renderRecsPanel();
-  document.getElementById('recommendations-panel').style.display = 'flex';
+  const panel = document.getElementById('recommendations-panel');
+  panel.style.display = 'flex';
   document.getElementById('modal-overlay').style.display = 'block';
+
+  _triggerEl = document.activeElement;
+  _releaseTrap = trapFocus(panel, closeRecsPanel);
+  focusFirst(panel);
 }
 
 export function closeRecsPanel() {
   document.getElementById('recommendations-panel').style.display = 'none';
   document.getElementById('modal-overlay').style.display = 'none';
+
+  if (_releaseTrap) { _releaseTrap(); _releaseTrap = null; }
+  if (_triggerEl) { _triggerEl.focus?.(); _triggerEl = null; }
 }
 
 export function initRecsPanel() {

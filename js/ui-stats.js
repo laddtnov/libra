@@ -1,5 +1,9 @@
 import { state } from './state.js';
 import { renderInsightsSection } from './ui-insights.js';
+import { trapFocus, focusFirst } from './ui-utils.js';
+
+let _releaseTrap = null;
+let _triggerEl = null;
 
 const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 
@@ -192,11 +196,18 @@ export function openStatsPanel() {
 
   panel.style.display   = 'flex';
   overlay.style.display = 'block';
+
+  _triggerEl = document.activeElement;
+  _releaseTrap = trapFocus(panel, closeStatsPanel);
+  focusFirst(panel);
 }
 
 export function closeStatsPanel() {
   document.getElementById('stats-panel').style.display   = 'none';
   document.getElementById('modal-overlay').style.display = 'none';
+
+  if (_releaseTrap) { _releaseTrap(); _releaseTrap = null; }
+  if (_triggerEl) { _triggerEl.focus?.(); _triggerEl = null; }
 }
 
 export function initStatsPanel() {

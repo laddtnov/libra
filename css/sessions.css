@@ -90,7 +90,6 @@
 .session-date-input.input-error,
 .session-pages-input.input-error {
   border-color: #ff4444;
-  animation: shake 0.35s ease;
 }
 
 .session-add-btn {
@@ -135,10 +134,6 @@
   text-shadow: 0 0 18px rgba(0, 255, 136, 0.5);
   line-height: 1;
   transition: color 0.2s ease;
-}
-
-.timer-display.running {
-  animation: timer-pulse 1s ease-in-out infinite;
 }
 
 @keyframes timer-pulse {
@@ -197,4 +192,10 @@
   color: #00f2ff;
   letter-spacing: 0.5px;
   min-height: 12px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .timer-display.running { animation: timer-pulse 1s ease-in-out infinite; }
+  .session-date-input.input-error,
+  .session-pages-input.input-error { animation: shake 0.35s ease; }
 }

@@ -1,3 +1,8 @@
+import { trapFocus, focusFirst } from './ui-utils.js';
+
+let _releaseTrap = null;
+let _triggerEl = null;
+
 // ── Replace these with your real values ───────────────────────────────────────
 // Stripe: create a Payment Link at dashboard.stripe.com → Payment Links
 // Product name: "Support Libra"
@@ -137,13 +142,21 @@ export function openDonatePanel() {
   document.getElementById('donate-content').innerHTML = buildDonateHTML();
   bindCopyButtons();
   bindSendButton();
-  document.getElementById('donate-panel').style.display = 'flex';
+  const panel = document.getElementById('donate-panel');
+  panel.style.display = 'flex';
   document.getElementById('modal-overlay').style.display = 'block';
+
+  _triggerEl = document.activeElement;
+  _releaseTrap = trapFocus(panel, closeDonatePanel);
+  focusFirst(panel);
 }
 
 export function closeDonatePanel() {
   document.getElementById('donate-panel').style.display = 'none';
   document.getElementById('modal-overlay').style.display = 'none';
+
+  if (_releaseTrap) { _releaseTrap(); _releaseTrap = null; }
+  if (_triggerEl) { _triggerEl.focus?.(); _triggerEl = null; }
 }
 
 export function initDonatePanel() {

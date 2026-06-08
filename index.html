@@ -20,9 +20,10 @@
   <link rel="apple-touch-icon" href="/assets/icons/icon.svg">
 </head>
 <body>
-  <div class="cyber-grid"></div>
+  <a href="#books-grid" class="skip-link">Skip to book grid</a>
+  <div class="cyber-grid" aria-hidden="true"></div>
 
-  <div class="container">
+  <main class="container">
 
     <!-- Header with Stats -->
     <header class="header">
@@ -140,10 +141,10 @@
     </header>
 
     <!-- Toolbar -->
-    <div class="toolbar">
+    <div class="toolbar" role="toolbar" aria-label="Main toolbar">
       <div class="search-wrapper">
         <span class="search-prompt">&gt;_</span>
-        <input type="text" id="search-input" class="search-input" placeholder="SEARCH ARCHIVE..." autocomplete="off" spellcheck="false">
+        <input type="text" id="search-input" class="search-input" placeholder="SEARCH ARCHIVE..." autocomplete="off" spellcheck="false" aria-label="Search archive">
       </div>
       <div class="filter-buttons">
         <button class="filter-btn active" data-filter="all" data-i18n="filter_all">ALL</button>
@@ -152,7 +153,7 @@
         <button class="filter-btn" data-filter="to-read" data-i18n="filter_queued">QUEUED</button>
       </div>
       <div class="sort-wrapper">
-        <select class="sort-select" id="sort-select">
+        <select class="sort-select" id="sort-select" aria-label="Sort order">
           <option value="default" data-i18n="sort_default">SORT</option>
           <option value="title-az" data-i18n="sort_title_az">TITLE A→Z</option>
           <option value="title-za" data-i18n="sort_title_za">TITLE Z→A</option>
@@ -197,38 +198,38 @@
 
     <!-- Books Grid (JS-rendered) -->
     <div class="books-grid" id="books-grid"></div>
-  </div>
+  </main>
 
   <!-- Modal Overlay -->
   <div id="modal-overlay"></div>
 
   <!-- Book Details Modal -->
-  <div id="book-modal">
+  <dialog id="book-modal" aria-label="Book details">
     <div class="modal-container">
-      <div class="scanlines"></div>
+      <div class="scanlines" aria-hidden="true"></div>
       <div class="modal-header">
         <div id="modal-sound-slot"></div>
-        <button id="close-modal" class="close-btn">✕</button>
+        <button id="close-modal" class="close-btn" aria-label="Close book details">✕</button>
       </div>
       <div id="modal-content"></div>
     </div>
-  </div>
+  </dialog>
 
   <!-- Add / Edit Form Modal -->
-  <div id="form-modal">
+  <dialog id="form-modal" aria-label="Add book">
     <div class="form-modal-container">
-      <div class="scanlines"></div>
-      <button id="close-form-modal" class="close-btn">✕</button>
+      <div class="scanlines" aria-hidden="true"></div>
+      <button id="close-form-modal" class="close-btn" aria-label="Close form">✕</button>
       <div id="form-modal-content"></div>
     </div>
-  </div>
+  </dialog>
 
   <!-- Scanner Modal -->
-  <div id="scanner-modal" style="display:none">
+  <dialog id="scanner-modal" style="display:none" aria-labelledby="scanner-modal-title">
     <div class="scanner-modal-container">
       <div class="scanner-header">
-        <span class="scanner-title">⊞ ISBN SCANNER</span>
-        <button id="close-scanner-modal" class="close-btn">✕</button>
+        <span class="scanner-title" id="scanner-modal-title">⊞ ISBN SCANNER</span>
+        <button id="close-scanner-modal" class="close-btn" aria-label="Close scanner">✕</button>
       </div>
       <div class="scanner-viewfinder-wrap" id="scanner-viewfinder-wrap">
         <video id="scanner-video" class="scanner-video" playsinline muted></video>
@@ -244,7 +245,7 @@
       <div class="scanner-fallback">
         <span class="scanner-fallback-label">ISBN:</span>
         <input id="scanner-isbn-input" class="terminal-input scanner-isbn-input"
-               placeholder="9780000000000" maxlength="20" autocomplete="off" spellcheck="false">
+               placeholder="9780000000000" maxlength="20" autocomplete="off" spellcheck="false" aria-label="ISBN number">
         <button id="scanner-go-btn" class="terminal-action-btn scanner-go-btn">GO</button>
       </div>
       <div class="scanner-footer">
@@ -252,90 +253,90 @@
         <span>OPEN LIBRARY API</span>
       </div>
     </div>
-  </div>
+  </dialog>
 
   <!-- Lists Panel -->
-  <div id="lists-panel" style="display:none">
+  <dialog id="lists-panel" style="display:none" aria-labelledby="lists-panel-title">
     <div class="lists-panel-container">
-      <div class="scanlines"></div>
+      <div class="scanlines" aria-hidden="true"></div>
       <div class="lists-panel-header">
-        <span class="lists-panel-title">&gt;_ READING LISTS</span>
-        <button id="close-lists-panel" class="close-btn">✕</button>
+        <span class="lists-panel-title" id="lists-panel-title">&gt;_ READING LISTS</span>
+        <button id="close-lists-panel" class="close-btn" aria-label="Close reading lists">✕</button>
       </div>
       <div class="lists-create-row">
-        <input type="text" id="new-list-input" class="new-list-input" placeholder="LIST NAME..." maxlength="60" spellcheck="false" autocomplete="off">
+        <input type="text" id="new-list-input" class="new-list-input" placeholder="LIST NAME..." maxlength="60" spellcheck="false" autocomplete="off" aria-label="New reading list name">
         <button id="create-list-btn" class="create-list-submit">&gt; CREATE</button>
       </div>
       <div id="lists-container"></div>
     </div>
-  </div>
+  </dialog>
 
   <!-- Recommendations Panel -->
-  <div id="recommendations-panel" style="display:none">
+  <dialog id="recommendations-panel" style="display:none" aria-labelledby="recs-panel-title">
     <div class="recs-container">
-      <div class="scanlines"></div>
+      <div class="scanlines" aria-hidden="true"></div>
       <div class="recs-header">
-        <span class="recs-title">&gt;_ GENRE ANALYSIS</span>
-        <button id="close-recs-panel" class="close-btn">✕</button>
+        <span class="recs-title" id="recs-panel-title">&gt;_ GENRE ANALYSIS</span>
+        <button id="close-recs-panel" class="close-btn" aria-label="Close recommendations">✕</button>
       </div>
       <div id="recs-content"></div>
     </div>
-  </div>
+  </dialog>
 
   <!-- Donate / Support Panel -->
-  <div id="donate-panel" style="display:none">
+  <dialog id="donate-panel" style="display:none" aria-labelledby="donate-panel-title">
     <div class="donate-panel-container">
-      <div class="scanlines"></div>
+      <div class="scanlines" aria-hidden="true"></div>
       <div class="donate-panel-header">
-        <span class="donate-panel-title glitch-gold" data-text=">_ SUPPORT THE PROJECT">&gt;_ SUPPORT THE PROJECT</span>
-        <button id="close-donate-panel" class="close-btn">✕</button>
+        <span class="donate-panel-title glitch-gold" id="donate-panel-title" data-text=">_ SUPPORT THE PROJECT">&gt;_ SUPPORT THE PROJECT</span>
+        <button id="close-donate-panel" class="close-btn" aria-label="Close support panel">✕</button>
       </div>
       <div id="donate-content"></div>
     </div>
-  </div>
+  </dialog>
 
   <!-- Reading Wrapped Panel -->
-  <div id="wrapped-panel" style="display:none">
+  <dialog id="wrapped-panel" style="display:none" aria-labelledby="wrapped-panel-title">
     <div class="wrapped-container">
       <div class="wrapped-header">
-        <span class="wrapped-title">&gt;_ READING WRAPPED</span>
+        <span class="wrapped-title" id="wrapped-panel-title">&gt;_ READING WRAPPED</span>
         <div class="wrapped-actions">
           <button id="wrapped-download-btn" class="wrapped-download-btn">[ ↓ SAVE PNG ]</button>
-          <button id="close-wrapped-panel" class="close-btn">✕</button>
+          <button id="close-wrapped-panel" class="close-btn" aria-label="Close reading wrapped">✕</button>
         </div>
       </div>
       <canvas id="wrapped-canvas"></canvas>
     </div>
-  </div>
+  </dialog>
 
   <!-- Stats Panel -->
-  <div id="stats-panel" style="display:none">
+  <dialog id="stats-panel" style="display:none" aria-labelledby="stats-panel-title">
     <div class="stats-container">
       <div class="stats-header">
-        <span class="stats-title">&gt;_ READING STATS</span>
-        <button id="close-stats-panel" class="close-btn">✕</button>
+        <span class="stats-title" id="stats-panel-title">&gt;_ READING STATS</span>
+        <button id="close-stats-panel" class="close-btn" aria-label="Close stats">✕</button>
       </div>
       <div id="stats-content"></div>
     </div>
-  </div>
+  </dialog>
 
   <!-- Discover Book Preview Modal -->
-  <div id="discover-preview" style="display:none">
+  <dialog id="discover-preview" style="display:none" aria-label="Book preview">
     <div class="discover-preview-container">
-      <div class="scanlines"></div>
-      <button id="close-discover-preview" class="close-btn">✕</button>
+      <div class="scanlines" aria-hidden="true"></div>
+      <button id="close-discover-preview" class="close-btn" aria-label="Close book preview">✕</button>
       <div id="discover-preview-content"></div>
     </div>
-  </div>
+  </dialog>
 
   <!-- Auth overlay -->
-  <div id="auth-overlay" style="display:none">
+  <dialog id="auth-overlay" style="display:none" aria-label="Account">
     <div class="auth-container">
       <div id="auth-content"></div>
     </div>
-  </div>
+  </dialog>
 
-  <div class="toast-container" id="toast-container"></div>
+  <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
   <!-- Detect password reset redirect before modules load -->
   <script>
     if (new URLSearchParams(location.search).get('reset') === '1') {

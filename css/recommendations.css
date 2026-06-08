@@ -425,10 +425,13 @@
   color: var(--neon-orange);
   letter-spacing: 1px;
   padding: 16px 0;
-  animation: recsLoadPulse 1.4s ease-in-out infinite;
 }
 
 @keyframes recsLoadPulse {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.3; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .recs-loading { animation: recsLoadPulse 1.4s ease-in-out infinite; }
 }

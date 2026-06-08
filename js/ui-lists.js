@@ -1,6 +1,10 @@
 import { state, escHtml, cleanText, saveLists } from './state.js';
 import { renderBooks } from './ui-render.js';
 import { showToast } from './ui-feedback.js';
+import { trapFocus, focusFirst } from './ui-utils.js';
+
+let _releaseTrap = null;
+let _triggerEl = null;
 
 function genListId(name) {
   return 'lst-' + name.toLowerCase()
@@ -120,13 +124,21 @@ export function renderListsPanel() {
 
 export function openListsPanel() {
   renderListsPanel();
-  document.getElementById('lists-panel').style.display = 'flex';
+  const panel = document.getElementById('lists-panel');
+  panel.style.display = 'flex';
   document.getElementById('modal-overlay').style.display = 'block';
+
+  _triggerEl = document.activeElement;
+  _releaseTrap = trapFocus(panel, closeListsPanel);
+  focusFirst(panel);
 }
 
 export function closeListsPanel() {
   document.getElementById('lists-panel').style.display = 'none';
   document.getElementById('modal-overlay').style.display = 'none';
+
+  if (_releaseTrap) { _releaseTrap(); _releaseTrap = null; }
+  if (_triggerEl) { _triggerEl.focus?.(); _triggerEl = null; }
 }
 
 export function initListsPanel() {

@@ -109,7 +109,6 @@
     inset 0 0 50px rgba(0, 255, 0, 0.05);
   font-family: 'Courier New', monospace;
   color: #00ff00;
-  animation: screenFlicker 0.15s infinite;
 }
 
 @keyframes screenFlicker {
@@ -162,7 +161,6 @@
   display: inline-block;
   background: #00ff00;
   color: #000;
-  animation: cursorBlink 0.7s infinite;
   margin-left: 2px;
 }
 
@@ -212,5 +210,10 @@
 @media (max-width: 1024px) {
   h1 { font-size: 3rem; }
   .books-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .tooltip-container { animation: screenFlicker 0.15s infinite; }
+  .cursor { animation: cursorBlink 0.7s infinite; }
 }
 

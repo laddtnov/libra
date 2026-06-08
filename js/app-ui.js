@@ -20,6 +20,7 @@ configureDetailHandlers({ openFormModal });
 
 function initApp() {
   initI18n();
+  document.documentElement.lang = localStorage.getItem('cyberpunk-lang') || 'en';
   applyI18n();
 
   updateStats();
@@ -116,6 +117,7 @@ function initApp() {
   document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       setLanguage(btn.dataset.lang);
+      document.documentElement.lang = btn.dataset.lang;
       applyI18n();
       renderBooks();
     });

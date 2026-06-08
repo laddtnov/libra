@@ -60,7 +60,6 @@
     inset 0 0 50px rgba(0, 255, 0, 0.05);
   font-family: 'Courier New', monospace;
   color: #00ff00;
-  animation: screenFlicker 0.1s infinite;
 }
 
 @keyframes screenFlicker {
@@ -158,5 +157,9 @@
 .modal-container::-webkit-scrollbar-thumb:hover {
   background: #00cc00;
   box-shadow: 0 0 10px #00ff00;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .modal-container { animation: screenFlicker 0.1s infinite; }
 }
 
