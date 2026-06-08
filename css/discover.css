@@ -389,3 +389,7 @@
     align-self: center;
   }
 }
+
+@media (prefers-reduced-motion: no-preference) {
+  .discover-loading { animation: discoverPulse 1.4s ease-in-out infinite; }
+}
