@@ -129,7 +129,7 @@ export function openListsPanel() {
   document.getElementById('modal-overlay').style.display = 'block';
 
   _triggerEl = document.activeElement;
-  _releaseTrap = trapFocus(panel);
+  _releaseTrap = trapFocus(panel, closeListsPanel);
   focusFirst(panel);
 }
 

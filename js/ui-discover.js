@@ -138,7 +138,7 @@ function openPreviewModal(doc) {
   overlay.style.display = 'block';
 
   _triggerEl = document.activeElement;
-  _releaseTrap = trapFocus(modal);
+  _releaseTrap = trapFocus(modal, closePreviewModal);
   focusFirst(modal);
 
   addBtn.addEventListener('click', () => {

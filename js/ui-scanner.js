@@ -64,7 +64,7 @@ export function openScannerModal() {
   modal.style.display = 'flex';
 
   _triggerEl = document.activeElement;
-  _releaseTrap = trapFocus(modal);
+  _releaseTrap = trapFocus(modal, closeScannerModal);
   focusFirst(modal);
 
   document.getElementById('close-scanner-modal').onclick = closeScannerModal;

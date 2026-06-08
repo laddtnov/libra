@@ -352,6 +352,6 @@ export function openFormModal(bookId = null, prefill = null) {
   document.getElementById('cancel-form-btn').addEventListener('click', closeFormModal);
 
   _triggerEl = document.activeElement;
-  _releaseTrap = trapFocus(formModal);
+  _releaseTrap = trapFocus(formModal, closeFormModal);
   focusFirst(formModal);
 }

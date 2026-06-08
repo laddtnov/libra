@@ -208,7 +208,7 @@ export function showBookDetails(bookId) {
   renderDetailListsSection(bookId);
 
   _triggerEl = document.activeElement;
-  _releaseTrap = trapFocus(modal);
+  _releaseTrap = trapFocus(modal, closeModal);
   focusFirst(modal);
 }
 

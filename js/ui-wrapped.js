@@ -225,7 +225,7 @@ export function openWrappedPanel() {
   overlay.style.display = 'block';
 
   _triggerEl = document.activeElement;
-  _releaseTrap = trapFocus(panel);
+  _releaseTrap = trapFocus(panel, closeWrappedPanel);
   focusFirst(panel);
 }
 

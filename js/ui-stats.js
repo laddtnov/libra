@@ -198,7 +198,7 @@ export function openStatsPanel() {
   overlay.style.display = 'block';
 
   _triggerEl = document.activeElement;
-  _releaseTrap = trapFocus(panel);
+  _releaseTrap = trapFocus(panel, closeStatsPanel);
   focusFirst(panel);
 }
 

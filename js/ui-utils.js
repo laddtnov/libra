@@ -17,8 +17,13 @@ function getFocusable(container) {
   );
 }
 
-export function trapFocus(container) {
+export function trapFocus(container, onEscape) {
   function handler(e) {
+    if (e.key === 'Escape' && onEscape) {
+      e.preventDefault();
+      onEscape();
+      return;
+    }
     if (e.key !== 'Tab') return;
     const focusable = getFocusable(container);
     if (focusable.length === 0) {
