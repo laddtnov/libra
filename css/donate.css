@@ -154,7 +154,6 @@
 
 .donate-section-label:hover {
   color: #ffd700;
-  animation: neon-flicker 0.45s steps(1) forwards;
 }
 
 @keyframes neon-flicker {
@@ -309,7 +308,6 @@
   inset: -4px;
   border: 1px solid #00ff88;
   border-radius: 5px;
-  animation: copy-pulse 0.7s ease-out forwards;
   pointer-events: none;
 }
 
@@ -443,4 +441,6 @@
   .glitch-gold:hover::before { animation: glitch-clip-1 0.32s steps(1) infinite; }
   .glitch-gold:hover::after  { animation: glitch-clip-2 0.32s steps(1) infinite; }
   .donate-tagline:hover::after { animation: cursor-blink 0.7s step-end infinite; }
+  .donate-section-label:hover { animation: neon-flicker 0.45s steps(1) forwards; }
+  .crypto-copy-btn.copied::after { animation: copy-pulse 0.7s ease-out forwards; }
 }

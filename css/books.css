@@ -325,7 +325,6 @@
 }
 
 .book-card:hover .star.filled {
-  animation: starPulse 0.6s ease-in-out;
 }
 
 @keyframes starPulse {
@@ -514,4 +513,5 @@
   .stat-svg { animation: stat-icon-pulse 3s ease-in-out infinite; }
   .progress-fill { animation: progressPulse 2s ease-in-out infinite; }
   .ring-fill { animation: ringPulse 2.5s ease-in-out infinite; }
+  .book-card:hover .star.filled { animation: starPulse 0.6s ease-in-out; }
 }

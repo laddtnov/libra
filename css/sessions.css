@@ -90,7 +90,6 @@
 .session-date-input.input-error,
 .session-pages-input.input-error {
   border-color: #ff4444;
-  animation: shake 0.35s ease;
 }
 
 .session-add-btn {
@@ -200,4 +199,6 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .timer-display.running { animation: timer-pulse 1s ease-in-out infinite; }
+  .session-date-input.input-error,
+  .session-pages-input.input-error { animation: shake 0.35s ease; }
 }
