@@ -141,7 +141,7 @@
     </header>
 
     <!-- Toolbar -->
-    <nav class="toolbar" aria-label="Main toolbar">
+    <div class="toolbar" role="toolbar" aria-label="Main toolbar">
       <div class="search-wrapper">
         <span class="search-prompt">&gt;_</span>
         <input type="text" id="search-input" class="search-input" placeholder="SEARCH ARCHIVE..." autocomplete="off" spellcheck="false" aria-label="Search archive">
@@ -153,7 +153,7 @@
         <button class="filter-btn" data-filter="to-read" data-i18n="filter_queued">QUEUED</button>
       </div>
       <div class="sort-wrapper">
-        <select class="sort-select" id="sort-select" aria-label="Sort books by">
+        <select class="sort-select" id="sort-select" aria-label="Sort order">
           <option value="default" data-i18n="sort_default">SORT</option>
           <option value="title-az" data-i18n="sort_title_az">TITLE A→Z</option>
           <option value="title-za" data-i18n="sort_title_za">TITLE Z→A</option>
@@ -191,7 +191,7 @@
       </div>
       <button class="donate-btn" id="donate-btn">♥ SUPPORT</button>
       <div id="active-list-indicator" class="active-list-indicator" style="display:none"></div>
-    </nav>
+    </div>
 
     <!-- Web Discover Section (shown when search bar is active) -->
     <div id="discover-section" style="display:none"></div>

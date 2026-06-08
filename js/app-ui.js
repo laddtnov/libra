@@ -20,6 +20,7 @@ configureDetailHandlers({ openFormModal });
 
 function initApp() {
   initI18n();
+  document.documentElement.lang = localStorage.getItem('cyberpunk-lang') || 'en';
   applyI18n();
 
   updateStats();
