@@ -23,7 +23,7 @@
   <a href="#books-grid" class="skip-link">Skip to book grid</a>
   <div class="cyber-grid" aria-hidden="true"></div>
 
-  <div class="container">
+  <main class="container">
 
     <!-- Header with Stats -->
     <header class="header">
@@ -141,10 +141,10 @@
     </header>
 
     <!-- Toolbar -->
-    <div class="toolbar">
+    <nav class="toolbar" aria-label="Main toolbar">
       <div class="search-wrapper">
         <span class="search-prompt">&gt;_</span>
-        <input type="text" id="search-input" class="search-input" placeholder="SEARCH ARCHIVE..." autocomplete="off" spellcheck="false">
+        <input type="text" id="search-input" class="search-input" placeholder="SEARCH ARCHIVE..." autocomplete="off" spellcheck="false" aria-label="Search archive">
       </div>
       <div class="filter-buttons">
         <button class="filter-btn active" data-filter="all" data-i18n="filter_all">ALL</button>
@@ -153,7 +153,7 @@
         <button class="filter-btn" data-filter="to-read" data-i18n="filter_queued">QUEUED</button>
       </div>
       <div class="sort-wrapper">
-        <select class="sort-select" id="sort-select">
+        <select class="sort-select" id="sort-select" aria-label="Sort books by">
           <option value="default" data-i18n="sort_default">SORT</option>
           <option value="title-az" data-i18n="sort_title_az">TITLE A→Z</option>
           <option value="title-za" data-i18n="sort_title_za">TITLE Z→A</option>
@@ -191,14 +191,14 @@
       </div>
       <button class="donate-btn" id="donate-btn">♥ SUPPORT</button>
       <div id="active-list-indicator" class="active-list-indicator" style="display:none"></div>
-    </div>
+    </nav>
 
     <!-- Web Discover Section (shown when search bar is active) -->
     <div id="discover-section" style="display:none"></div>
 
     <!-- Books Grid (JS-rendered) -->
     <div class="books-grid" id="books-grid"></div>
-  </div>
+  </main>
 
   <!-- Modal Overlay -->
   <div id="modal-overlay"></div>
@@ -245,7 +245,7 @@
       <div class="scanner-fallback">
         <span class="scanner-fallback-label">ISBN:</span>
         <input id="scanner-isbn-input" class="terminal-input scanner-isbn-input"
-               placeholder="9780000000000" maxlength="20" autocomplete="off" spellcheck="false">
+               placeholder="9780000000000" maxlength="20" autocomplete="off" spellcheck="false" aria-label="ISBN number">
         <button id="scanner-go-btn" class="terminal-action-btn scanner-go-btn">GO</button>
       </div>
       <div class="scanner-footer">
@@ -264,7 +264,7 @@
         <button id="close-lists-panel" class="close-btn" aria-label="Close reading lists">✕</button>
       </div>
       <div class="lists-create-row">
-        <input type="text" id="new-list-input" class="new-list-input" placeholder="LIST NAME..." maxlength="60" spellcheck="false" autocomplete="off">
+        <input type="text" id="new-list-input" class="new-list-input" placeholder="LIST NAME..." maxlength="60" spellcheck="false" autocomplete="off" aria-label="New reading list name">
         <button id="create-list-btn" class="create-list-submit">&gt; CREATE</button>
       </div>
       <div id="lists-container"></div>

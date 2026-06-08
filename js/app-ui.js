@@ -116,6 +116,7 @@ function initApp() {
   document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       setLanguage(btn.dataset.lang);
+      document.documentElement.lang = btn.dataset.lang;
       applyI18n();
       renderBooks();
     });
