@@ -204,7 +204,7 @@
   <div id="modal-overlay"></div>
 
   <!-- Book Details Modal -->
-  <div id="book-modal">
+  <div id="book-modal" role="dialog" aria-modal="true" aria-label="Book details">
     <div class="modal-container">
       <div class="scanlines" aria-hidden="true"></div>
       <div class="modal-header">
@@ -216,7 +216,7 @@
   </div>
 
   <!-- Add / Edit Form Modal -->
-  <div id="form-modal">
+  <div id="form-modal" role="dialog" aria-modal="true" aria-label="Add book">
     <div class="form-modal-container">
       <div class="scanlines" aria-hidden="true"></div>
       <button id="close-form-modal" class="close-btn" aria-label="Close form">✕</button>
@@ -225,10 +225,10 @@
   </div>
 
   <!-- Scanner Modal -->
-  <div id="scanner-modal" style="display:none">
+  <div id="scanner-modal" style="display:none" role="dialog" aria-modal="true" aria-labelledby="scanner-modal-title">
     <div class="scanner-modal-container">
       <div class="scanner-header">
-        <span class="scanner-title">⊞ ISBN SCANNER</span>
+        <span class="scanner-title" id="scanner-modal-title">⊞ ISBN SCANNER</span>
         <button id="close-scanner-modal" class="close-btn" aria-label="Close scanner">✕</button>
       </div>
       <div class="scanner-viewfinder-wrap" id="scanner-viewfinder-wrap">
@@ -256,11 +256,11 @@
   </div>
 
   <!-- Lists Panel -->
-  <div id="lists-panel" style="display:none">
+  <div id="lists-panel" style="display:none" role="dialog" aria-modal="true" aria-labelledby="lists-panel-title">
     <div class="lists-panel-container">
       <div class="scanlines" aria-hidden="true"></div>
       <div class="lists-panel-header">
-        <span class="lists-panel-title">&gt;_ READING LISTS</span>
+        <span class="lists-panel-title" id="lists-panel-title">&gt;_ READING LISTS</span>
         <button id="close-lists-panel" class="close-btn" aria-label="Close reading lists">✕</button>
       </div>
       <div class="lists-create-row">
@@ -272,11 +272,11 @@
   </div>
 
   <!-- Recommendations Panel -->
-  <div id="recommendations-panel" style="display:none">
+  <div id="recommendations-panel" style="display:none" role="dialog" aria-modal="true" aria-labelledby="recs-panel-title">
     <div class="recs-container">
       <div class="scanlines" aria-hidden="true"></div>
       <div class="recs-header">
-        <span class="recs-title">&gt;_ GENRE ANALYSIS</span>
+        <span class="recs-title" id="recs-panel-title">&gt;_ GENRE ANALYSIS</span>
         <button id="close-recs-panel" class="close-btn" aria-label="Close recommendations">✕</button>
       </div>
       <div id="recs-content"></div>
@@ -284,11 +284,11 @@
   </div>
 
   <!-- Donate / Support Panel -->
-  <div id="donate-panel" style="display:none">
+  <div id="donate-panel" style="display:none" role="dialog" aria-modal="true" aria-labelledby="donate-panel-title">
     <div class="donate-panel-container">
       <div class="scanlines" aria-hidden="true"></div>
       <div class="donate-panel-header">
-        <span class="donate-panel-title glitch-gold" data-text=">_ SUPPORT THE PROJECT">&gt;_ SUPPORT THE PROJECT</span>
+        <span class="donate-panel-title glitch-gold" id="donate-panel-title" data-text=">_ SUPPORT THE PROJECT">&gt;_ SUPPORT THE PROJECT</span>
         <button id="close-donate-panel" class="close-btn" aria-label="Close support panel">✕</button>
       </div>
       <div id="donate-content"></div>
@@ -296,10 +296,10 @@
   </div>
 
   <!-- Reading Wrapped Panel -->
-  <div id="wrapped-panel" style="display:none">
+  <div id="wrapped-panel" style="display:none" role="dialog" aria-modal="true" aria-labelledby="wrapped-panel-title">
     <div class="wrapped-container">
       <div class="wrapped-header">
-        <span class="wrapped-title">&gt;_ READING WRAPPED</span>
+        <span class="wrapped-title" id="wrapped-panel-title">&gt;_ READING WRAPPED</span>
         <div class="wrapped-actions">
           <button id="wrapped-download-btn" class="wrapped-download-btn">[ ↓ SAVE PNG ]</button>
           <button id="close-wrapped-panel" class="close-btn" aria-label="Close reading wrapped">✕</button>
@@ -310,10 +310,10 @@
   </div>
 
   <!-- Stats Panel -->
-  <div id="stats-panel" style="display:none">
+  <div id="stats-panel" style="display:none" role="dialog" aria-modal="true" aria-labelledby="stats-panel-title">
     <div class="stats-container">
       <div class="stats-header">
-        <span class="stats-title">&gt;_ READING STATS</span>
+        <span class="stats-title" id="stats-panel-title">&gt;_ READING STATS</span>
         <button id="close-stats-panel" class="close-btn" aria-label="Close stats">✕</button>
       </div>
       <div id="stats-content"></div>
@@ -321,7 +321,7 @@
   </div>
 
   <!-- Discover Book Preview Modal -->
-  <div id="discover-preview" style="display:none">
+  <div id="discover-preview" style="display:none" role="dialog" aria-modal="true" aria-label="Book preview">
     <div class="discover-preview-container">
       <div class="scanlines" aria-hidden="true"></div>
       <button id="close-discover-preview" class="close-btn" aria-label="Close book preview">✕</button>
@@ -330,7 +330,7 @@
   </div>
 
   <!-- Auth overlay -->
-  <div id="auth-overlay" style="display:none">
+  <div id="auth-overlay" style="display:none" role="dialog" aria-modal="true" aria-label="Account">
     <div class="auth-container">
       <div id="auth-content"></div>
     </div>

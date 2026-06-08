@@ -1,9 +1,12 @@
 import { openFormModal } from './ui-form-modal.js';
 import { showToast } from './ui-feedback.js';
 import { guessCategory } from './state.js';
+import { trapFocus, focusFirst } from './ui-utils.js';
 
 // Module-level state — one scanner active at a time
 let _reader = null;
+let _releaseTrap = null;   // focus-trap cleanup fn
+let _triggerEl = null;     // element to restore focus to on close
 
 // ── UI helpers ─────────────────────────────────────────────────────────────
 
@@ -45,6 +48,9 @@ export function closeScannerModal() {
   const video = document.getElementById('scanner-video');
   if (video) video.srcObject = null;
   document.getElementById('scanner-modal').style.display = 'none';
+
+  if (_releaseTrap) { _releaseTrap(); _releaseTrap = null; }
+  if (_triggerEl) { _triggerEl.focus?.(); _triggerEl = null; }
 }
 
 // ── Open ───────────────────────────────────────────────────────────────────
@@ -54,7 +60,12 @@ export function openScannerModal() {
   setCamLabel('INITIALISING');
   setScanLine(false);
   document.getElementById('scanner-isbn-input').value = '';
-  document.getElementById('scanner-modal').style.display = 'flex';
+  const modal = document.getElementById('scanner-modal');
+  modal.style.display = 'flex';
+
+  _triggerEl = document.activeElement;
+  _releaseTrap = trapFocus(modal);
+  focusFirst(modal);
 
   document.getElementById('close-scanner-modal').onclick = closeScannerModal;
 

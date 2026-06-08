@@ -1,4 +1,8 @@
 import { state } from './state.js';
+import { trapFocus, focusFirst } from './ui-utils.js';
+
+let _releaseTrap = null;
+let _triggerEl = null;
 
 const W = 640, H = 900;
 
@@ -219,11 +223,18 @@ export function openWrappedPanel() {
   drawWrapped(canvas);
   panel.style.display   = 'flex';
   overlay.style.display = 'block';
+
+  _triggerEl = document.activeElement;
+  _releaseTrap = trapFocus(panel);
+  focusFirst(panel);
 }
 
 export function closeWrappedPanel() {
   document.getElementById('wrapped-panel').style.display   = 'none';
   document.getElementById('modal-overlay').style.display = 'none';
+
+  if (_releaseTrap) { _releaseTrap(); _releaseTrap = null; }
+  if (_triggerEl) { _triggerEl.focus?.(); _triggerEl = null; }
 }
 
 export function initWrappedPanel() {

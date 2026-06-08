@@ -1,4 +1,8 @@
 import { signUpWithPassword, signInWithPassword, signOut, resetPassword, updatePassword, establishRecoverySession, pushSettingsToCloud, buildSettings } from './auth.js';
+import { trapFocus, focusFirst } from './ui-utils.js';
+
+let _releaseTrap = null;
+let _triggerEl = null;
 
 // ── State machine ─────────────────────────────────────────────────────────────
 const S = { IDLE: 'idle', SIGNUP: 'signup', LOGIN: 'login', FORGOT: 'forgot', RESET: 'reset', SYNCING: 'syncing', LOGGED_IN: 'logged-in' };
@@ -29,13 +33,24 @@ function getContent() { return document.getElementById('auth-content'); }
 export function showAuthOverlay(targetState) {
   state = targetState ?? (state === S.LOGGED_IN ? S.LOGGED_IN : S.IDLE);
   const overlay = getOverlay();
-  if (overlay) overlay.style.display = 'flex';
+  if (!overlay) return;
+  const wasOpen = overlay.style.display === 'flex';
+  overlay.style.display = 'flex';
   renderOverlay();
+
+  if (!wasOpen) {
+    _triggerEl = document.activeElement;
+    _releaseTrap = trapFocus(overlay);
+    focusFirst(overlay);
+  }
 }
 
 export function hideAuthOverlay() {
   const overlay = getOverlay();
   if (overlay) overlay.style.display = 'none';
+
+  if (_releaseTrap) { _releaseTrap(); _releaseTrap = null; }
+  if (_triggerEl) { _triggerEl.focus?.(); _triggerEl = null; }
 }
 
 // ── Badge ─────────────────────────────────────────────────────────────────────

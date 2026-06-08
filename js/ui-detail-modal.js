@@ -5,8 +5,11 @@ import { toggleBookInList, removeBookFromAllLists, renderListsPanel } from './ui
 import { renderQuotesSection, initQuotesSection } from './ui-quotes.js';
 import { renderSessionsSection, initSessionsSection } from './ui-sessions.js';
 import { renderAvailabilitySection } from './ui-availability.js';
+import { trapFocus, focusFirst } from './ui-utils.js';
 
 let onOpenFormModal = () => {};
+let _releaseTrap = null;
+let _triggerEl = null;
 
 function calcPace(sessions, totalPages, currentPage) {
   if (!sessions?.length || !totalPages) return null;
@@ -32,6 +35,9 @@ export function configureDetailHandlers({ openFormModal }) {
 export function closeModal() {
   document.getElementById('book-modal').style.display = 'none';
   document.getElementById('modal-overlay').style.display = 'none';
+
+  if (_releaseTrap) { _releaseTrap(); _releaseTrap = null; }
+  if (_triggerEl) { _triggerEl.focus?.(); _triggerEl = null; }
 }
 
 function confirmDelete(bookId) {
@@ -200,6 +206,10 @@ export function showBookDetails(bookId) {
   initQuotesSection(bookId);
   initSessionsSection(bookId);
   renderDetailListsSection(bookId);
+
+  _triggerEl = document.activeElement;
+  _releaseTrap = trapFocus(modal);
+  focusFirst(modal);
 }
 
 function renderDetailListsSection(bookId) {
