@@ -20,7 +20,7 @@
   <link rel="apple-touch-icon" href="/assets/icons/icon.svg">
 </head>
 <body>
-  <div class="cyber-grid"></div>
+  <div class="cyber-grid" aria-hidden="true"></div>
 
   <div class="container">
 
@@ -205,10 +205,10 @@
   <!-- Book Details Modal -->
   <div id="book-modal">
     <div class="modal-container">
-      <div class="scanlines"></div>
+      <div class="scanlines" aria-hidden="true"></div>
       <div class="modal-header">
         <div id="modal-sound-slot"></div>
-        <button id="close-modal" class="close-btn">✕</button>
+        <button id="close-modal" class="close-btn" aria-label="Close book details">✕</button>
       </div>
       <div id="modal-content"></div>
     </div>
@@ -217,8 +217,8 @@
   <!-- Add / Edit Form Modal -->
   <div id="form-modal">
     <div class="form-modal-container">
-      <div class="scanlines"></div>
-      <button id="close-form-modal" class="close-btn">✕</button>
+      <div class="scanlines" aria-hidden="true"></div>
+      <button id="close-form-modal" class="close-btn" aria-label="Close form">✕</button>
       <div id="form-modal-content"></div>
     </div>
   </div>
@@ -228,7 +228,7 @@
     <div class="scanner-modal-container">
       <div class="scanner-header">
         <span class="scanner-title">⊞ ISBN SCANNER</span>
-        <button id="close-scanner-modal" class="close-btn">✕</button>
+        <button id="close-scanner-modal" class="close-btn" aria-label="Close scanner">✕</button>
       </div>
       <div class="scanner-viewfinder-wrap" id="scanner-viewfinder-wrap">
         <video id="scanner-video" class="scanner-video" playsinline muted></video>
@@ -257,10 +257,10 @@
   <!-- Lists Panel -->
   <div id="lists-panel" style="display:none">
     <div class="lists-panel-container">
-      <div class="scanlines"></div>
+      <div class="scanlines" aria-hidden="true"></div>
       <div class="lists-panel-header">
         <span class="lists-panel-title">&gt;_ READING LISTS</span>
-        <button id="close-lists-panel" class="close-btn">✕</button>
+        <button id="close-lists-panel" class="close-btn" aria-label="Close reading lists">✕</button>
       </div>
       <div class="lists-create-row">
         <input type="text" id="new-list-input" class="new-list-input" placeholder="LIST NAME..." maxlength="60" spellcheck="false" autocomplete="off">
@@ -273,10 +273,10 @@
   <!-- Recommendations Panel -->
   <div id="recommendations-panel" style="display:none">
     <div class="recs-container">
-      <div class="scanlines"></div>
+      <div class="scanlines" aria-hidden="true"></div>
       <div class="recs-header">
         <span class="recs-title">&gt;_ GENRE ANALYSIS</span>
-        <button id="close-recs-panel" class="close-btn">✕</button>
+        <button id="close-recs-panel" class="close-btn" aria-label="Close recommendations">✕</button>
       </div>
       <div id="recs-content"></div>
     </div>
@@ -285,10 +285,10 @@
   <!-- Donate / Support Panel -->
   <div id="donate-panel" style="display:none">
     <div class="donate-panel-container">
-      <div class="scanlines"></div>
+      <div class="scanlines" aria-hidden="true"></div>
       <div class="donate-panel-header">
         <span class="donate-panel-title glitch-gold" data-text=">_ SUPPORT THE PROJECT">&gt;_ SUPPORT THE PROJECT</span>
-        <button id="close-donate-panel" class="close-btn">✕</button>
+        <button id="close-donate-panel" class="close-btn" aria-label="Close support panel">✕</button>
       </div>
       <div id="donate-content"></div>
     </div>
@@ -301,7 +301,7 @@
         <span class="wrapped-title">&gt;_ READING WRAPPED</span>
         <div class="wrapped-actions">
           <button id="wrapped-download-btn" class="wrapped-download-btn">[ ↓ SAVE PNG ]</button>
-          <button id="close-wrapped-panel" class="close-btn">✕</button>
+          <button id="close-wrapped-panel" class="close-btn" aria-label="Close reading wrapped">✕</button>
         </div>
       </div>
       <canvas id="wrapped-canvas"></canvas>
@@ -313,7 +313,7 @@
     <div class="stats-container">
       <div class="stats-header">
         <span class="stats-title">&gt;_ READING STATS</span>
-        <button id="close-stats-panel" class="close-btn">✕</button>
+        <button id="close-stats-panel" class="close-btn" aria-label="Close stats">✕</button>
       </div>
       <div id="stats-content"></div>
     </div>
@@ -322,8 +322,8 @@
   <!-- Discover Book Preview Modal -->
   <div id="discover-preview" style="display:none">
     <div class="discover-preview-container">
-      <div class="scanlines"></div>
-      <button id="close-discover-preview" class="close-btn">✕</button>
+      <div class="scanlines" aria-hidden="true"></div>
+      <button id="close-discover-preview" class="close-btn" aria-label="Close book preview">✕</button>
       <div id="discover-preview-content"></div>
     </div>
   </div>
@@ -335,7 +335,7 @@
     </div>
   </div>
 
-  <div class="toast-container" id="toast-container"></div>
+  <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
   <!-- Detect password reset redirect before modules load -->
   <script>
     if (new URLSearchParams(location.search).get('reset') === '1') {
