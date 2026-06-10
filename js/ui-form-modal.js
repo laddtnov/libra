@@ -10,16 +10,40 @@ let _triggerEl = null;     // element to restore focus to on close
 
 const CATEGORIES = ['History', 'Fantasy', 'Adventure', 'Historical Fiction', 'Biography', 'Economics', 'Science', 'Philosophy', 'Other'];
 
+function setFieldError(inputId, errorId, message) {
+  const input = document.getElementById(inputId);
+  const error = document.getElementById(errorId);
+  input.classList.add('input-error');
+  input.setAttribute('aria-invalid', 'true');
+  input.setAttribute('aria-describedby', errorId);
+  if (error) {
+    error.textContent = message;
+    error.classList.remove('sr-only');
+  }
+}
+
+function clearFieldError(inputId, errorId) {
+  const input = document.getElementById(inputId);
+  const error = document.getElementById(errorId);
+  input.classList.remove('input-error');
+  input.removeAttribute('aria-invalid');
+  input.removeAttribute('aria-describedby');
+  if (error) {
+    error.textContent = '';
+    error.classList.add('sr-only');
+  }
+}
+
 function validateBookForm(title, author) {
   let isValid = true;
 
   if (!title) {
-    document.getElementById('f-title').classList.add('input-error');
+    setFieldError('f-title', 'f-title-error', t('form_err_title_required'));
     isValid = false;
   }
 
   if (!author) {
-    document.getElementById('f-author').classList.add('input-error');
+    setFieldError('f-author', 'f-author-error', t('form_err_author_required'));
     isValid = false;
   }
 
@@ -134,6 +158,7 @@ function buildFormHtml(book, isEdit, rv) {
       <div class="form-field">
         <label class="terminal-label">&gt; ${t('form_lbl_title')}</label>
         <input id="f-title" class="terminal-input" value="${escHtml(book?.title || '')}" placeholder="${t('form_ph_title')}">
+        <span id="f-title-error" class="field-error sr-only" role="alert"></span>
       </div>
       <div class="form-field">
         <label class="terminal-label">&gt; ${t('form_lbl_subtitle')}</label>
@@ -142,6 +167,7 @@ function buildFormHtml(book, isEdit, rv) {
       <div class="form-field">
         <label class="terminal-label">&gt; ${t('form_lbl_author')}</label>
         <input id="f-author" class="terminal-input" value="${escHtml(book?.author || '')}" placeholder="${t('form_ph_author')}">
+        <span id="f-author-error" class="field-error sr-only" role="alert"></span>
       </div>
       <div class="form-field">
         <label class="terminal-label">&gt; ${t('form_lbl_category')}</label>
@@ -344,8 +370,8 @@ export function openFormModal(bookId = null, prefill = null) {
   initStatusToggle();
   if (!isEdit) initSearchWiring();
 
-  ['f-title', 'f-author'].forEach(id => {
-    document.getElementById(id)?.addEventListener('input', e => e.target.classList.remove('input-error'));
+  [['f-title', 'f-title-error'], ['f-author', 'f-author-error']].forEach(([inputId, errorId]) => {
+    document.getElementById(inputId)?.addEventListener('input', () => clearFieldError(inputId, errorId));
   });
 
   document.getElementById('save-book-btn').addEventListener('click', saveBook);
