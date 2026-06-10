@@ -41,7 +41,17 @@ function initApp() {
 
   document.querySelectorAll('.stat-card[data-filter]').forEach(card => {
     card.style.cursor = 'pointer';
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    const label = card.querySelector('.stat-label')?.textContent?.trim();
+    if (label) card.setAttribute('aria-label', `Filter: ${label}`);
     card.addEventListener('click', () => setFilter(card.dataset.filter));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        setFilter(card.dataset.filter);
+      }
+    });
   });
 
   // Search bar → web discover

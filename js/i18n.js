@@ -36,6 +36,9 @@ const T = {
   no_records:     ['> NO RECORDS FOUND',  '> ЗАПИСІВ НЕ ЗНАЙДЕНО','> SIN RESULTADOS',    '> ЗАПИСЕЙ НЕ НАЙДЕНО','> KEINE EINTRÄGE GEFUNDEN','> BRAK WYNIKÓW'],
   no_records_sub: ['Adjust filters or search query','Змініть фільтри або запит','Ajusta los filtros o la búsqueda','Измените фильтры или запрос','Filter oder Suchanfrage anpassen','Zmień filtry lub zapytanie'],
 
+  // Accessibility labels
+  open_details:   ['open details', 'відкрити деталі', 'abrir detalles', 'открыть детали', 'Details öffnen', 'otwórz szczegóły'],
+
   // Status badges
   status_reading:   ['READING',    'ЧИТАЮ',     'LEYENDO',    'ЧИТАЮ',     'LESE',          'CZYTAM'],
   status_completed: ['COMPLETED',  'ПРОЧИТАНО', 'COMPLETADO', 'ПРОЧИТАНО', 'GELESEN',       'PRZECZYTANE'],
