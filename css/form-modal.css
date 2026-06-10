@@ -100,7 +100,18 @@
 .terminal-input.input-error {
   border-color: #ff5555;
   box-shadow: 0 0 10px rgba(255, 85, 85, 0.4);
-  animation: shake 0.3s ease;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .terminal-input.input-error { animation: shake 0.3s ease; }
+}
+
+.field-error {
+  display: block;
+  margin-top: 4px;
+  color: #ff5555;
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
 @keyframes shake {

@@ -36,6 +36,9 @@ const T = {
   no_records:     ['> NO RECORDS FOUND',  '> ЗАПИСІВ НЕ ЗНАЙДЕНО','> SIN RESULTADOS',    '> ЗАПИСЕЙ НЕ НАЙДЕНО','> KEINE EINTRÄGE GEFUNDEN','> BRAK WYNIKÓW'],
   no_records_sub: ['Adjust filters or search query','Змініть фільтри або запит','Ajusta los filtros o la búsqueda','Измените фильтры или запрос','Filter oder Suchanfrage anpassen','Zmień filtry lub zapytanie'],
 
+  // Accessibility labels
+  open_details:   ['open details', 'відкрити деталі', 'abrir detalles', 'открыть детали', 'Details öffnen', 'otwórz szczegóły'],
+
   // Status badges
   status_reading:   ['READING',    'ЧИТАЮ',     'LEYENDO',    'ЧИТАЮ',     'LESE',          'CZYTAM'],
   status_completed: ['COMPLETED',  'ПРОЧИТАНО', 'COMPLETADO', 'ПРОЧИТАНО', 'GELESEN',       'PRZECZYTANE'],
@@ -92,6 +95,8 @@ const T = {
   form_ph_subtitle:     ['Optional subtitle',            'Необов\'язковий підзаголовок', 'Subtítulo opcional',          'Необязательный подзаголовок',  'Optionaler Untertitel',         'Opcjonalny podtytuł'],
   form_lbl_author:      ['AUTHOR *',                     'АВТОР *',                      'AUTOR *',                     'АВТОР *',                      'AUTOR *',                       'AUTOR *'],
   form_ph_author:       ['Author name',                  'Ім\'я автора',                 'Nombre del autor',            'Имя автора',                   'Autorenname',                   'Imię autora'],
+  form_err_title_required:  ['Title is required',  'Назва обов\'язкова',  'El título es obligatorio',  'Название обязательно',  'Titel ist erforderlich',  'Tytuł jest wymagany'],
+  form_err_author_required: ['Author is required', 'Автор обов\'язковий', 'El autor es obligatorio',   'Автор обязателен',      'Autor ist erforderlich',  'Autor jest wymagany'],
   form_lbl_category:    ['CATEGORY',                     'КАТЕГОРІЯ',                    'CATEGORÍA',                   'КАТЕГОРИЯ',                    'KATEGORIE',                     'KATEGORIA'],
   form_lbl_pages:       ['TOTAL PAGES',                  'КІЛЬКІСТЬ СТОРІНОК',           'PÁGINAS TOTALES',             'ВСЕГО СТРАНИЦ',                'SEITEN GESAMT',                 'ŁĄCZNA LICZBA STRON'],
   form_ph_pages:        ['e.g. 464',                     'напр. 464',                    'p.ej. 464',                   'напр. 464',                    'z.B. 464',                      'np. 464'],

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Libra</title>
+  <title>Libra — Cyberpunk Reading Tracker</title>
   <meta name="description" content="Libra — a personal reading tracker with a cyberpunk neon UI. Track, discover, and organise your books.">
   <meta property="og:title" content="Libra">
   <meta property="og:description" content="Libra — a personal reading tracker with a cyberpunk neon UI. Track, discover, and organise your books.">
@@ -44,6 +44,7 @@
       </div>
 
       <!-- Stats Dashboard -->
+      <h2 class="sr-only">Reading statistics</h2>
       <div class="stats-grid">
         <div class="stat-card" data-filter="completed">
           <div class="stat-icon">
@@ -141,6 +142,8 @@
       </div>
     </header>
 
+    <h2 class="sr-only">Book library</h2>
+
     <!-- Toolbar -->
     <div class="toolbar" role="toolbar" aria-label="Main toolbar">
       <div class="search-wrapper">
@@ -229,7 +232,7 @@
   <dialog id="scanner-modal" style="display:none" aria-labelledby="scanner-modal-title">
     <div class="scanner-modal-container">
       <div class="scanner-header">
-        <span class="scanner-title" id="scanner-modal-title">⊞ ISBN SCANNER</span>
+        <h2 class="scanner-title" id="scanner-modal-title">⊞ ISBN SCANNER</h2>
         <button id="close-scanner-modal" class="close-btn" aria-label="Close scanner">✕</button>
       </div>
       <div class="scanner-viewfinder-wrap" id="scanner-viewfinder-wrap">
@@ -261,7 +264,7 @@
     <div class="lists-panel-container">
       <div class="scanlines" aria-hidden="true"></div>
       <div class="lists-panel-header">
-        <span class="lists-panel-title" id="lists-panel-title">&gt;_ READING LISTS</span>
+        <h2 class="lists-panel-title" id="lists-panel-title">&gt;_ READING LISTS</h2>
         <button id="close-lists-panel" class="close-btn" aria-label="Close reading lists">✕</button>
       </div>
       <div class="lists-create-row">
@@ -277,7 +280,7 @@
     <div class="recs-container">
       <div class="scanlines" aria-hidden="true"></div>
       <div class="recs-header">
-        <span class="recs-title" id="recs-panel-title">&gt;_ GENRE ANALYSIS</span>
+        <h2 class="recs-title" id="recs-panel-title">&gt;_ GENRE ANALYSIS</h2>
         <button id="close-recs-panel" class="close-btn" aria-label="Close recommendations">✕</button>
       </div>
       <div id="recs-content"></div>
@@ -289,7 +292,7 @@
     <div class="donate-panel-container">
       <div class="scanlines" aria-hidden="true"></div>
       <div class="donate-panel-header">
-        <span class="donate-panel-title glitch-gold" id="donate-panel-title" data-text=">_ SUPPORT THE PROJECT">&gt;_ SUPPORT THE PROJECT</span>
+        <h2 class="donate-panel-title glitch-gold" id="donate-panel-title" data-text=">_ SUPPORT THE PROJECT">&gt;_ SUPPORT THE PROJECT</h2>
         <button id="close-donate-panel" class="close-btn" aria-label="Close support panel">✕</button>
       </div>
       <div id="donate-content"></div>
@@ -300,7 +303,7 @@
   <dialog id="wrapped-panel" style="display:none" aria-labelledby="wrapped-panel-title">
     <div class="wrapped-container">
       <div class="wrapped-header">
-        <span class="wrapped-title" id="wrapped-panel-title">&gt;_ READING WRAPPED</span>
+        <h2 class="wrapped-title" id="wrapped-panel-title">&gt;_ READING WRAPPED</h2>
         <div class="wrapped-actions">
           <button id="wrapped-download-btn" class="wrapped-download-btn">[ ↓ SAVE PNG ]</button>
           <button id="close-wrapped-panel" class="close-btn" aria-label="Close reading wrapped">✕</button>
@@ -314,7 +317,7 @@
   <dialog id="stats-panel" style="display:none" aria-labelledby="stats-panel-title">
     <div class="stats-container">
       <div class="stats-header">
-        <span class="stats-title" id="stats-panel-title">&gt;_ READING STATS</span>
+        <h2 class="stats-title" id="stats-panel-title">&gt;_ READING STATS</h2>
         <button id="close-stats-panel" class="close-btn" aria-label="Close stats">✕</button>
       </div>
       <div id="stats-content"></div>

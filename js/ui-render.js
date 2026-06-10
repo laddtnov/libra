@@ -244,7 +244,16 @@ export function renderBooks() {
     card.dataset.bookId = id;
     card.style.animationDelay = `${i * 0.07}s`;
     card.innerHTML = buildCardHTML(book);
+    card.setAttribute('role', 'button');
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('aria-label', `${book.title || 'Untitled'} by ${book.author || 'Unknown'} — ${t('open_details')}`);
     card.addEventListener('click', () => onOpenDetails(id));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        onOpenDetails(id);
+      }
+    });
 
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
