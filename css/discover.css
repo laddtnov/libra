@@ -68,7 +68,7 @@
 /* ── Result Card ── */
 .discover-card {
   background: var(--dark-card);
-  border: 1px solid rgba(0, 242, 255, 0.15);
+  border: 1px solid rgba(0, 242, 255, 0.3);
   border-radius: 10px;
   overflow: hidden;
   display: flex;

@@ -261,7 +261,7 @@
 
 /* ── AI card variant ── */
 .rec-card--ai {
-  border-color: rgba(0, 242, 255, 0.18);
+  border-color: rgba(0, 242, 255, 0.3);
   background: rgba(0, 242, 255, 0.03);
 }
 
