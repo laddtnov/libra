@@ -82,6 +82,22 @@ const T = {
   reminders_days_ago_sg:['day ago',            'день тому',          'día',                 'день назад',         'Tag her',                  'dzień temu'],
   reminders_days_ago_pl:['days ago',           'днів тому',          'días',                'дней назад',         'Tagen her',                'dni temu'],
 
+  // Bulk actions
+  btn_select:           ['☑ SELECT',           '☑ ВИБІР',            '☑ SELECCIONAR',       '☑ ВЫБОР',            '☑ AUSWÄHLEN',              '☑ WYBIERZ'],
+  btn_select_done:      ['✕ DONE',             '✕ ГОТОВО',           '✕ LISTO',             '✕ ГОТОВО',           '✕ FERTIG',                 '✕ GOTOWE'],
+  bulk_selected_count:  ['selected',           'вибрано',            'seleccionados',       'выбрано',            'ausgewählt',               'wybranych'],
+  bulk_select_all:      ['[ ALL ]',            '[ УСІ ]',            '[ TODOS ]',           '[ ВСЕ ]',            '[ ALLE ]',                 '[ WSZYSTKIE ]'],
+  bulk_tag_placeholder: ['add tag…',           'тег…',               'etiqueta…',           'тег…',               'Tag…',                     'tag…'],
+  bulk_tag_apply:       ['[ TAG ]',            '[ ТЕГ ]',            '[ ETIQUETA ]',        '[ ТЕГ ]',            '[ TAG ]',                  '[ TAG ]'],
+  bulk_move_placeholder:['move to list…',      'до списку…',         'mover a lista…',      'в список…',          'zu Liste…',                'do listy…'],
+  bulk_delete:          ['[ DELETE ]',         '[ ВИДАЛИТИ ]',       '[ ELIMINAR ]',        '[ УДАЛИТЬ ]',        '[ LÖSCHEN ]',              '[ USUŃ ]'],
+  bulk_delete_confirm:  ['Delete {n} books? This cannot be undone.', 'Видалити {n} книг? Це незворотно.', '¿Eliminar {n} libros? No se puede deshacer.', 'Удалить {n} книг? Это нельзя отменить.', '{n} Bücher löschen? Das kann nicht rückgängig gemacht werden.', 'Usunąć {n} książek? Tej operacji nie można odwrócić.'],
+  bulk_yes_delete:      ['[ YES, DELETE ]',    '[ ТАК, ВИДАЛИТИ ]',  '[ SÍ, ELIMINAR ]',    '[ ДА, УДАЛИТЬ ]',    '[ JA, LÖSCHEN ]',          '[ TAK, USUŃ ]'],
+  bulk_cancel:          ['[ CANCEL ]',         '[ ВІДМІНА ]',        '[ CANCELAR ]',        '[ ОТМЕНА ]',         '[ ABBRECHEN ]',            '[ ANULUJ ]'],
+  bulk_tagged_toast:    ['{n} books tagged "{tag}"', '{n} книг позначено "{tag}"', '{n} libros etiquetados "{tag}"', '{n} книг помечено "{tag}"', '{n} Bücher mit "{tag}" markiert', '{n} książek oznaczono "{tag}"'],
+  bulk_moved_toast:     ['{n} books added to "{list}"', '{n} книг додано до "{list}"', '{n} libros añadidos a "{list}"', '{n} книг добавлено в "{list}"', '{n} Bücher zu "{list}" hinzugefügt', '{n} książek dodano do "{list}"'],
+  bulk_deleted_toast:   ['{n} books deleted',  '{n} книг видалено',  '{n} libros eliminados', '{n} книг удалено',  '{n} Bücher gelöscht',      '{n} książek usunięto'],
+
   // Lists panel
   lists_title:          ['>_ READING LISTS',   '>_ СПИСКИ ЧИТАННЯ',  '>_ LISTAS DE LECTURA','>_ СПИСКИ ЧТЕНИЯ',   '>_ LESELISTEN',            '>_ LISTY LEKTUR'],
   lists_create:         ['> CREATE',            '> СТВОРИТИ',         '> CREAR',             '> СОЗДАТЬ',          '> ERSTELLEN',              '> UTWÓRZ'],

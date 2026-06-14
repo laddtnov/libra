@@ -1,4 +1,4 @@
-const CACHE = 'libra-v51';
+const CACHE = 'libra-v52';
 
 const ASSETS = [
   '/',
@@ -37,6 +37,7 @@ const ASSETS = [
   '/js/ui-form-modal.js',
   '/js/ui-search.js',
   '/js/ui-lists.js',
+  '/js/ui-bulk.js',
   '/js/ui-recommendations.js',
   '/js/ui-discover.js',
   '/js/ui-backup.js',

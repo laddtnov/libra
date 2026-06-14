@@ -167,6 +167,7 @@
           <option value="added" data-i18n="sort_added">DATE ADDED</option>
         </select>
       </div>
+      <button class="select-mode-btn" id="select-mode-btn" data-i18n="btn_select">☑ SELECT</button>
       <button class="lists-btn" id="lists-btn">
         <svg class="btn-svg" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <circle cx="3.5" cy="5" r="1.2" fill="currentColor"/>
@@ -195,6 +196,9 @@
       <button class="donate-btn" id="donate-btn">♥ SUPPORT</button>
       <div id="active-list-indicator" class="active-list-indicator" style="display:none"></div>
     </div>
+
+    <!-- Bulk Action Bar (shown in select mode) -->
+    <div id="bulk-action-bar" class="bulk-action-bar" style="display:none"></div>
 
     <!-- Web Discover Section (shown when search bar is active) -->
     <div id="discover-section" style="display:none"></div>

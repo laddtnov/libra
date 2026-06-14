@@ -12,6 +12,7 @@ import { initGoal, renderGoal } from './ui-goal.js';
 import { initStreak } from './ui-streak.js';
 import { openStatsPanel, closeStatsPanel, initStatsPanel } from './ui-stats.js';
 import { importGoodreads } from './ui-goodreads.js';
+import { initBulk, updateSelectBtn } from './ui-bulk.js';
 
 configureRenderHandlers({ openDetails: showBookDetails });
 configureDetailHandlers({ openFormModal });
@@ -113,6 +114,7 @@ function initApp() {
   initListsPanel();
   initRecsPanel();
   initDonatePanel();
+  initBulk();
 
   // Language switcher
   document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -120,6 +122,7 @@ function initApp() {
       setLanguage(btn.dataset.lang);
       document.documentElement.lang = btn.dataset.lang;
       applyI18n();
+      updateSelectBtn();
       renderBooks();
     });
   });
