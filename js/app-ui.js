@@ -5,7 +5,7 @@ import { renderBooks, setFilter, configureRenderHandlers, updateStats } from './
 import { openListsPanel, closeListsPanel, initListsPanel } from './ui-lists.js';
 import { openRecsPanel, closeRecsPanel, initRecsPanel } from './ui-recommendations.js';
 import { clearDiscover, debouncedFetch, closePreviewModal } from './ui-discover.js';
-import { exportBooks, importBooks } from './ui-backup.js';
+import { exportBooks, exportBooksCSV, importBooks } from './ui-backup.js';
 import { openDonatePanel, closeDonatePanel, initDonatePanel } from './ui-donate.js';
 import { initI18n, setLanguage, applyI18n } from './i18n.js';
 import { initGoal, renderGoal } from './ui-goal.js';
@@ -93,6 +93,7 @@ function initApp() {
   });
 
   document.getElementById('export-btn').addEventListener('click', exportBooks);
+  document.getElementById('export-csv-btn').addEventListener('click', exportBooksCSV);
   document.getElementById('import-input').addEventListener('change', e => {
     importBooks(e.target.files[0]);
     e.target.value = '';

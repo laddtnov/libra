@@ -174,6 +174,7 @@ const T = {
 
   // Backup buttons
   btn_export:         ['↓ EXPORT',            '↓ ЕКСПОРТ',            '↓ EXPORTAR',           '↓ ЭКСПОРТ',            '↓ EXPORTIEREN',             '↓ EKSPORT'],
+  btn_export_csv:     ['↓ CSV',               '↓ CSV',                '↓ CSV',                '↓ CSV',                '↓ CSV',                     '↓ CSV'],
   btn_import:         ['↑ IMPORT',            '↑ ІМПОРТ',             '↑ IMPORTAR',           '↑ ИМПОРТ',             '↑ IMPORTIEREN',             '↑ IMPORT'],
   export_success:     ['ARCHIVE EXPORTED',    'АРХІВ ЕКСПОРТОВАНО',   'ARCHIVO EXPORTADO',    'АРХИВ ЭКСПОРТИРОВАН',  'ARCHIV EXPORTIERT',         'ARCHIWUM WYEKSPORTOWANE'],
   import_success:     ['{n} RECORDS IMPORTED','{n} ЗАПИСІВ ІМПОРТОВАНО','{n} REGISTROS IMPORTADOS','{n} ЗАПИСЕЙ ИМПОРТИРОВАНО','{n} EINTRÄGE IMPORTIERT','{n} REKORDÓW ZAIMPORTOWANYCH'],
