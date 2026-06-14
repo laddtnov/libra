@@ -153,6 +153,11 @@ const T = {
   preview_add_btn:    ['+ ADD TO ARCHIVE',     '+ ДОДАТИ ДО АРХІВУ',   '+ AÑADIR AL ARCHIVO',   '+ ДОБАВИТЬ В АРХИВ',    '+ ZUM ARCHIV HINZUFÜGEN',  '+ DODAJ DO ARCHIWUM'],
 
   // Quotes & highlights
+  notes_title:       ['NOTES & JOURNAL',       'НОТАТКИ ТА ЩОДЕННИК',   'NOTAS Y DIARIO',       'ЗАМЕТКИ И ДНЕВНИК',    'NOTIZEN & TAGEBUCH',      'NOTATKI I DZIENNIK'],
+  notes_empty:       ['No notes yet.',         'Заметок ще немає.',    'Sin notas todavía.',  'Заметок ещё нет.',     'Noch keine Notizen.',     'Brak notatek.'],
+  notes_ph_text:     ['Add a thought, reflection, or journal entry...', 'Додайте думку чи запис у щоденник...', 'Añade un pensamiento o entrada de diario...', 'Добавьте мысль или запись в дневник...', 'Gedanken oder Tagebucheintrag hinzufügen...', 'Dodaj myśl lub wpis do dziennika...'],
+  notes_btn_add:     ['+ ADD NOTE',            '+ ДОДАТИ НОТАТКУ',      '+ AÑADIR NOTA',       '+ ДОБАВИТЬ ЗАМЕТКУ',   '+ NOTIZ HINZUFÜGEN',      '+ DODAJ NOTATKĘ'],
+
   quotes_title:      ['QUOTES & HIGHLIGHTS',   'ЦИТАТИ ТА ВИДІЛЕННЯ',   'CITAS Y DESTACADOS',   'ЦИТАТЫ И ВЫДЕЛЕНИЯ',   'ZITATE & MARKIERUNGEN',   'CYTATY I WYRÓŻNIENIA'],
   quotes_empty:      ['No quotes saved yet.',  'Цитат ще немає.',       'Sin citas guardadas.', 'Цитат ещё нет.',       'Noch keine Zitate.',      'Brak zapisanych cytatów.'],
   quotes_page_label: ['Page',                  'Ст.',                   'Pág.',                 'Стр.',                 'S.',                      'Str.'],

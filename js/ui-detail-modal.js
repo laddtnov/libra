@@ -3,6 +3,7 @@ import { playClickSound, toggleSound, showToast } from './ui-feedback.js';
 import { renderStarsHTML, renderBooks } from './ui-render.js';
 import { toggleBookInList, removeBookFromAllLists, renderListsPanel } from './ui-lists.js';
 import { renderQuotesSection, initQuotesSection } from './ui-quotes.js';
+import { renderNotesSection, initNotesSection } from './ui-notes.js';
 import { renderSessionsSection, initSessionsSection } from './ui-sessions.js';
 import { renderAvailabilitySection } from './ui-availability.js';
 import { trapFocus, focusFirst } from './ui-utils.js';
@@ -137,10 +138,6 @@ export function showBookDetails(bookId) {
     ? `<div class="detail-row"><span class="detail-key">&gt; TAGS</span><span class="detail-val">${tagChips}</span></div>`
     : '';
 
-  const notesHTML = book.notes?.length
-    ? book.notes.map((n, i) => `<div class="detail-note">${i + 1}. ${escHtml(n)}</div>`).join('')
-    : `<div class="detail-note muted">No notes added yet.</div>`;
-
   content.innerHTML = `
     <div class="detail-panel">
       <div class="detail-prompt">&gt; LIBRA // RECORD RETRIEVED</div>
@@ -172,10 +169,7 @@ export function showBookDetails(bookId) {
         <div class="detail-section-body">${escHtml(book.synopsis)}</div>
       </div>` : ''}
 
-      <div class="detail-section">
-        <div class="detail-section-title">&gt;&gt; NOTES</div>
-        <div class="detail-section-body">${notesHTML}</div>
-      </div>
+      ${renderNotesSection(bookId)}
 
       ${renderQuotesSection(bookId)}
 
@@ -203,6 +197,7 @@ export function showBookDetails(bookId) {
     confirmDelete(bookId);
   });
 
+  initNotesSection(bookId);
   initQuotesSection(bookId);
   initSessionsSection(bookId);
   renderDetailListsSection(bookId);
