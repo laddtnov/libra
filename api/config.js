@@ -12,6 +12,5 @@ export default function handler(req, res) {
   res.json({
     supabaseUrl:  process.env.SUPABASE_URL        || '',
     supabaseAnon: process.env.SUPABASE_ANON_KEY   || '',
-    vapidPublicKey: process.env.VAPID_PUBLIC_KEY  || '',
   });
 }

@@ -199,6 +199,8 @@ export const state = {
   editingBookId: null,
   soundEnabled: true,
   audioContext: null,
+  selectMode: false,
+  selectedIds: new Set(),
 };
 
 export function saveBooks() {

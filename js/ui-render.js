@@ -1,5 +1,6 @@
 import { state, clamp, toPositiveInt, toNonNegativeInt, escHtml } from './state.js';
 import { t } from './i18n.js';
+import { isSelectMode, isSelected, toggleBookSelection, renderBulkBar } from './ui-bulk.js';
 
 const GENRE_SVGS = {
   History: `<svg class="genre-svg" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -225,6 +226,7 @@ export function renderBooks() {
 
   const entries = getFilteredEntries();
   updateStats(state.activeFilter !== 'all' || state.searchQuery ? entries : undefined);
+  renderBulkBar();
 
   if (!entries.length) {
     grid.innerHTML = `
@@ -238,20 +240,42 @@ export function renderBooks() {
 
   const MAX_TILT = 8;
 
+  const selectMode = isSelectMode();
+
   entries.forEach(([id, book], i) => {
     const card = document.createElement('div');
     card.className = `book-card ${getStatusClass(book.status)} card-enter`;
+    if (selectMode) card.classList.add('selectable');
+    if (selectMode && isSelected(id)) card.classList.add('selected');
     card.dataset.bookId = id;
     card.style.animationDelay = `${i * 0.07}s`;
     card.innerHTML = buildCardHTML(book);
+
+    if (selectMode) {
+      const checkbox = document.createElement('div');
+      checkbox.className = 'card-select-checkbox';
+      checkbox.textContent = isSelected(id) ? '✓' : '';
+      card.appendChild(checkbox);
+    }
+
     card.setAttribute('role', 'button');
     card.setAttribute('tabindex', '0');
-    card.setAttribute('aria-label', `${book.title || 'Untitled'} by ${book.author || 'Unknown'} — ${t('open_details')}`);
-    card.addEventListener('click', () => onOpenDetails(id));
+    const cardTitle = book.title || 'Untitled';
+    let ariaLabel;
+    if (selectMode) {
+      const selectAction = isSelected(id) ? 'deselect' : 'select';
+      ariaLabel = `${cardTitle} — ${selectAction}`;
+    } else {
+      ariaLabel = `${cardTitle} by ${book.author || 'Unknown'} — ${t('open_details')}`;
+    }
+    card.setAttribute('aria-label', ariaLabel);
+
+    const activate = () => selectMode ? toggleBookSelection(id) : onOpenDetails(id);
+    card.addEventListener('click', activate);
     card.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        onOpenDetails(id);
+        activate();
       }
     });
 

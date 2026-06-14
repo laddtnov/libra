@@ -35,7 +35,6 @@ A personal reading tracker with a full cyberpunk neon UI — glitch title, statu
 - **Per-genre goals** — e.g. "Read 5 Fantasy books this year" with mini progress bars
 - **Reading streaks** — consecutive days with sessions logged; flame badge with hover animation
 - **Milestone toasts** — fire at 7, 14, 30, 60, 100-day streaks
-- **Web Push notifications** — daily reminder if no session logged (opt-in)
 
 ### Reading Timer & Sessions
 - **Reading timer** — start/pause/stop timer in session log; elapsed minutes saved with session
@@ -130,7 +129,6 @@ Then open `index.html` — no build step needed for the frontend.
 2. Run all migrations in order in the Supabase SQL Editor:
    - `db/002_user_books.sql`
    - `db/003_user_settings.sql`
-   - `db/004_push_subscriptions.sql`
 3. Fill in `js/config.js` with your project URL and anon key
 4. Click **[ SIGN IN ]** in the header → create an account or log in
 
@@ -164,9 +162,8 @@ Your key is stored only in localStorage and sent exclusively to `api.anthropic.c
 - **Open Library API** — book search, covers, metadata (no key required)
 - **Claude API** — AI recommendations (user-supplied key, optional)
 - **Resend** — transactional email (donation appreciation + password reset)
-- **web-push** — Web Push / VAPID notifications via Vercel serverless
 - **Service Worker** — PWA offline cache
-- **Vercel** — hosting + serverless functions + daily cron (streak reminders)
+- **Vercel** — hosting + serverless functions
 
 ---
 

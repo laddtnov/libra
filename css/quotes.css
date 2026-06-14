@@ -127,3 +127,98 @@
   border-color: #ffd700;
   text-shadow: 0 0 6px rgba(255, 215, 0, 0.4);
 }
+
+/* ====================================
+   NOTES & JOURNAL
+   ==================================== */
+
+.note-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  background: rgba(0, 242, 255, 0.04);
+  border: 1px solid rgba(0, 242, 255, 0.12);
+  border-left: 2px solid rgba(0, 242, 255, 0.45);
+  border-radius: 0 4px 4px 0;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+
+.note-text {
+  font-size: 12px;
+  color: var(--text-primary);
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.note-delete-btn {
+  background: transparent;
+  border: none;
+  color: #553333;
+  cursor: pointer;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  padding: 0 2px;
+  line-height: 1;
+  flex-shrink: 0;
+  transition: color 0.18s ease;
+}
+
+.note-delete-btn:hover { color: #ff4444; }
+
+.notes-empty {
+  font-size: 11px;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin-bottom: 8px;
+}
+
+.notes-add-form { margin-top: 10px; }
+
+.note-textarea {
+  width: 100%;
+  min-height: 56px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 242, 255, 0.2);
+  color: var(--text-primary);
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  padding: 8px;
+  resize: vertical;
+  box-sizing: border-box;
+  border-radius: 3px;
+  transition: border-color 0.2s ease;
+}
+
+.note-textarea:focus {
+  outline: none;
+  border-color: var(--neon-cyan);
+}
+
+.note-textarea.input-error {
+  border-color: #ff4444;
+  animation: shake 0.35s ease;
+}
+
+.note-add-btn {
+  margin-top: 6px;
+  width: 100%;
+  background: transparent;
+  border: 1px solid rgba(0, 242, 255, 0.3);
+  color: var(--neon-cyan);
+  font-family: 'Courier New', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.note-add-btn:hover {
+  background: rgba(0, 242, 255, 0.07);
+  border-color: var(--neon-cyan);
+  text-shadow: 0 0 6px rgba(0, 242, 255, 0.4);
+}

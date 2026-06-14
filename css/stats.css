@@ -250,37 +250,3 @@
   .stats-summary-grid { grid-template-columns: repeat(2, 1fr); }
   .stats-genre-row    { grid-template-columns: 90px 1fr 60px; }
 }
-
-/* ── AI Insights ──────────────────────────────────── */
-
-.insights-section {
-  margin-top: 28px;
-}
-
-.insights-btn {
-  margin-top: 14px;
-  color: #00f2ff;
-  border-color: rgba(0, 242, 255, 0.6);
-}
-
-.insights-btn:hover {
-  background: rgba(0, 242, 255, 0.1);
-  border-color: #00f2ff;
-  box-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
-}
-
-.insights-hint {
-  margin-top: 10px;
-}
-
-.insights-output {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.85rem;
-  color: #00f2ff;
-  line-height: 1.8;
-  margin-top: 16px;
-  padding: 14px 16px;
-  background: rgba(0, 0, 0, 0.2);
-  border-left: 2px solid rgba(0, 242, 255, 0.35);
-  border-radius: 0 4px 4px 0;
-}

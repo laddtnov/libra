@@ -1,5 +1,4 @@
 import { state } from './state.js';
-import { renderInsightsSection } from './ui-insights.js';
 import { trapFocus, focusFirst } from './ui-utils.js';
 
 let _releaseTrap = null;
@@ -192,7 +191,6 @@ export function openStatsPanel() {
   content.appendChild(buildBarChart('BOOKS FINISHED / MONTH', booksPerMonth(), 'books'));
   content.appendChild(buildGenreRatings());
   content.appendChild(buildTopCategories());
-  renderInsightsSection(content);
 
   panel.style.display   = 'flex';
   overlay.style.display = 'block';

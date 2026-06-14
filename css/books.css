@@ -164,6 +164,30 @@
   background: var(--dark-card-hover);
 }
 
+.book-card.selected {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 0 2px var(--neon-cyan), 0 0 20px rgba(0, 242, 255, 0.35);
+}
+
+.card-select-checkbox {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--neon-cyan);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--neon-cyan);
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1;
+  z-index: 2;
+}
+
 .book-card.read:hover {
   border-color: var(--neon-green);
   box-shadow:

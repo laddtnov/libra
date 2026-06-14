@@ -111,6 +111,92 @@
 }
 
 /* ====================================
+   BULK SELECTION
+   ==================================== */
+
+.select-mode-btn {
+  background: transparent;
+  border: 2px solid rgba(0, 242, 255, 0.25);
+  color: var(--text-secondary);
+  font-family: 'Orbitron', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.select-mode-btn:hover {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+}
+
+.select-mode-btn.active {
+  background: rgba(0, 242, 255, 0.1);
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  box-shadow: 0 0 12px rgba(0, 242, 255, 0.2);
+}
+
+.bulk-action-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: var(--dark-card);
+  border: 2px solid rgba(0, 242, 255, 0.25);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+}
+
+.bulk-count {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.7rem;
+  color: var(--neon-cyan);
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.bulk-tag-group {
+  display: flex;
+  gap: 6px;
+}
+
+.bulk-tag-input,
+.bulk-list-select {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(0, 242, 255, 0.25);
+  border-radius: 4px;
+  color: var(--text-primary);
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  padding: 6px 10px;
+  outline: none;
+}
+
+.bulk-tag-input:focus,
+.bulk-list-select:focus {
+  border-color: var(--neon-cyan);
+}
+
+.bulk-delete-confirm {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.bulk-delete-warn {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: #ff5555;
+}
+
+/* ====================================
    CARD ENTRANCE ANIMATION
    ==================================== */
 

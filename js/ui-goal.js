@@ -1,4 +1,5 @@
 import { state } from './state.js';
+import { renderReminders } from './ui-reminders.js';
 
 const YEAR     = new Date().getFullYear();
 const KEY      = `libra-goal-${YEAR}`;
@@ -47,6 +48,7 @@ export function renderGoal() {
   if (editBtn) editBtn.textContent = goal ? '[ EDIT ]' : '[ SET ]';
 
   renderGenreGoals();
+  renderReminders();
 }
 
 // ── Render genre goals ────────────────────────────────────────────────────────

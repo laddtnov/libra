@@ -133,6 +133,7 @@
           </div>
           <div class="goal-meta" id="goal-meta"></div>
           <div id="genre-goals-container"></div>
+          <div id="reading-reminders"></div>
         </div>
         <div class="streak-badge" id="streak-badge">
           <span class="streak-icon">🔥</span>
@@ -166,6 +167,7 @@
           <option value="added" data-i18n="sort_added">DATE ADDED</option>
         </select>
       </div>
+      <button class="select-mode-btn" id="select-mode-btn" data-i18n="btn_select">☑ SELECT</button>
       <button class="lists-btn" id="lists-btn">
         <svg class="btn-svg" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <circle cx="3.5" cy="5" r="1.2" fill="currentColor"/>
@@ -178,12 +180,11 @@
         <span data-i18n="btn_lists">LISTS</span>
       </button>
       <button class="stats-btn" id="stats-btn">📊 STATS</button>
-      <button class="wrapped-btn" id="wrapped-btn">🎁 WRAPPED</button>
       <button class="recs-btn" id="recommend-btn" data-i18n="btn_recommend">⚡ RECOMMEND</button>
-      <button class="scan-isbn-btn" id="scan-isbn-btn">⊞ SCAN ISBN</button>
       <button class="add-book-btn" id="add-book-btn" data-i18n="btn_add_book">&gt; ADD BOOK</button>
       <div class="backup-btns">
         <button class="backup-btn export-btn" id="export-btn" data-i18n="btn_export">↓ EXPORT</button>
+        <button class="backup-btn export-btn" id="export-csv-btn" data-i18n="btn_export_csv">↓ CSV</button>
         <label class="backup-btn import-btn" id="import-label">
           <span data-i18n="btn_import">↑ IMPORT</span>
           <input type="file" id="import-input" accept=".json" style="display:none">
@@ -196,6 +197,9 @@
       <button class="donate-btn" id="donate-btn">♥ SUPPORT</button>
       <div id="active-list-indicator" class="active-list-indicator" style="display:none"></div>
     </div>
+
+    <!-- Bulk Action Bar (shown in select mode) -->
+    <div id="bulk-action-bar" class="bulk-action-bar" style="display:none"></div>
 
     <!-- Web Discover Section (shown when search bar is active) -->
     <div id="discover-section" style="display:none"></div>
@@ -225,37 +229,6 @@
       <div class="scanlines" aria-hidden="true"></div>
       <button id="close-form-modal" class="close-btn" aria-label="Close form">✕</button>
       <div id="form-modal-content"></div>
-    </div>
-  </dialog>
-
-  <!-- Scanner Modal -->
-  <dialog id="scanner-modal" style="display:none" aria-labelledby="scanner-modal-title">
-    <div class="scanner-modal-container">
-      <div class="scanner-header">
-        <h2 class="scanner-title" id="scanner-modal-title">⊞ ISBN SCANNER</h2>
-        <button id="close-scanner-modal" class="close-btn" aria-label="Close scanner">✕</button>
-      </div>
-      <div class="scanner-viewfinder-wrap" id="scanner-viewfinder-wrap">
-        <video id="scanner-video" class="scanner-video" playsinline muted></video>
-        <div class="scanner-corners">
-          <span class="sc-corner tl"></span>
-          <span class="sc-corner tr"></span>
-          <span class="sc-corner bl"></span>
-          <span class="sc-corner br"></span>
-        </div>
-        <div class="scanner-line" id="scanner-line"></div>
-        <div class="scanner-status" id="scanner-status">▸ REQUESTING CAMERA...</div>
-      </div>
-      <div class="scanner-fallback">
-        <span class="scanner-fallback-label">ISBN:</span>
-        <input id="scanner-isbn-input" class="terminal-input scanner-isbn-input"
-               placeholder="9780000000000" maxlength="20" autocomplete="off" spellcheck="false" aria-label="ISBN number">
-        <button id="scanner-go-btn" class="terminal-action-btn scanner-go-btn">GO</button>
-      </div>
-      <div class="scanner-footer">
-        <span id="scanner-cam-label">INITIALISING</span>
-        <span>OPEN LIBRARY API</span>
-      </div>
     </div>
   </dialog>
 
@@ -299,20 +272,6 @@
     </div>
   </dialog>
 
-  <!-- Reading Wrapped Panel -->
-  <dialog id="wrapped-panel" style="display:none" aria-labelledby="wrapped-panel-title">
-    <div class="wrapped-container">
-      <div class="wrapped-header">
-        <h2 class="wrapped-title" id="wrapped-panel-title">&gt;_ READING WRAPPED</h2>
-        <div class="wrapped-actions">
-          <button id="wrapped-download-btn" class="wrapped-download-btn">[ ↓ SAVE PNG ]</button>
-          <button id="close-wrapped-panel" class="close-btn" aria-label="Close reading wrapped">✕</button>
-        </div>
-      </div>
-      <canvas id="wrapped-canvas"></canvas>
-    </div>
-  </dialog>
-
   <!-- Stats Panel -->
   <dialog id="stats-panel" style="display:none" aria-labelledby="stats-panel-title">
     <div class="stats-container">
@@ -348,8 +307,6 @@
     }
   </script>
   <script src="js/vendor/supabase.min.js"></script>
-  <!-- ZXing barcode scanner (ISBN support) — vendored from @zxing/browser@0.1.5 -->
-  <script src="js/vendor/zxing-browser.min.js"></script>
   <script type="module" src="js/app-ui.js"></script>
   <script>
     if ('serviceWorker' in navigator) {

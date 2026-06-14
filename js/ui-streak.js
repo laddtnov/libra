@@ -5,11 +5,11 @@ function getTodayStr() {
 }
 
 function load() {
-  try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch { return {}; }
+  try { return JSON.parse(localStorage.getItem(STREAK_STORAGE_KEY) || '{}'); } catch { return {}; }
 }
 
 function save(data) {
-  localStorage.setItem(KEY, JSON.stringify(data));
+  localStorage.setItem(STREAK_STORAGE_KEY, JSON.stringify(data));
 }
 
 export function recordSessionToday() {

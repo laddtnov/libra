@@ -5,15 +5,14 @@ import { renderBooks, setFilter, configureRenderHandlers, updateStats } from './
 import { openListsPanel, closeListsPanel, initListsPanel } from './ui-lists.js';
 import { openRecsPanel, closeRecsPanel, initRecsPanel } from './ui-recommendations.js';
 import { clearDiscover, debouncedFetch, closePreviewModal } from './ui-discover.js';
-import { exportBooks, importBooks } from './ui-backup.js';
+import { exportBooks, exportBooksCSV, importBooks } from './ui-backup.js';
 import { openDonatePanel, closeDonatePanel, initDonatePanel } from './ui-donate.js';
 import { initI18n, setLanguage, applyI18n } from './i18n.js';
 import { initGoal, renderGoal } from './ui-goal.js';
 import { initStreak } from './ui-streak.js';
 import { openStatsPanel, closeStatsPanel, initStatsPanel } from './ui-stats.js';
 import { importGoodreads } from './ui-goodreads.js';
-import { openWrappedPanel, closeWrappedPanel, initWrappedPanel } from './ui-wrapped.js';
-import { openScannerModal, closeScannerModal } from './ui-scanner.js';
+import { initBulk, updateSelectBtn } from './ui-bulk.js';
 
 configureRenderHandlers({ openDetails: showBookDetails });
 configureDetailHandlers({ openFormModal });
@@ -28,12 +27,9 @@ function initApp() {
   initGoal();
   initStreak();
   initStatsPanel();
-  initWrappedPanel();
   document.getElementById('stats-btn')?.addEventListener('click', openStatsPanel);
-  document.getElementById('wrapped-btn')?.addEventListener('click', openWrappedPanel);
 
   document.getElementById('add-book-btn').addEventListener('click', () => openFormModal());
-  document.getElementById('scan-isbn-btn').addEventListener('click', openScannerModal);
 
   document.querySelectorAll('.filter-btn').forEach(btn =>
     btn.addEventListener('click', () => setFilter(btn.dataset.filter))
@@ -78,29 +74,26 @@ function initApp() {
   document.getElementById('modal-overlay').addEventListener('click', () => {
     closeModal();
     closeFormModal();
-    closeScannerModal();
     closePreviewModal();
     closeListsPanel();
     closeRecsPanel();
     closeDonatePanel();
     closeStatsPanel();
-      closeWrappedPanel();
   });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       closeModal();
       closeFormModal();
-      closeScannerModal();
       closePreviewModal();
       closeListsPanel();
       closeRecsPanel();
       closeDonatePanel();
       closeStatsPanel();
-      closeWrappedPanel();
     }
   });
 
   document.getElementById('export-btn').addEventListener('click', exportBooks);
+  document.getElementById('export-csv-btn').addEventListener('click', exportBooksCSV);
   document.getElementById('import-input').addEventListener('change', e => {
     importBooks(e.target.files[0]);
     e.target.value = '';
@@ -122,6 +115,7 @@ function initApp() {
   initListsPanel();
   initRecsPanel();
   initDonatePanel();
+  initBulk();
 
   // Language switcher
   document.querySelectorAll('.lang-btn').forEach(btn => {
@@ -129,6 +123,7 @@ function initApp() {
       setLanguage(btn.dataset.lang);
       document.documentElement.lang = btn.dataset.lang;
       applyI18n();
+      updateSelectBtn();
       renderBooks();
     });
   });
