@@ -90,31 +90,3 @@ globalThis.addEventListener('fetch', event => {
     caches.match(event.request).then(cached => cached || fetch(event.request))
   );
 });
-
-// ── Push notifications ────────────────────────────────────────────────────────
-globalThis.addEventListener('push', event => {
-  let data = { title: '📖 Libra', body: 'Keep reading!', icon: '/assets/icons/icon.svg', url: '/' };
-  try { data = { ...data, ...event.data.json() }; } catch { /* use defaults */ }
-
-  event.waitUntil(
-    globalThis.registration.showNotification(data.title, {
-      body: data.body,
-      icon: data.icon,
-      badge: '/assets/icons/icon.svg',
-      tag: 'libra-streak',
-      renotify: true,
-      data: { url: data.url },
-    })
-  );
-});
-
-globalThis.addEventListener('notificationclick', event => {
-  event.notification.close();
-  const url = event.notification.data?.url ?? '/';
-  event.waitUntil(
-    globalThis.clients.matchAll({ type: 'window' }).then(list => {
-      const existing = list.find(c => c.url.includes(globalThis.location.origin));
-      return existing ? existing.focus() : globalThis.clients.openWindow(url);
-    })
-  );
-});

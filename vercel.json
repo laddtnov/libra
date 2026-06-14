@@ -22,11 +22,5 @@
         { "key": "Access-Control-Allow-Headers", "value": "Content-Type, x-claude-key" }
       ]
     }
-  ],
-  "crons": [
-    {
-      "path": "/api/cron/streak-reminder",
-      "schedule": "0 18 * * *"
-    }
   ]
 }
