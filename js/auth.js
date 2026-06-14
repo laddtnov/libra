@@ -57,36 +57,6 @@ export async function signOut() {
   currentUser = null;
 }
 
-// ── API-key encryption (AES-GCM, key derived from user id via HKDF) ──────────
-const _KEY_ALGO = { name: 'AES-GCM', length: 256 };
-
-async function _deriveEncKey(userId) {
-  const raw  = new TextEncoder().encode(userId);
-  const base = await crypto.subtle.importKey('raw', raw, 'HKDF', false, ['deriveKey']);
-  return crypto.subtle.deriveKey(
-    { name: 'HKDF', hash: 'SHA-256', salt: new Uint8Array(16), info: new TextEncoder().encode('libra-claude-key-v1') },
-    base, _KEY_ALGO, false, ['encrypt', 'decrypt']
-  );
-}
-
-async function _encryptKey(userId, plaintext) {
-  const key = await _deriveEncKey(userId);
-  const iv  = crypto.getRandomValues(new Uint8Array(12));
-  const ct  = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, new TextEncoder().encode(plaintext));
-  const b64 = buf => btoa(String.fromCodePoint(...new Uint8Array(buf)));
-  return `${b64(iv)}:${b64(ct)}`;
-}
-
-async function _decryptKey(userId, encrypted) {
-  try {
-    const [ivB64, ctB64] = encrypted.split(':');
-    const fb64 = s => Uint8Array.from(atob(s), c => c.codePointAt(0));
-    const key  = await _deriveEncKey(userId);
-    const dec  = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: fb64(ivB64) }, key, fb64(ctB64));
-    return new TextDecoder().decode(dec);
-  } catch { return null; }
-}
-
 // ── Cloud sync ────────────────────────────────────────────────────────────────
 export async function pushBooksToCloud(booksData) {
   if (!currentUser) return;
