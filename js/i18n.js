@@ -75,6 +75,13 @@ const T = {
   recs_no_completed:    ['> No completed books yet — showing popular genres.','> Прочитаних книг ще немає — показую популярні жанри.','> Sin libros completados — mostrando géneros populares.','> Прочитанных книг нет — показываю популярные жанры.','> Noch keine gelesenen Bücher — zeige beliebte Genres.','> Brak przeczytanych książek — pokazuję popularne gatunki.'],
   recs_add:             ['+ ADD',              '+ ДОДАТИ',           '+ AÑADIR',            '+ ДОБАВИТЬ',         '+ HINZUFÜGEN',             '+ DODAJ'],
 
+  // Reading reminders
+  reminders_title:      ['>> PICK UP WHERE YOU LEFT OFF', '>> ПОВЕРНІТЬСЯ ДО ЧИТАННЯ', '>> CONTINÚA TU LECTURA', '>> ВЕРНИТЕСЬ К ЧТЕНИЮ', '>> WEITERLESEN', '>> WRÓĆ DO CZYTANIA'],
+  reminders_last_read:  ['> Last read',        '> Останній раз читали', '> Última lectura', '> Последнее чтение', '> Zuletzt gelesen',        '> Ostatnio czytane'],
+  reminders_not_started:['> Not started yet',  '> Ще не почато',     '> Aún sin empezar',   '> Ещё не начато',    '> Noch nicht begonnen',    '> Jeszcze nie zaczęto'],
+  reminders_days_ago_sg:['day ago',            'день тому',          'día',                 'день назад',         'Tag her',                  'dzień temu'],
+  reminders_days_ago_pl:['days ago',           'днів тому',          'días',                'дней назад',         'Tagen her',                'dni temu'],
+
   // Lists panel
   lists_title:          ['>_ READING LISTS',   '>_ СПИСКИ ЧИТАННЯ',  '>_ LISTAS DE LECTURA','>_ СПИСКИ ЧТЕНИЯ',   '>_ LESELISTEN',            '>_ LISTY LEKTUR'],
   lists_create:         ['> CREATE',            '> СТВОРИТИ',         '> CREAR',             '> СОЗДАТЬ',          '> ERSTELLEN',              '> UTWÓRZ'],

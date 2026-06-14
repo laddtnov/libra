@@ -146,6 +146,57 @@
 }
 .genre-goal-del:hover { color: #ff5555; }
 
+/* ── Reading reminders ── */
+#reading-reminders:empty { display: none; }
+
+.reminders-title {
+  font-family: 'Orbitron', monospace;
+  font-size: 0.55rem;
+  color: rgba(0, 242, 255, 0.6);
+  letter-spacing: 1.5px;
+  margin-top: 8px;
+}
+
+.reminder-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(0, 242, 255, 0.08);
+  padding: 4px 0;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s ease;
+}
+
+.reminder-row:hover {
+  background: rgba(0, 242, 255, 0.05);
+}
+
+.reminder-row:last-child {
+  border-bottom: none;
+}
+
+.reminder-book {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.75);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reminder-meta {
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  color: rgba(0, 242, 255, 0.5);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
 /* ── Streak badge ── */
 .streak-badge {
   display: flex;

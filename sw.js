@@ -50,6 +50,7 @@ const ASSETS = [
   '/js/auth.js',
   '/js/ui-auth.js',
   '/js/ui-goal.js',
+  '/js/ui-reminders.js',
   '/js/ui-streak.js',
   '/js/ui-stats.js',
   '/js/ui-goodreads.js',

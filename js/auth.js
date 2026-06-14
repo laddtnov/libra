@@ -81,13 +81,9 @@ export async function pullBooksFromCloud() {
 // ── Settings sync ─────────────────────────────────────────────────────────────
 export async function pushSettingsToCloud(settings) {
   if (!currentUser) return;
-  const payload = { ...settings };
-  if (payload.claude_key) {
-    payload.claude_key = await _encryptKey(currentUser.id, payload.claude_key);
-  }
   await supabase.from('user_books').upsert({
     user_id:    currentUser.id,
-    settings:   payload,
+    settings:   settings,
     updated_at: new Date().toISOString(),
   }, { onConflict: 'user_id' });
 }
@@ -100,24 +96,18 @@ export async function pullSettingsFromCloud() {
     .eq('user_id', currentUser.id)
     .single();
   if (error || !data?.settings) return null;
-  const s = { ...data.settings };
-  if (s.claude_key) {
-    s.claude_key = await _decryptKey(currentUser.id, s.claude_key) ?? s.claude_key;
-  }
-  return s;
+  return data.settings;
 }
 
 export function buildSettings() {
   const year        = new Date().getFullYear();
   const goal        = localStorage.getItem(`libra-goal-${year}`);
   const genreGoals  = localStorage.getItem(`libra-genre-goals-${year}`);
-  const apiKey      = localStorage.getItem('libra-claude-key');
   const streak      = localStorage.getItem('libra-streak');
   const displayName = localStorage.getItem('libra-display-name');
   const settings    = {};
   if (goal)        settings[`goal_${year}`]        = goal;
   if (genreGoals)  settings[`genre_goals_${year}`] = genreGoals;
-  if (apiKey)      settings.claude_key              = apiKey;
   if (streak)      settings.streak                  = streak;
   if (displayName) settings.display_name            = displayName;
   return settings;
@@ -128,7 +118,6 @@ export function applySettings(settings) {
   const year = new Date().getFullYear();
   if (settings[`goal_${year}`])        localStorage.setItem(`libra-goal-${year}`,        settings[`goal_${year}`]);
   if (settings[`genre_goals_${year}`]) localStorage.setItem(`libra-genre-goals-${year}`, settings[`genre_goals_${year}`]);
-  if (settings.claude_key)             localStorage.setItem('libra-claude-key',           settings.claude_key);
   if (settings.streak)                 localStorage.setItem('libra-streak',               settings.streak);
   if (settings.display_name)           localStorage.setItem('libra-display-name',         settings.display_name);
 }
