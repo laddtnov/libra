@@ -52,9 +52,12 @@ export function renderReminders() {
 
     const meta = document.createElement('span');
     meta.className = 'reminder-meta';
-    meta.textContent = days === null
-      ? t('reminders_not_started')
-      : `${t('reminders_last_read')} ${days} ${days === 1 ? t('reminders_days_ago_sg') : t('reminders_days_ago_pl')}`;
+    if (days === null) {
+      meta.textContent = t('reminders_not_started');
+    } else {
+      const daysLabel = days === 1 ? t('reminders_days_ago_sg') : t('reminders_days_ago_pl');
+      meta.textContent = `${t('reminders_last_read')} ${days} ${daysLabel}`;
+    }
     row.appendChild(meta);
 
     container.appendChild(row);

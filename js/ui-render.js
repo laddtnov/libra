@@ -260,9 +260,15 @@ export function renderBooks() {
 
     card.setAttribute('role', 'button');
     card.setAttribute('tabindex', '0');
-    card.setAttribute('aria-label', selectMode
-      ? `${book.title || 'Untitled'} — ${isSelected(id) ? 'deselect' : 'select'}`
-      : `${book.title || 'Untitled'} by ${book.author || 'Unknown'} — ${t('open_details')}`);
+    const cardTitle = book.title || 'Untitled';
+    let ariaLabel;
+    if (selectMode) {
+      const selectAction = isSelected(id) ? 'deselect' : 'select';
+      ariaLabel = `${cardTitle} — ${selectAction}`;
+    } else {
+      ariaLabel = `${cardTitle} by ${book.author || 'Unknown'} — ${t('open_details')}`;
+    }
+    card.setAttribute('aria-label', ariaLabel);
 
     const activate = () => selectMode ? toggleBookSelection(id) : onOpenDetails(id);
     card.addEventListener('click', activate);
