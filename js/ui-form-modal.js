@@ -241,28 +241,6 @@ function buildFormHtml(book, isEdit, rv) {
     </div>`;
 }
 
-function applyPrefill(prefill) {
-  if (prefill.title)    document.getElementById('f-title').value    = prefill.title;
-  if (prefill.author)   document.getElementById('f-author').value   = prefill.author;
-  if (prefill.pages)    document.getElementById('f-pages').value    = prefill.pages;
-  if (prefill.synopsis) document.getElementById('f-synopsis').value = prefill.synopsis;
-  if (prefill.coverId) {
-    let coverInput = document.getElementById('f-cover-id');
-    if (!coverInput) {
-      coverInput = document.createElement('input');
-      coverInput.type = 'hidden';
-      coverInput.id = 'f-cover-id';
-      document.getElementById('form-modal-content').appendChild(coverInput);
-    }
-    coverInput.value = prefill.coverId;
-  }
-  if (prefill.category) {
-    const sel = document.getElementById('f-category');
-    const match = [...sel.options].find(o => o.value === prefill.category);
-    if (match) sel.value = prefill.category;
-  }
-}
-
 function initTagChips() {
   const tagsWrap   = document.getElementById('tags-wrap');
   const tagsHidden = document.getElementById('f-tags');
@@ -349,7 +327,7 @@ function initSearchWiring() {
 
 // ── Public API ─────────────────────────────────────────────────────────────
 
-export function openFormModal(bookId = null, prefill = null) {
+export function openFormModal(bookId = null) {
   state.editingBookId = bookId;
   const book   = bookId ? state.booksData[bookId] : null;
   const isEdit = !!book;
@@ -362,8 +340,6 @@ export function openFormModal(bookId = null, prefill = null) {
   overlay.style.display   = 'block';
 
   content.innerHTML = buildFormHtml(book, isEdit, book?.rating || 0);
-
-  if (!bookId && prefill) applyPrefill(prefill);
 
   initTagChips();
   initStarPicker();

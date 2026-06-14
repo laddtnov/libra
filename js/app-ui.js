@@ -12,8 +12,6 @@ import { initGoal, renderGoal } from './ui-goal.js';
 import { initStreak } from './ui-streak.js';
 import { openStatsPanel, closeStatsPanel, initStatsPanel } from './ui-stats.js';
 import { importGoodreads } from './ui-goodreads.js';
-import { openWrappedPanel, closeWrappedPanel, initWrappedPanel } from './ui-wrapped.js';
-import { openScannerModal, closeScannerModal } from './ui-scanner.js';
 
 configureRenderHandlers({ openDetails: showBookDetails });
 configureDetailHandlers({ openFormModal });
@@ -28,12 +26,9 @@ function initApp() {
   initGoal();
   initStreak();
   initStatsPanel();
-  initWrappedPanel();
   document.getElementById('stats-btn')?.addEventListener('click', openStatsPanel);
-  document.getElementById('wrapped-btn')?.addEventListener('click', openWrappedPanel);
 
   document.getElementById('add-book-btn').addEventListener('click', () => openFormModal());
-  document.getElementById('scan-isbn-btn').addEventListener('click', openScannerModal);
 
   document.querySelectorAll('.filter-btn').forEach(btn =>
     btn.addEventListener('click', () => setFilter(btn.dataset.filter))
@@ -78,25 +73,21 @@ function initApp() {
   document.getElementById('modal-overlay').addEventListener('click', () => {
     closeModal();
     closeFormModal();
-    closeScannerModal();
     closePreviewModal();
     closeListsPanel();
     closeRecsPanel();
     closeDonatePanel();
     closeStatsPanel();
-      closeWrappedPanel();
   });
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       closeModal();
       closeFormModal();
-      closeScannerModal();
       closePreviewModal();
       closeListsPanel();
       closeRecsPanel();
       closeDonatePanel();
       closeStatsPanel();
-      closeWrappedPanel();
     }
   });
 
