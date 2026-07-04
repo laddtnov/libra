@@ -222,6 +222,56 @@
   background: rgba(99,188,80,0.08);
 }
 
+/* ── Open Library search (Add Book form) ── */
+[data-theme="light"] .book-search-section .terminal-input {
+  border-color: #0369a1;
+}
+[data-theme="light"] .book-search-section .terminal-input:focus {
+  border-color: #0284c7;
+  box-shadow: 0 0 10px rgba(3, 105, 161, 0.2);
+}
+[data-theme="light"] .search-status {
+  color: #0369a1;
+}
+[data-theme="light"] .api-search-results {
+  background: #ffffff;
+  border-color: #d1d5db;
+  scrollbar-color: #0369a1 #f0f0f0;
+}
+[data-theme="light"] .search-result-item {
+  border-bottom-color: #f3f4f6;
+}
+[data-theme="light"] .search-result-item:hover {
+  background: rgba(3, 105, 161, 0.05);
+}
+[data-theme="light"] .sr-cover {
+  border-color: #d1d5db;
+}
+[data-theme="light"] .sr-cover-placeholder {
+  background: #e8f4fd;
+  border-color: #bfdbfe;
+  color: #0369a1;
+}
+[data-theme="light"] .sr-title  { color: #1a1a2e; }
+[data-theme="light"] .sr-meta   { color: #4b5563; }
+[data-theme="light"] .form-or-divider,
+[data-theme="light"] .form-divider-line { color: #9ca3af; }
+[data-theme="light"] .field-filled {
+  border-color: #0369a1 !important;
+  box-shadow: 0 0 10px rgba(3, 105, 161, 0.2) !important;
+  background: rgba(3, 105, 161, 0.04) !important;
+}
+
+/* ── Discover preview panel ── */
+[data-theme="light"] .discover-preview-container {
+  background: linear-gradient(145deg, #ffffff 0%, #f0f6ff 60%, #eef2ff 100%);
+  border-color: rgba(0, 242, 255, 0.3);
+  box-shadow:
+    0 0 0 1px rgba(0, 242, 255, 0.08),
+    0 0 40px rgba(0, 242, 255, 0.08),
+    0 20px 60px rgba(15, 30, 60, 0.12);
+}
+
 /* ── Auth badge & logout button (toolbar) ── */
 [data-theme="light"] #auth-badge {
   background: #ffffff;
