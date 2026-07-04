@@ -231,7 +231,7 @@
 [data-theme="light"] #auth-badge[data-state="signed-in"] {
   background: #f0fdf4;
   border-color: rgba(5, 150, 105, 0.4);
-  color: #059669;
+  color: #065f46;
 }
 [data-theme="light"] #auth-badge:hover {
   background: #fef3c7;
