@@ -311,3 +311,140 @@
     rgba(0, 100, 180, 0.04) 100%
   );
 }
+
+/* ── Book detail modal: ID-specificity fix ── */
+/* detail-modal.css uses #book-modal .modal-container (1,1,0) which beats
+   [data-theme="light"] .modal-container (0,2,0) — must match the ID */
+[data-theme="light"] #book-modal .modal-container {
+  background: #ffffff;
+  border-color: var(--neon-cyan);
+  color: #1a1a2e;
+  box-shadow:
+    0 0 30px rgba(0, 242, 255, 0.2),
+    0 0 60px rgba(0, 242, 255, 0.06);
+}
+[data-theme="light"] #book-modal .modal-container::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-color: #ddd;
+}
+[data-theme="light"] .scanlines {
+  opacity: 0;
+}
+
+/* ── Stats panel ── */
+[data-theme="light"] .stats-container {
+  background: linear-gradient(135deg, #ffffff 0%, #fefce8 100%);
+  border-color: rgba(245, 158, 11, 0.4);
+  box-shadow:
+    0 0 40px rgba(245, 158, 11, 0.1),
+    0 0 80px rgba(245, 158, 11, 0.04),
+    inset 0 1px 0 rgba(245, 158, 11, 0.08);
+}
+[data-theme="light"] .stats-summary-card {
+  background: #fafaf8;
+  border-color: rgba(245, 158, 11, 0.2);
+}
+[data-theme="light"] .stats-summary-card:hover {
+  background: #fefce8;
+  border-color: rgba(245, 158, 11, 0.4);
+}
+[data-theme="light"] .stats-genre-bar-wrap {
+  background: #e5e7eb;
+}
+
+/* ── Lists panel ── */
+[data-theme="light"] .lists-panel-container {
+  background: linear-gradient(135deg, #ffffff 0%, #f5f0ff 100%);
+  border-color: rgba(157, 0, 255, 0.4);
+  box-shadow:
+    0 0 40px rgba(157, 0, 255, 0.1),
+    0 0 80px rgba(157, 0, 255, 0.04),
+    inset 0 1px 0 rgba(157, 0, 255, 0.08);
+}
+[data-theme="light"] .new-list-input {
+  background: #f9f5ff;
+  color: #1a1a2e;
+}
+
+/* ── Recommendations panel ── */
+[data-theme="light"] .recs-container {
+  background: linear-gradient(135deg, #ffffff 0%, #fefce8 100%);
+  border-color: rgba(245, 158, 11, 0.4);
+  box-shadow:
+    0 0 40px rgba(245, 158, 11, 0.1),
+    0 0 80px rgba(245, 158, 11, 0.04),
+    inset 0 1px 0 rgba(245, 158, 11, 0.08);
+}
+
+/* ── Streak badge ── */
+[data-theme="light"] .streak-badge {
+  background: #fefce8;
+  border-color: rgba(245, 158, 11, 0.3);
+}
+[data-theme="light"] .streak-badge[data-active="true"] {
+  background: #fff7ed;
+  border-color: rgba(255, 100, 0, 0.5);
+  box-shadow: 0 0 14px rgba(255, 100, 0, 0.1);
+}
+[data-theme="light"] .streak-label {
+  color: rgba(30, 30, 60, 0.55);
+}
+
+/* ── Goal section ── */
+[data-theme="light"] .goal-meta {
+  color: #92400e;
+}
+[data-theme="light"] .goal-inline-input {
+  background: #f9f9fb;
+  color: #1a1a2e;
+}
+[data-theme="light"] .goal-inline-save {
+  color: #065f46;
+  border-color: rgba(5, 150, 105, 0.4);
+}
+[data-theme="light"] .goal-inline-save:hover {
+  background: rgba(5, 150, 105, 0.08);
+  border-color: #059669;
+}
+[data-theme="light"] .goal-inline-cancel:hover {
+  background: #fee2e2;
+}
+[data-theme="light"] .reminders-title {
+  color: #0369a1;
+}
+[data-theme="light"] .reminder-book {
+  color: #1a1a2e;
+}
+[data-theme="light"] .reminder-meta {
+  color: #0369a1;
+}
+
+/* ── Reading sessions (in detail modal) ── */
+[data-theme="light"] .session-date-input,
+[data-theme="light"] .session-pages-input {
+  background: #f8f9fb;
+  border-color: rgba(5, 150, 105, 0.3);
+  color: #1a1a2e;
+}
+[data-theme="light"] .session-date        { color: #047857; }
+[data-theme="light"] .session-pages       { color: #065f46; text-shadow: none; }
+[data-theme="light"] .sessions-total      { color: #047857; text-shadow: none; }
+[data-theme="light"] .sessions-empty      { color: #6b7280; }
+[data-theme="light"] .session-add-btn {
+  border-color: rgba(5, 150, 105, 0.4);
+  color: #047857;
+}
+[data-theme="light"] .session-add-btn:hover {
+  background: rgba(5, 150, 105, 0.07);
+  border-color: #059669;
+  text-shadow: none;
+}
+[data-theme="light"] .timer-display       { color: #047857; text-shadow: none; }
+[data-theme="light"] .timer-hint          { color: #0369a1; }
+[data-theme="light"] .timer-btn--start {
+  border-color: rgba(5, 150, 105, 0.5);
+  color: #065f46;
+}
+[data-theme="light"] .timer-btn--reset:hover {
+  background: #fee2e2;
+}
