@@ -120,7 +120,7 @@
 [data-theme="light"] .detail-lists-empty { color: #6b7280; }
 [data-theme="light"] .detail-list-toggle {
   background: rgba(0,242,255,0.06);
-  color: #0369a1;
+  color: #1e4d7b;
   border-color: rgba(0,242,255,0.25);
 }
 [data-theme="light"] .detail-list-toggle.in-list {
@@ -132,13 +132,24 @@
 [data-theme="light"] .pace-val   { color: #0369a1; }
 [data-theme="light"] .pace-sub   { color: #6b7280; }
 
-/* ── Modal actions ── */
+/* ── Modal actions — override hardcoded #00ff00 greens ── */
 [data-theme="light"] .terminal-action-btn {
   color: var(--neon-cyan);
   border-color: rgba(0,242,255,0.4);
 }
 [data-theme="light"] .terminal-action-btn:hover {
   background: rgba(0,242,255,0.08);
+}
+[data-theme="light"] .terminal-action-btn.edit-btn,
+[data-theme="light"] .terminal-action-btn.save-btn {
+  color: var(--neon-cyan);
+  border-color: rgba(0,242,255,0.5);
+}
+[data-theme="light"] .terminal-action-btn.edit-btn:hover,
+[data-theme="light"] .terminal-action-btn.save-btn:hover {
+  background: var(--neon-cyan);
+  color: #000;
+  box-shadow: 0 0 15px var(--neon-cyan);
 }
 [data-theme="light"] .terminal-action-btn.delete-btn {
   color: #ef4444;
@@ -147,4 +158,65 @@
 [data-theme="light"] .terminal-action-btn.cancel-btn {
   color: #6b7280;
   border-color: rgba(107,114,128,0.4);
+}
+[data-theme="light"] .terminal-action-btn.cancel-btn:hover {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  background: transparent;
+}
+
+/* ── Book card — stars, progress track, checkbox, cover ── */
+[data-theme="light"] .star            { color: rgba(0,0,0,0.12); }
+[data-theme="light"] .progress-bar    { background: rgba(0,0,0,0.1); }
+[data-theme="light"] .card-select-checkbox {
+  background: rgba(255,255,255,0.85);
+}
+[data-theme="light"] .card-cover {
+  filter: brightness(1) contrast(1.05) saturate(1);
+}
+[data-theme="light"] .book-card:hover .card-cover {
+  filter: brightness(1.05) contrast(1.05) saturate(1.1);
+}
+
+/* ── Genre / category tags on cards ── */
+[data-theme="light"] .tag {
+  background: rgba(0,0,0,0.04);
+  border-color: rgba(0,0,0,0.12);
+}
+
+/* ── Custom tags (user-created) ── */
+[data-theme="light"] .tag-custom {
+  background: rgba(0,242,255,0.08);
+  border-color: rgba(0,242,255,0.35);
+  color: #1e4d7b;
+}
+
+/* ── Tag input (form modal) ── */
+[data-theme="light"] .tags-input-wrap {
+  background: rgba(0,100,180,0.04);
+  border-color: rgba(0,100,180,0.2);
+}
+[data-theme="light"] .tag-chip {
+  background: rgba(0,242,255,0.1);
+  border-color: rgba(0,242,255,0.4);
+  color: #1e4d7b;
+}
+[data-theme="light"] .tag-text-input {
+  color: #1a1a2e;
+}
+[data-theme="light"] .tag-text-input::placeholder {
+  color: rgba(0,100,180,0.4);
+}
+
+/* ── Bulk action bar inputs ── */
+[data-theme="light"] .bulk-tag-input,
+[data-theme="light"] .bulk-list-select {
+  background: #f8f9fb;
+  border-color: rgba(0,100,180,0.2);
+  color: #1a1a2e;
+}
+
+/* ── Goodreads import button hover ── */
+[data-theme="light"] .goodreads-btn:hover {
+  background: rgba(99,188,80,0.08);
 }
