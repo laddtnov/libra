@@ -17,7 +17,27 @@ import { initBulk, updateSelectBtn } from './ui-bulk.js';
 configureRenderHandlers({ openDetails: showBookDetails });
 configureDetailHandlers({ openFormModal });
 
+function initTheme() {
+  const saved = localStorage.getItem('cyberpunk-theme') || 'dark';
+  applyTheme(saved);
+}
+
+function applyTheme(theme) {
+  document.documentElement.dataset.theme = theme;
+  localStorage.setItem('cyberpunk-theme', theme);
+  const btn = document.getElementById('theme-toggle-btn');
+  if (btn) btn.textContent = theme === 'light' ? '🌙' : '☀';
+}
+
+function toggleTheme() {
+  const current = document.documentElement.dataset.theme || 'dark';
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+}
+
 function initApp() {
+  initTheme();
+  document.getElementById('theme-toggle-btn')?.addEventListener('click', toggleTheme);
+
   initI18n();
   document.documentElement.lang = localStorage.getItem('cyberpunk-lang') || 'en';
   applyI18n();

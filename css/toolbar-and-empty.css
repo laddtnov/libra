@@ -243,3 +243,23 @@
   font-size: 0.9rem;
 }
 
+/* ── Theme toggle ── */
+.theme-toggle-btn {
+  background: transparent;
+  border: 1px solid rgba(0, 242, 255, 0.35);
+  color: var(--neon-cyan);
+  font-size: 1rem;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.theme-toggle-btn:hover {
+  background: rgba(0, 242, 255, 0.08);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 14px rgba(0, 242, 255, 0.25);
+}
+
