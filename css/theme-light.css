@@ -120,7 +120,7 @@
 [data-theme="light"] .detail-lists-empty { color: #6b7280; }
 [data-theme="light"] .detail-list-toggle {
   background: rgba(0,242,255,0.06);
-  color: #0369a1;
+  color: #1e4d7b;
   border-color: rgba(0,242,255,0.25);
 }
 [data-theme="light"] .detail-list-toggle.in-list {
@@ -188,7 +188,7 @@
 [data-theme="light"] .tag-custom {
   background: rgba(0,242,255,0.08);
   border-color: rgba(0,242,255,0.35);
-  color: #0369a1;
+  color: #1e4d7b;
 }
 
 /* ── Tag input (form modal) ── */
@@ -199,7 +199,7 @@
 [data-theme="light"] .tag-chip {
   background: rgba(0,242,255,0.1);
   border-color: rgba(0,242,255,0.4);
-  color: #0369a1;
+  color: #1e4d7b;
 }
 [data-theme="light"] .tag-text-input {
   color: #1a1a2e;
