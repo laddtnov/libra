@@ -66,6 +66,14 @@ dialog {
   --text-secondary: #9ca3af;
 }
 
+[data-theme="light"] {
+  --dark-bg: #f5f7fa;
+  --dark-card: #ffffff;
+  --dark-card-hover: #f0f2f8;
+  --text-primary: #1a1a2e;
+  --text-secondary: #4b5563;
+}
+
 body {
   font-family: 'Rajdhani', sans-serif;
   background: linear-gradient(135deg, #0a0a0c 0%, #1a1a2e 100%);

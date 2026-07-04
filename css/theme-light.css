@@ -1,0 +1,150 @@
+/* ====================================
+   LIGHT THEME OVERRIDES
+   Applied when <html data-theme="light">
+   All hardcoded dark hex values that CSS
+   variables can't reach are fixed here.
+   ==================================== */
+
+/* ── Body & background ── */
+[data-theme="light"] body {
+  background: linear-gradient(135deg, #f5f7fa 0%, #eef0f7 100%);
+}
+
+[data-theme="light"] .cyber-grid {
+  background-image:
+    linear-gradient(rgba(0, 100, 180, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 100, 180, 0.05) 1px, transparent 1px);
+}
+
+/* ── h1 glow — tone down on light bg ── */
+[data-theme="light"] h1 {
+  text-shadow:
+    0 0 8px rgba(0, 242, 255, 0.5),
+    0 0 16px rgba(0, 242, 255, 0.25);
+}
+
+/* ── Modal overlay ── */
+[data-theme="light"] #modal-overlay {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+/* ── Terminal detail modal ── */
+[data-theme="light"] .modal-container {
+  background: #ffffff;
+  border-color: var(--neon-cyan);
+  color: #1a1a2e;
+  box-shadow:
+    0 0 20px rgba(0, 242, 255, 0.25),
+    0 0 40px rgba(0, 242, 255, 0.08),
+    inset 0 0 50px rgba(0, 242, 255, 0.02);
+}
+[data-theme="light"] .modal-container::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-color: #ddd;
+}
+[data-theme="light"] .modal-container::-webkit-scrollbar-thumb {
+  background: var(--neon-cyan);
+  border-color: #f0f0f0;
+}
+[data-theme="light"] .modal-container::-webkit-scrollbar-thumb:hover {
+  background: #00d8e8;
+}
+
+/* ── Detail panel (terminal green → readable dark) ── */
+[data-theme="light"] .detail-panel            { color: #1a1a2e; }
+[data-theme="light"] .detail-prompt           { color: #0369a1; text-shadow: none; }
+[data-theme="light"] .detail-divider          { color: #cbd5e1; }
+[data-theme="light"] .detail-cover            { border-color: var(--neon-cyan); box-shadow: 0 0 10px rgba(0,242,255,0.15); }
+[data-theme="light"] .detail-cover-placeholder { background: #e8f4fd; border-color: var(--neon-cyan); color: #0369a1; }
+[data-theme="light"] .detail-title            { color: #1a1a2e; text-shadow: none; }
+[data-theme="light"] .detail-subtitle         { color: #374151; }
+[data-theme="light"] .detail-author           { color: #4b5563; }
+[data-theme="light"] .detail-row              { border-bottom-color: #e5e7eb; }
+[data-theme="light"] .detail-key              { color: #0369a1; }
+[data-theme="light"] .detail-val              { color: #1a1a2e; text-shadow: none; }
+[data-theme="light"] .detail-section-title    { color: #0369a1; }
+[data-theme="light"] .detail-section-body     { color: #374151; }
+[data-theme="light"] .detail-tag              { background: rgba(0,242,255,0.1); color: #0369a1; border-color: rgba(0,242,255,0.3); }
+
+/* ── Form modal ── */
+[data-theme="light"] .form-modal-container {
+  background: linear-gradient(160deg, #fafbff 0%, #f0f2fa 100%);
+}
+[data-theme="light"] .form-modal-container::-webkit-scrollbar-track {
+  background: #f0f2fa;
+}
+[data-theme="light"] .terminal-input,
+[data-theme="light"] .terminal-select,
+[data-theme="light"] .terminal-textarea {
+  background: rgba(0, 100, 180, 0.04);
+  color: #1a1a2e;
+  border-color: rgba(0, 100, 180, 0.2);
+}
+[data-theme="light"] .terminal-input::placeholder,
+[data-theme="light"] .terminal-textarea::placeholder { color: #9ca3af; }
+
+/* ── Quotes ── */
+[data-theme="light"] .quote-card {
+  background: rgba(245, 158, 11, 0.06);
+  border-color: rgba(245, 158, 11, 0.18);
+  border-left-color: rgba(245, 158, 11, 0.5);
+}
+[data-theme="light"] .quote-text    { color: #92400e; text-shadow: none; }
+[data-theme="light"] .quote-page    { color: #059669; }
+[data-theme="light"] .quotes-empty  { color: #6b7280; }
+[data-theme="light"] .quote-textarea,
+[data-theme="light"] .quote-page-input {
+  background: #f8f9fb;
+  border-color: #d1d5db;
+  color: #1a1a2e;
+}
+[data-theme="light"] .quote-textarea:focus,
+[data-theme="light"] .quote-page-input:focus { border-color: rgba(255, 215, 0, 0.6); }
+
+/* ── Notes ── */
+[data-theme="light"] .note-card {
+  background: rgba(0, 242, 255, 0.05);
+  border-color: rgba(0, 242, 255, 0.18);
+  border-left-color: rgba(0, 242, 255, 0.5);
+}
+[data-theme="light"] .note-text    { color: #1a1a2e; }
+[data-theme="light"] .notes-empty  { color: #6b7280; }
+[data-theme="light"] .note-textarea {
+  background: #f8f9fb;
+  border-color: #d1d5db;
+  color: #1a1a2e;
+}
+[data-theme="light"] .note-textarea:focus { border-color: var(--neon-cyan); }
+
+/* ── Reading lists / availability panels (terminal green areas) ── */
+[data-theme="light"] .detail-lists-empty { color: #6b7280; }
+[data-theme="light"] .detail-list-toggle {
+  background: rgba(0,242,255,0.06);
+  color: #0369a1;
+  border-color: rgba(0,242,255,0.25);
+}
+[data-theme="light"] .detail-list-toggle.in-list {
+  background: rgba(0,242,255,0.15);
+  border-color: var(--neon-cyan);
+}
+
+/* ── Pace / finish estimate ── */
+[data-theme="light"] .pace-val   { color: #0369a1; }
+[data-theme="light"] .pace-sub   { color: #6b7280; }
+
+/* ── Modal actions ── */
+[data-theme="light"] .terminal-action-btn {
+  color: var(--neon-cyan);
+  border-color: rgba(0,242,255,0.4);
+}
+[data-theme="light"] .terminal-action-btn:hover {
+  background: rgba(0,242,255,0.08);
+}
+[data-theme="light"] .terminal-action-btn.delete-btn {
+  color: #ef4444;
+  border-color: rgba(239,68,68,0.4);
+}
+[data-theme="light"] .terminal-action-btn.cancel-btn {
+  color: #6b7280;
+  border-color: rgba(107,114,128,0.4);
+}
