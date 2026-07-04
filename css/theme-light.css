@@ -25,7 +25,7 @@
 
 /* ── Modal overlay ── */
 [data-theme="light"] #modal-overlay {
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(15, 30, 60, 0.45);
 }
 
 /* ── Terminal detail modal ── */
@@ -37,6 +37,7 @@
     0 0 20px rgba(0, 242, 255, 0.25),
     0 0 40px rgba(0, 242, 255, 0.08),
     inset 0 0 50px rgba(0, 242, 255, 0.02);
+  animation: none;
 }
 [data-theme="light"] .modal-container::-webkit-scrollbar-track {
   background: #f0f0f0;
@@ -225,7 +226,7 @@
 [data-theme="light"] #auth-badge {
   background: #ffffff;
   border-color: rgba(245, 158, 11, 0.4);
-  color: rgba(180, 120, 0, 0.85);
+  color: #b45309;
 }
 [data-theme="light"] #auth-badge[data-state="signed-in"] {
   background: #f0fdf4;
@@ -244,8 +245,8 @@
 }
 [data-theme="light"] .logout-btn:hover {
   background: #fee2e2;
-  border-color: #ef4444;
-  color: #ef4444;
+  border-color: #b91c1c;
+  color: #b91c1c;
 }
 
 /* ── Auth dialog (overlay panel) ── */
@@ -297,22 +298,16 @@
 }
 [data-theme="light"] .lang-btn.active {
   color: #0369a1;
-  background: rgba(0, 100, 180, 0.08);
+  background: #e8f2fc;
   border-color: rgba(0, 100, 180, 0.55);
   text-shadow: none;
 }
 
-/* ── Modal: kill terminal flicker + lighten CRT vignette ── */
-[data-theme="light"] .modal-container {
-  animation: none !important;
-}
+/* ── Modal: lighten CRT vignette ── */
 [data-theme="light"] .modal-container::before {
   background: radial-gradient(
     ellipse at center,
     transparent 0%,
     rgba(0, 100, 180, 0.04) 100%
   );
-}
-[data-theme="light"] #modal-overlay {
-  background: rgba(15, 30, 60, 0.45);
 }
