@@ -419,6 +419,53 @@
   color: #0369a1;
 }
 
+/* ── Availability / Where to find tabs ── */
+[data-theme="light"] .avail-free {
+  background: #f0fdf4;
+  border-color: rgba(5, 150, 105, 0.3);
+  color: #065f46;
+}
+[data-theme="light"] .avail-free:hover {
+  background: #dcfce7;
+  border-color: rgba(5, 150, 105, 0.6);
+  box-shadow: 0 0 12px rgba(5, 150, 105, 0.15);
+}
+[data-theme="light"] .avail-free .avail-tag {
+  color: rgba(6, 95, 70, 0.65);
+}
+
+[data-theme="light"] .avail-cheap {
+  background: #fefce8;
+  border-color: rgba(180, 83, 9, 0.3);
+  color: #92400e;
+}
+[data-theme="light"] .avail-cheap:hover {
+  background: #fef9c3;
+  border-color: rgba(180, 83, 9, 0.6);
+  box-shadow: 0 0 12px rgba(180, 83, 9, 0.12);
+}
+[data-theme="light"] .avail-cheap .avail-tag {
+  color: rgba(146, 64, 14, 0.65);
+}
+
+[data-theme="light"] .avail-store {
+  background: #e0f7fa;
+  border-color: rgba(3, 105, 161, 0.3);
+  color: #0369a1;
+}
+[data-theme="light"] .avail-store:hover {
+  background: #cff3fb;
+  border-color: rgba(3, 105, 161, 0.6);
+  box-shadow: 0 0 12px rgba(3, 105, 161, 0.15);
+}
+[data-theme="light"] .avail-store .avail-tag {
+  color: rgba(3, 105, 161, 0.65);
+}
+
+[data-theme="light"] .avail-note {
+  color: rgba(30, 30, 60, 0.4);
+}
+
 /* ── Reading sessions (in detail modal) ── */
 [data-theme="light"] .session-date-input,
 [data-theme="light"] .session-pages-input {
