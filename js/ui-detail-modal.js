@@ -111,9 +111,11 @@ export function showBookDetails(bookId) {
   const safeCompleted = escHtml(book.completed || '—');
   const safeRating = clamp(toNonNegativeInt(book.rating, 0), 0, 5);
 
+  const firstLetter = escHtml((book.title || '?').charAt(0).toUpperCase());
   const coverHTML = safeCoverId
-    ? `<img class="detail-cover" src="https://covers.openlibrary.org/b/id/${safeCoverId}-M.jpg" alt="cover" loading="lazy">`
-    : `<div class="detail-cover-placeholder">${escHtml((book.title || '?').charAt(0).toUpperCase())}</div>`;
+    ? `<img class="detail-cover" src="https://covers.openlibrary.org/b/id/${safeCoverId}-M.jpg" alt="cover" loading="lazy" onerror="this.replaceWith(this.nextElementSibling)">
+       <div class="detail-cover-placeholder" hidden>${firstLetter}</div>`
+    : `<div class="detail-cover-placeholder">${firstLetter}</div>`;
 
   const pace = book.status === 'reading'
     ? calcPace(book.sessions, safePages, safeCurrentPage) : null;

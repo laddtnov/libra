@@ -155,7 +155,7 @@ function buildCardHTML(book) {
   }
 
   const coverHTML = book.coverId
-    ? `<img class="card-cover" src="https://covers.openlibrary.org/b/id/${book.coverId}-S.jpg" alt="" loading="lazy">`
+    ? `<img class="card-cover" src="https://covers.openlibrary.org/b/id/${book.coverId}-S.jpg" alt="" loading="lazy" onerror="this.remove()">`
     : '';
 
   const progressHTML = book.status === 'reading'
