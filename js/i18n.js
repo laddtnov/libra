@@ -30,7 +30,7 @@ const T = {
   btn_add_book:   ['> ADD BOOK', '> ДОДАТИ КНИГУ','> AÑADIR LIBRO','> ДОБАВИТЬ КНИГУ','> BUCH HINZUFÜGEN','> DODAJ KSIĄŻKĘ'],
 
   // Search
-  search_placeholder: ['SEARCH ARCHIVE...','ПОШУК В АРХІВІ...','BUSCAR EN ARCHIVO...','ПОИСК В АРХИВЕ...','ARCHIV DURCHSUCHEN...','SZUKAJ W ARCHIWUM...'],
+  search_placeholder: ['Search archive...','Пошук в архіві...','Buscar en archivo...','Поиск в архиве...','Archiv durchsuchen...','Szukaj w archiwum...'],
 
   // Empty state
   no_records:     ['> NO RECORDS FOUND',  '> ЗАПИСІВ НЕ ЗНАЙДЕНО','> SIN RESULTADOS',    '> ЗАПИСЕЙ НЕ НАЙДЕНО','> KEINE EINTRÄGE GEFUNDEN','> BRAK WYNIKÓW'],
