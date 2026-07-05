@@ -222,6 +222,56 @@
   background: rgba(99,188,80,0.08);
 }
 
+/* ── Open Library search (Add Book form) ── */
+[data-theme="light"] .book-search-section .terminal-input {
+  border-color: #0369a1;
+}
+[data-theme="light"] .book-search-section .terminal-input:focus {
+  border-color: #0284c7;
+  box-shadow: 0 0 10px rgba(3, 105, 161, 0.2);
+}
+[data-theme="light"] .search-status {
+  color: #0369a1;
+}
+[data-theme="light"] .api-search-results {
+  background: #ffffff;
+  border-color: #d1d5db;
+  scrollbar-color: #0369a1 #f0f0f0;
+}
+[data-theme="light"] .search-result-item {
+  border-bottom-color: #f3f4f6;
+}
+[data-theme="light"] .search-result-item:hover {
+  background: rgba(3, 105, 161, 0.05);
+}
+[data-theme="light"] .sr-cover {
+  border-color: #d1d5db;
+}
+[data-theme="light"] .sr-cover-placeholder {
+  background: #e8f4fd;
+  border-color: #bfdbfe;
+  color: #0369a1;
+}
+[data-theme="light"] .sr-title  { color: #1a1a2e; }
+[data-theme="light"] .sr-meta   { color: #4b5563; }
+[data-theme="light"] .form-or-divider,
+[data-theme="light"] .form-divider-line { color: #9ca3af; }
+[data-theme="light"] .field-filled {
+  border-color: #0369a1 !important;
+  box-shadow: 0 0 10px rgba(3, 105, 161, 0.2) !important;
+  background: rgba(3, 105, 161, 0.04) !important;
+}
+
+/* ── Discover preview panel ── */
+[data-theme="light"] .discover-preview-container {
+  background: linear-gradient(145deg, #ffffff 0%, #f0f6ff 60%, #eef2ff 100%);
+  border-color: rgba(0, 242, 255, 0.3);
+  box-shadow:
+    0 0 0 1px rgba(0, 242, 255, 0.08),
+    0 0 40px rgba(0, 242, 255, 0.08),
+    0 20px 60px rgba(15, 30, 60, 0.12);
+}
+
 /* ── Auth badge & logout button (toolbar) ── */
 [data-theme="light"] #auth-badge {
   background: #ffffff;
@@ -494,4 +544,87 @@
 }
 [data-theme="light"] .timer-btn--reset:hover {
   background: #fee2e2;
+}
+
+/* ── Support / Donate panel ── */
+[data-theme="light"] .donate-panel-container {
+  background: linear-gradient(135deg, #ffffff 0%, #fefce8 100%);
+  border-color: rgba(180, 83, 9, 0.35);
+  box-shadow:
+    0 0 40px rgba(245, 158, 11, 0.1),
+    0 0 80px rgba(245, 158, 11, 0.04),
+    inset 0 1px 0 rgba(245, 158, 11, 0.08);
+}
+[data-theme="light"] .donate-tagline {
+  color: #92400e;
+}
+[data-theme="light"] .donate-tagline:hover {
+  color: #78350f;
+}
+[data-theme="light"] .donate-section-label {
+  color: #b45309;
+}
+[data-theme="light"] .donate-stripe-btn {
+  background: #fef9c3;
+  border-color: rgba(180, 83, 9, 0.4);
+  color: #78350f;
+}
+[data-theme="light"] .donate-stripe-btn:hover {
+  background: #fef08a;
+  border-color: #b45309;
+  box-shadow: 0 0 14px rgba(180, 83, 9, 0.15);
+}
+[data-theme="light"] .donate-divider {
+  color: rgba(120, 53, 15, 0.3);
+}
+[data-theme="light"] .crypto-row {
+  background: rgba(245, 158, 11, 0.04);
+  border-color: rgba(180, 83, 9, 0.15);
+}
+[data-theme="light"] .crypto-symbol {
+  color: #b45309;
+}
+[data-theme="light"] .crypto-address {
+  color: rgba(120, 53, 15, 0.65);
+}
+[data-theme="light"] .crypto-copy-btn {
+  border-color: rgba(180, 83, 9, 0.3);
+  color: #b45309;
+}
+[data-theme="light"] .crypto-copy-btn:hover {
+  background: #fef9c3;
+  border-color: #b45309;
+  color: #78350f;
+}
+[data-theme="light"] .donate-email-hint {
+  color: #92400e;
+}
+[data-theme="light"] .donate-name-input,
+[data-theme="light"] .donate-email-input {
+  background: #fefce8;
+  border-color: rgba(180, 83, 9, 0.3);
+  color: #1a1a2e;
+}
+[data-theme="light"] .donate-name-input::placeholder,
+[data-theme="light"] .donate-email-input::placeholder {
+  color: rgba(120, 53, 15, 0.45);
+}
+[data-theme="light"] .donate-send-btn {
+  border-color: rgba(180, 83, 9, 0.4);
+  color: #b45309;
+}
+[data-theme="light"] .donate-send-btn:hover:not(:disabled) {
+  background: #fef9c3;
+  border-color: #b45309;
+}
+[data-theme="light"] .donate-send-status[data-type="success"] {
+  color: #065f46;
+}
+[data-theme="light"] .donate-footer {
+  color: rgba(120, 53, 15, 0.45);
+  border-top-color: rgba(180, 83, 9, 0.12);
+}
+[data-theme="light"] .donate-footer:hover {
+  color: rgba(120, 53, 15, 0.75);
+  text-shadow: none;
 }
