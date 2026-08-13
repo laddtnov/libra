@@ -17,7 +17,7 @@
 ![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
-A personal reading tracker with a full cyberpunk neon UI — glitch title, status-colored book spines, Open Library auto-fill, AI-powered recommendations, cross-device cloud sync, and a full reading stats dashboard.
+A personal reading tracker with a full cyberpunk neon UI — glitch title, status-colored book spines, Open Library auto-fill, genre-based recommendations, cross-device cloud sync, and a full reading stats dashboard.
 
 [🌐 Live Demo](https://libra.laddtnov.xyz/)
 
@@ -74,25 +74,14 @@ A personal reading tracker with a full cyberpunk neon UI — glitch title, statu
 - **Filter buttons** — All / Reading / Done / Queued
 - **Sort dropdown** — Title, Rating, Pages, Date Added
 - **📊 STATS** — full reading statistics dashboard
-- **🎁 WRAPPED** — shareable year-in-review card, downloadable as PNG
-- **⚡ RECOMMEND** — AI or genre-based book recommendations
+- **⚡ RECOMMEND** — genre-based book recommendations
 - **⊕ GOODREADS** — import your Goodreads CSV export with duplicate detection
 - **Export / Import** — one-click JSON backup and restore
+
 ### Auth
 - Email + password sign up / sign in
 - Forgot password → reset link via email (cyberpunk-styled email template)
 - Settings sync across devices (goal, API key, streak, display name)
-
-### AI Recommendations
-- Paste your **Claude API key** (stored locally, never leaves your browser)
-- Claude analyses your completed books and returns 6 personalised picks
-- Open Library enriches each suggestion with cover and metadata
-- Falls back to genre-based search when no key is set
-
-### Reading Wrapped
-- On-demand year-in-review canvas card
-- Shows: books read, pages read, top genre, best streak, favourite book
-- Download as PNG and share
 
 ### Goodreads Import
 - Upload your Goodreads CSV export
@@ -148,23 +137,11 @@ Then open `index.html` — no build step needed for the frontend.
 
 ---
 
-## 🤖 AI Recommendations Setup
-
-1. Open the **⚡ RECOMMEND** panel
-2. Click **⚙ CLAUDE API KEY**
-3. Paste your key from [console.anthropic.com](https://console.anthropic.com)
-4. Hit **[ SAVE ]** — AI picks render instantly
-
-Your key is stored only in localStorage and sent exclusively to `api.anthropic.com`.
-
----
-
 ## 🛠️ Tech Stack
 
 - **HTML5 / CSS3 / JavaScript ES6+** — vanilla, no frameworks; ~30 modular ES modules
 - **Supabase** — Postgres + email+password auth + cross-device sync
 - **Open Library API** — book search, covers, metadata (no key required)
-- **Claude API** — AI recommendations (user-supplied key, optional)
 - **Resend** — transactional email (password reset)
 - **Service Worker** — PWA offline cache
 - **Vercel** — hosting + serverless functions
