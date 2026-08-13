@@ -6,7 +6,6 @@ import { openListsPanel, closeListsPanel, initListsPanel } from './ui-lists.js';
 import { openRecsPanel, closeRecsPanel, initRecsPanel } from './ui-recommendations.js';
 import { clearDiscover, debouncedFetch, closePreviewModal } from './ui-discover.js';
 import { exportBooks, exportBooksCSV, importBooks } from './ui-backup.js';
-import { openDonatePanel, closeDonatePanel, initDonatePanel } from './ui-donate.js';
 import { initI18n, setLanguage, applyI18n } from './i18n.js';
 import { initGoal, renderGoal } from './ui-goal.js';
 import { initStreak } from './ui-streak.js';
@@ -97,7 +96,6 @@ function initApp() {
     closePreviewModal();
     closeListsPanel();
     closeRecsPanel();
-    closeDonatePanel();
     closeStatsPanel();
   });
   document.addEventListener('keydown', e => {
@@ -107,7 +105,6 @@ function initApp() {
       closePreviewModal();
       closeListsPanel();
       closeRecsPanel();
-      closeDonatePanel();
       closeStatsPanel();
     }
   });
@@ -131,10 +128,8 @@ function initApp() {
 
   document.getElementById('lists-btn').addEventListener('click', openListsPanel);
   document.getElementById('recommend-btn').addEventListener('click', openRecsPanel);
-  document.getElementById('donate-btn').addEventListener('click', openDonatePanel);
   initListsPanel();
   initRecsPanel();
-  initDonatePanel();
   initBulk();
 
   // Language switcher

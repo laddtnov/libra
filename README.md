@@ -2,6 +2,12 @@
 
 <div align="center">
 
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/laddtnov)
+
+</div>
+
+<div align="center">
+
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
@@ -72,8 +78,6 @@ A personal reading tracker with a full cyberpunk neon UI — glitch title, statu
 - **⚡ RECOMMEND** — AI or genre-based book recommendations
 - **⊕ GOODREADS** — import your Goodreads CSV export with duplicate detection
 - **Export / Import** — one-click JSON backup and restore
-- **♥ SUPPORT** — Stripe + crypto donation panel with Resend appreciation email
-
 ### Auth
 - Email + password sign up / sign in
 - Forgot password → reset link via email (cyberpunk-styled email template)
@@ -161,7 +165,7 @@ Your key is stored only in localStorage and sent exclusively to `api.anthropic.c
 - **Supabase** — Postgres + email+password auth + cross-device sync
 - **Open Library API** — book search, covers, metadata (no key required)
 - **Claude API** — AI recommendations (user-supplied key, optional)
-- **Resend** — transactional email (donation appreciation + password reset)
+- **Resend** — transactional email (password reset)
 - **Service Worker** — PWA offline cache
 - **Vercel** — hosting + serverless functions
 

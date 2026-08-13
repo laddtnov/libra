@@ -1,4 +1,4 @@
-const CACHE = 'libra-v55';
+const CACHE = 'libra-v56';
 
 const ASSETS = [
   '/',
@@ -24,7 +24,6 @@ const ASSETS = [
   '/css/backup.css',
   '/css/quotes.css',
   '/css/sessions.css',
-  '/css/donate.css',
   '/css/availability.css',
   '/css/auth.css',
   '/css/theme-light.css',
@@ -45,7 +44,6 @@ const ASSETS = [
   '/js/ui-quotes.js',
   '/js/ui-notes.js',
   '/js/ui-sessions.js',
-  '/js/ui-donate.js',
   '/js/ui-availability.js',
   '/js/i18n.js',
   '/js/vendor/supabase.min.js',
