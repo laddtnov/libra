@@ -96,7 +96,6 @@ function initApp() {
     closePreviewModal();
     closeListsPanel();
     closeRecsPanel();
-    closeDonatePanel();
     closeStatsPanel();
   });
   document.addEventListener('keydown', e => {
@@ -106,7 +105,6 @@ function initApp() {
       closePreviewModal();
       closeListsPanel();
       closeRecsPanel();
-      closeDonatePanel();
       closeStatsPanel();
     }
   });
