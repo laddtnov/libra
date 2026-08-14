@@ -75,6 +75,7 @@ A personal reading tracker with a full cyberpunk neon UI — glitch title, statu
 - **Sort dropdown** — Title, Rating, Pages, Date Added
 - **📊 STATS** — full reading statistics dashboard
 - **⚡ RECOMMEND** — genre-based book recommendations
+- **♥ SUPPORT** — opens Buy Me a Coffee in a new tab
 - **⊕ GOODREADS** — import your Goodreads CSV export with duplicate detection
 - **Export / Import** — one-click JSON backup and restore
 
