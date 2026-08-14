@@ -43,6 +43,7 @@ export function closeModal() {
 
 function confirmDelete(bookId) {
   const book = state.booksData[bookId];
+  if (!book) return;
   const actions = document.getElementById('detail-actions');
   actions.innerHTML = `
     <div class="delete-confirm">

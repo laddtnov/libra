@@ -48,7 +48,7 @@ function initApp() {
   initStatsPanel();
   document.getElementById('stats-btn')?.addEventListener('click', openStatsPanel);
 
-  document.getElementById('add-book-btn').addEventListener('click', () => openFormModal());
+  document.getElementById('add-book-btn')?.addEventListener('click', () => openFormModal());
 
   document.querySelectorAll('.filter-btn').forEach(btn =>
     btn.addEventListener('click', () => setFilter(btn.dataset.filter))
@@ -71,7 +71,7 @@ function initApp() {
 
   // Search bar → web discover
   const searchInput = document.getElementById('search-input');
-  searchInput.addEventListener('input', e => {
+  searchInput?.addEventListener('input', e => {
     const q = e.target.value.trim();
     if (q) {
       debouncedFetch(q);
@@ -82,14 +82,14 @@ function initApp() {
     }
   });
 
-  document.getElementById('sort-select').addEventListener('change', e => {
+  document.getElementById('sort-select')?.addEventListener('change', e => {
     state.activeSort = e.target.value;
     renderBooks();
   });
 
-  document.getElementById('close-modal').addEventListener('click', closeModal);
-  document.getElementById('close-form-modal').addEventListener('click', closeFormModal);
-  document.getElementById('close-discover-preview').addEventListener('click', closePreviewModal);
+  document.getElementById('close-modal')?.addEventListener('click', closeModal);
+  document.getElementById('close-form-modal')?.addEventListener('click', closeFormModal);
+  document.getElementById('close-discover-preview')?.addEventListener('click', closePreviewModal);
   document.getElementById('modal-overlay').addEventListener('click', () => {
     closeModal();
     closeFormModal();
@@ -109,9 +109,9 @@ function initApp() {
     }
   });
 
-  document.getElementById('export-btn').addEventListener('click', exportBooks);
-  document.getElementById('export-csv-btn').addEventListener('click', exportBooksCSV);
-  document.getElementById('import-input').addEventListener('change', e => {
+  document.getElementById('export-btn')?.addEventListener('click', exportBooks);
+  document.getElementById('export-csv-btn')?.addEventListener('click', exportBooksCSV);
+  document.getElementById('import-input')?.addEventListener('change', e => {
     importBooks(e.target.files[0]);
     e.target.value = '';
   });
@@ -126,8 +126,8 @@ function initApp() {
     else { showToast(`> IMPORTED ${imported} books, skipped ${skipped} duplicates`, 'success'); }
   });
 
-  document.getElementById('lists-btn').addEventListener('click', openListsPanel);
-  document.getElementById('recommend-btn').addEventListener('click', openRecsPanel);
+  document.getElementById('lists-btn')?.addEventListener('click', openListsPanel);
+  document.getElementById('recommend-btn')?.addEventListener('click', openRecsPanel);
   initListsPanel();
   initRecsPanel();
   initBulk();
