@@ -48,6 +48,32 @@
   transform: translateY(-2px);
 }
 
+.support-btn {
+  background: transparent;
+  font-family: 'Orbitron', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 11px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  border: 2px solid var(--neon-pink);
+  color: var(--neon-pink);
+}
+
+.support-btn:hover {
+  background: rgba(255, 0, 255, 0.12);
+  box-shadow: 0 0 18px rgba(255, 0, 255, 0.35);
+  transform: translateY(-2px);
+}
+
 /* ====================================
    ACTIVE LIST INDICATOR
    ==================================== */

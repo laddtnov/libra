@@ -545,3 +545,13 @@
 [data-theme="light"] .timer-btn--reset:hover {
   background: #fee2e2;
 }
+
+/* ── Support button ── */
+[data-theme="light"] .support-btn {
+  border-color: #be185d;
+  color: #be185d;
+}
+[data-theme="light"] .support-btn:hover {
+  background: rgba(190, 24, 93, 0.08);
+  box-shadow: 0 0 18px rgba(190, 24, 93, 0.2);
+}
