@@ -154,8 +154,9 @@ function buildCardHTML(book) {
       <div class="meta-item"><span class="meta-label">${t('meta_pages')}:</span><span class="meta-value">${safePages || '?'}</span></div>`;
   }
 
-  const coverHTML = book.coverId
-    ? `<img class="card-cover" src="https://covers.openlibrary.org/b/id/${book.coverId}-S.jpg" alt="" loading="lazy" onerror="this.remove()">`
+  const safeCoverId = toPositiveInt(book.coverId);
+  const coverHTML = safeCoverId
+    ? `<img class="card-cover" src="https://covers.openlibrary.org/b/id/${safeCoverId}-S.jpg" alt="" loading="lazy" onerror="this.remove()">`
     : '';
 
   const progressHTML = book.status === 'reading'

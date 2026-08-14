@@ -61,6 +61,15 @@ function sanitizeNotesList(rawNotes) {
   return rawNotes.map(n => cleanText(n, 260)).filter(Boolean).slice(0, 100);
 }
 
+function sanitizeQuotesList(rawQuotes) {
+  if (!Array.isArray(rawQuotes)) return [];
+  return rawQuotes
+    .filter(q => q && typeof q === 'object')
+    .map(q => ({ text: cleanText(String(q.text ?? ''), 500), page: toPositiveInt(q.page) ?? null }))
+    .filter(q => q.text)
+    .slice(0, 200);
+}
+
 function sanitizeSessions(rawSessions) {
   if (!Array.isArray(rawSessions)) return [];
   return rawSessions
@@ -109,6 +118,7 @@ function normalizeBookRecord(rawBook) {
     status,
     category: cleanText(rawBook.category, 80) || 'Other',
     notes: sanitizeNotesList(rawBook.notes),
+    quotes: sanitizeQuotesList(rawBook.quotes),
     ...(Array.isArray(rawBook.sessions) && rawBook.sessions.length
       ? { sessions: sanitizeSessions(rawBook.sessions) }
       : {}),

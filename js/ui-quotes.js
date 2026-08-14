@@ -6,7 +6,7 @@ function quoteCardHTML(q, i) {
     <div class="quote-card">
       <div class="quote-text">&ldquo;${escHtml(q.text)}&rdquo;</div>
       <div class="quote-footer">
-        ${q.page ? `<span class="quote-page">&gt; ${t('quotes_page_label')} ${q.page}</span>` : '<span></span>'}
+        ${q.page != null ? `<span class="quote-page">&gt; ${t('quotes_page_label')} ${escHtml(String(q.page))}</span>` : '<span></span>'}
         <button class="quote-delete-btn" data-idx="${i}">[&times;]</button>
       </div>
     </div>`;
