@@ -64,6 +64,7 @@ A personal reading tracker with a full cyberpunk neon UI — glitch title, statu
 
 ### Detail Modal
 - Full fields: status, category, pages, progress, dates, synopsis, notes, tags
+- **Per-book journal** — freeform notes section per book, separate from synopsis
 - **Quotes & Highlights** — save memorable passages with page numbers
 - **Where to Find** — 6 one-click links (Open Library, WorldCat, ThriftBooks, AbeBooks, Amazon, Google Books)
 - **Reading Lists** — toggle book in/out of any named list
@@ -77,7 +78,7 @@ A personal reading tracker with a full cyberpunk neon UI — glitch title, statu
 - **⚡ RECOMMEND** — genre-based book recommendations
 - **♥ SUPPORT** — opens Buy Me a Coffee in a new tab
 - **⊕ GOODREADS** — import your Goodreads CSV export with duplicate detection
-- **Export / Import** — one-click JSON backup and restore
+- **Export / Import** — one-click JSON or CSV backup and restore
 
 ### Auth
 - Email + password sign up / sign in
