@@ -150,6 +150,16 @@ Then open `index.html` — no build step needed for the frontend.
 
 ---
 
+## 🔒 Security
+
+- **Content Security Policy** — strict CSP via Vercel headers: `default-src 'none'`, `script-src 'self'`, `frame-ancestors 'none'`; blocks script injection at the browser level
+- **Supabase Row Level Security** — RLS enabled on all tables; users can only read/write their own rows (`auth.uid() = user_id`)
+- **Input sanitization** — all user-supplied and cloud-pulled data normalized through `escHtml()` and typed sanitizers before rendering
+- **No secrets in source** — Supabase credentials fetched at runtime from `/api/config`; anon key only (RLS enforces access)
+- **XSS-safe DOM writes** — all `innerHTML` callsites guard with `escHtml()`; `onerror` handlers use pre-rendered DOM nodes, no string interpolation
+
+---
+
 ## 📱 Responsive
 
 - **Desktop:** 3–4 column grid
