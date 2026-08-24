@@ -11,6 +11,9 @@ jobs:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     name: Build Check
+    permissions:
+      pull-requests: write
+      contents: read
 
     steps:
       - uses: actions/checkout@v4
