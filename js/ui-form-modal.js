@@ -172,7 +172,7 @@ function buildFormHtml(book, isEdit, rv) {
       <div class="form-field">
         <label class="terminal-label">&gt; ${t('form_lbl_category')}</label>
         <select id="f-category" class="terminal-select">
-          ${CATEGORIES.map(c => `<option value="${c}"${book?.category === c ? ' selected' : ''}>${c}</option>`).join('')}
+          ${CATEGORIES.map(c => `<option value="${escHtml(c)}"${book?.category === c ? ' selected' : ''}>${escHtml(c)}</option>`).join('')}
         </select>
       </div>
       <div class="form-field">
