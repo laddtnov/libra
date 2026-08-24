@@ -28,7 +28,7 @@ function bindDeleteButtons(bookId) {
       const idx = Number.parseInt(btn.dataset.idx, 10);
       const book = state.booksData[bookId];
       if (!book?.quotes) return;
-      book.quotes.splice(idx, 1);
+      book.quotes = book.quotes.filter((_, i) => i !== idx);
       saveBooks();
       refreshList(bookId);
     });
