@@ -165,6 +165,80 @@ function buildBarChart(title, dataMap, unit) {
   return section;
 }
 
+// Month labels, one per column where the month turns over. A label's glyphs are
+// ~2.5 columns wide while its grid box is only one, so labels closer than
+// MIN_LABEL_COLS would collide.
+function buildMonthLabels(gridStart, weeks) {
+  const MIN_LABEL_COLS = 3;
+  const monthAt = w => new Date(gridStart.getTime() + w * 7 * DAY_MS).getUTCMonth();
+  const months  = makeEl('div', 'heat-months');
+  months.style.gridTemplateColumns = `repeat(${weeks}, var(--heat-cell))`;
+
+  const addLabel = (m, w) => {
+    const lbl = makeEl('div', 'heat-month-lbl', MONTHS[m]);
+    lbl.style.gridColumn = String(w + 1);
+    months.appendChild(lbl);
+  };
+
+  // The leading month gets a label only when it owns enough columns to carry
+  // one. gridStart is the Sunday on or before the window's first day, so that
+  // month can be anything from a one-column stub to five full columns — always
+  // labelling it would collide with the next month, never labelling it leaves
+  // the year's first weeks unidentified.
+  let lastMonth = monthAt(0);
+  let firstTurn = weeks;
+  for (let w = 1; w < weeks; w++) { if (monthAt(w) !== lastMonth) { firstTurn = w; break; } }
+
+  let lastLabelCol = -Infinity;
+  if (firstTurn >= MIN_LABEL_COLS) { addLabel(lastMonth, 0); lastLabelCol = 0; }
+
+  for (let w = 1; w < weeks; w++) {
+    const m = monthAt(w);
+    if (m === lastMonth) continue;
+    lastMonth = m;
+    if (w - lastLabelCol >= MIN_LABEL_COLS) { addLabel(m, w); lastLabelCol = w; }
+  }
+  return months;
+}
+
+// Day-of-week labels — alternating rows only, as GitHub does.
+function buildDayLabels() {
+  const days = makeEl('div', 'heat-days');
+  for (const [row, txt] of [[1, 'MON'], [3, 'WED'], [5, 'FRI']]) {
+    const lbl = makeEl('div', 'heat-day-lbl', txt);
+    lbl.style.gridRow = String(row + 1);
+    days.appendChild(lbl);
+  }
+  return days;
+}
+
+// Cells in chronological order; grid-auto-flow:column fills each week downward.
+// Days outside the window pad the first and last columns so weeks stay aligned.
+function buildHeatCells(gridStart, weeks, start, end, pages) {
+  const grid = makeEl('div', 'heat-grid');
+  for (let i = 0; i < weeks * 7; i++) {
+    const d = new Date(gridStart.getTime() + i * DAY_MS);
+    if (d < start || d > end) {
+      grid.appendChild(makeEl('div', 'heat-cell heat-pad'));
+      continue;
+    }
+    const key  = dayKey(d);
+    const p    = pages[key] || 0;
+    const cell = makeEl('div', `heat-cell heat-t${heatTier(p)}`);
+    cell.title = p ? `${key}: ${p} pages` : `${key}: no sessions`;
+    grid.appendChild(cell);
+  }
+  return grid;
+}
+
+function buildHeatLegend() {
+  const legend = makeEl('div', 'heat-legend');
+  legend.appendChild(makeEl('span', 'heat-legend-lbl', 'LESS'));
+  for (let t = 0; t <= HEAT_TIERS; t++) legend.appendChild(makeEl('span', `heat-cell heat-t${t}`));
+  legend.appendChild(makeEl('span', 'heat-legend-lbl', 'MORE'));
+  return legend;
+}
+
 function buildHeatmap() {
   const section = makeEl('div', 'stats-section');
   section.appendChild(makeEl('div', 'stats-section-title', 'READING ACTIVITY'));
@@ -188,75 +262,15 @@ function buildHeatmap() {
 
   const layout = makeEl('div', 'heat-layout');
   layout.appendChild(makeEl('div', 'heat-corner'));
-
-  // Month labels, one per column where the month turns over. A label's glyphs
-  // are ~2.5 columns wide while its grid box is only one, so labels closer than
-  // MIN_LABEL_COLS would collide.
-  const MIN_LABEL_COLS = 3;
-  const monthAt = w => new Date(gridStart.getTime() + w * 7 * DAY_MS).getUTCMonth();
-  const months  = makeEl('div', 'heat-months');
-  months.style.gridTemplateColumns = `repeat(${weeks}, var(--heat-cell))`;
-
-  const addLabel = (m, w) => {
-    const lbl = makeEl('div', 'heat-month-lbl', MONTHS[m]);
-    lbl.style.gridColumn = String(w + 1);
-    months.appendChild(lbl);
-  };
-
-  // The leading month gets a label only when it owns enough columns to carry
-  // one. gridStart is the Sunday on or before the window's first day, so that
-  // month can be anything from a one-column stub to five full columns — always
-  // labelling it would collide with the next month, never labelling it leaves
-  // the year's first weeks unidentified.
-  let lastMonth    = monthAt(0);
-  let firstTurn    = weeks;
-  for (let w = 1; w < weeks; w++) { if (monthAt(w) !== lastMonth) { firstTurn = w; break; } }
-  let lastLabelCol = -Infinity;
-  if (firstTurn >= MIN_LABEL_COLS) { addLabel(lastMonth, 0); lastLabelCol = 0; }
-
-  for (let w = 1; w < weeks; w++) {
-    const m = monthAt(w);
-    if (m === lastMonth) continue;
-    lastMonth = m;
-    if (w - lastLabelCol < MIN_LABEL_COLS) continue;
-    addLabel(m, w);
-    lastLabelCol = w;
-  }
-  layout.appendChild(months);
-
-  // Day-of-week labels — alternating rows only, as GitHub does.
-  const days = makeEl('div', 'heat-days');
-  for (const [row, txt] of [[1, 'MON'], [3, 'WED'], [5, 'FRI']]) {
-    const lbl = makeEl('div', 'heat-day-lbl', txt);
-    lbl.style.gridRow = String(row + 1);
-    days.appendChild(lbl);
-  }
-  layout.appendChild(days);
-
-  // Cells in chronological order; grid-auto-flow:column fills each week downward.
-  const grid = makeEl('div', 'heat-grid');
-  for (let i = 0; i < weeks * 7; i++) {
-    const d = new Date(gridStart.getTime() + i * DAY_MS);
-    if (d < start || d > end) {
-      grid.appendChild(makeEl('div', 'heat-cell heat-pad'));
-      continue;
-    }
-    const key  = dayKey(d);
-    const p    = pages[key] || 0;
-    const cell = makeEl('div', `heat-cell heat-t${heatTier(p)}`);
-    cell.title = p ? `${key}: ${p} pages` : `${key}: no sessions`;
-    grid.appendChild(cell);
-  }
-  layout.appendChild(grid);
+  layout.appendChild(buildMonthLabels(gridStart, weeks));
+  layout.appendChild(buildDayLabels());
+  layout.appendChild(buildHeatCells(gridStart, weeks, start, end, pages));
 
   const scroll = makeEl('div', 'heat-scroll');
   scroll.appendChild(layout);
   section.appendChild(scroll);
 
-  const legend = makeEl('div', 'heat-legend');
-  legend.appendChild(makeEl('span', 'heat-legend-lbl', 'LESS'));
-  for (let t = 0; t <= HEAT_TIERS; t++) legend.appendChild(makeEl('span', `heat-cell heat-t${t}`));
-  legend.appendChild(makeEl('span', 'heat-legend-lbl', 'MORE'));
+  const legend = buildHeatLegend();
   section.appendChild(legend);
 
   return section;
