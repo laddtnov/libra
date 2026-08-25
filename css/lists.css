@@ -9,6 +9,7 @@
 }
 
 .lists-btn,
+.stats-btn,
 .recs-btn {
   background: transparent;
   font-family: 'Orbitron', monospace;
@@ -34,6 +35,17 @@
 .lists-btn:hover {
   background: rgba(157, 0, 255, 0.12);
   box-shadow: 0 0 18px rgba(157, 0, 255, 0.35);
+  transform: translateY(-2px);
+}
+
+.stats-btn {
+  border: 2px solid var(--neon-cyan);
+  color: var(--neon-cyan);
+}
+
+.stats-btn:hover {
+  background: rgba(0, 242, 255, 0.12);
+  box-shadow: 0 0 18px rgba(0, 242, 255, 0.35);
   transform: translateY(-2px);
 }
 

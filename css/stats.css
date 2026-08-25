@@ -321,27 +321,7 @@
 .heat-legend-lbl:first-child { margin-right: 4px; }
 .heat-legend-lbl:last-child  { margin-left: 4px; }
 
-/* ── Stats toolbar button ── */
-.stats-btn {
-  background: transparent;
-  border: 1px solid rgba(0, 242, 255, 0.35);
-  color: #00f2ff;
-  font-family: 'Orbitron', monospace;
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  padding: 8px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  white-space: nowrap;
-}
-
-.stats-btn:hover {
-  background: rgba(0, 242, 255, 0.08);
-  border-color: #00f2ff;
-  box-shadow: 0 0 14px rgba(0, 242, 255, 0.25);
-}
+/* Toolbar button styling lives with its siblings in lists.css */
 
 @media (max-width: 600px) {
   .stats-summary-grid { grid-template-columns: repeat(2, 1fr); }
