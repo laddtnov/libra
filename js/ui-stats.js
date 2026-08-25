@@ -6,6 +6,11 @@ let _triggerEl = null;
 
 const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 
+const DAY_MS         = 86400000;
+const HEAT_DAYS      = 365;  // rolling window, today inclusive
+const HEAT_TIERS     = 4;    // tier 0 is "no activity"; 1..4 are the shaded steps
+const HEAT_PER_TIER  = 15;   // pages per step — 1-15 → t1, 16-30 → t2, … 46+ → t4
+
 // ── Data helpers ──────────────────────────────────────────────────────────────
 function allBooks()      { return Object.values(state.booksData); }
 function completed()     { return allBooks().filter(b => b.status === 'completed'); }
@@ -22,6 +27,39 @@ function pagesPerMonth() {
     map[m] = (map[m] || 0) + (s.pages || 0);
   }
   return map;
+}
+
+// Session dates are bare YYYY-MM-DD calendar dates: ui-sessions.js stores the
+// value of a date picker, prefilled with the UTC date. The grid is built on UTC
+// midnights so its own arithmetic never drifts across DST; dayKey() is how a
+// grid date becomes a lookup key for that stored string.
+function dayKey(d) { return d.toISOString().slice(0, 10); }
+
+// "Today" is two different calendar dates either side of UTC midnight, and the
+// picker lets a reader store either one. Take whichever is later so a session
+// logged as "today" is always inside the window rather than one square past its
+// right edge.
+function windowEnd() {
+  const now      = new Date();
+  const utcToday = new Date(now);
+  utcToday.setUTCHours(0, 0, 0, 0);
+  const localToday = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+  return localToday > utcToday ? localToday : utcToday;
+}
+
+function dailyPages() {
+  const map = {};
+  for (const s of allSessions()) {
+    const d = String(s.date || '').slice(0, 10); // "2025-03-14"
+    if (d.length < 10) continue;
+    map[d] = (map[d] || 0) + (s.pages || 0);
+  }
+  return map;
+}
+
+function heatTier(pages) {
+  if (!pages) return 0;
+  return Math.min(HEAT_TIERS, Math.floor((pages - 1) / HEAT_PER_TIER) + 1);
 }
 
 function booksPerMonth() {
@@ -127,6 +165,117 @@ function buildBarChart(title, dataMap, unit) {
   return section;
 }
 
+// Month labels, one per column where the month turns over. A label's glyphs are
+// ~2.5 columns wide while its grid box is only one, so labels closer than
+// MIN_LABEL_COLS would collide.
+function buildMonthLabels(gridStart, weeks) {
+  const MIN_LABEL_COLS = 3;
+  const monthAt = w => new Date(gridStart.getTime() + w * 7 * DAY_MS).getUTCMonth();
+  const months  = makeEl('div', 'heat-months');
+  months.style.gridTemplateColumns = `repeat(${weeks}, var(--heat-cell))`;
+
+  const addLabel = (m, w) => {
+    const lbl = makeEl('div', 'heat-month-lbl', MONTHS[m]);
+    lbl.style.gridColumn = String(w + 1);
+    months.appendChild(lbl);
+  };
+
+  // The leading month gets a label only when it owns enough columns to carry
+  // one. gridStart is the Sunday on or before the window's first day, so that
+  // month can be anything from a one-column stub to five full columns — always
+  // labelling it would collide with the next month, never labelling it leaves
+  // the year's first weeks unidentified.
+  let lastMonth = monthAt(0);
+  let firstTurn = weeks;
+  for (let w = 1; w < weeks; w++) { if (monthAt(w) !== lastMonth) { firstTurn = w; break; } }
+
+  let lastLabelCol = -Infinity;
+  if (firstTurn >= MIN_LABEL_COLS) { addLabel(lastMonth, 0); lastLabelCol = 0; }
+
+  for (let w = 1; w < weeks; w++) {
+    const m = monthAt(w);
+    if (m === lastMonth) continue;
+    lastMonth = m;
+    if (w - lastLabelCol >= MIN_LABEL_COLS) { addLabel(m, w); lastLabelCol = w; }
+  }
+  return months;
+}
+
+// Day-of-week labels — alternating rows only, as GitHub does.
+function buildDayLabels() {
+  const days = makeEl('div', 'heat-days');
+  for (const [row, txt] of [[1, 'MON'], [3, 'WED'], [5, 'FRI']]) {
+    const lbl = makeEl('div', 'heat-day-lbl', txt);
+    lbl.style.gridRow = String(row + 1);
+    days.appendChild(lbl);
+  }
+  return days;
+}
+
+// Cells in chronological order; grid-auto-flow:column fills each week downward.
+// Days outside the window pad the first and last columns so weeks stay aligned.
+function buildHeatCells(gridStart, weeks, start, end, pages) {
+  const grid = makeEl('div', 'heat-grid');
+  for (let i = 0; i < weeks * 7; i++) {
+    const d = new Date(gridStart.getTime() + i * DAY_MS);
+    if (d < start || d > end) {
+      grid.appendChild(makeEl('div', 'heat-cell heat-pad'));
+      continue;
+    }
+    const key  = dayKey(d);
+    const p    = pages[key] || 0;
+    const cell = makeEl('div', `heat-cell heat-t${heatTier(p)}`);
+    cell.title = p ? `${key}: ${p} pages` : `${key}: no sessions`;
+    grid.appendChild(cell);
+  }
+  return grid;
+}
+
+function buildHeatLegend() {
+  const legend = makeEl('div', 'heat-legend');
+  legend.appendChild(makeEl('span', 'heat-legend-lbl', 'LESS'));
+  for (let t = 0; t <= HEAT_TIERS; t++) legend.appendChild(makeEl('span', `heat-cell heat-t${t}`));
+  legend.appendChild(makeEl('span', 'heat-legend-lbl', 'MORE'));
+  return legend;
+}
+
+function buildHeatmap() {
+  const section = makeEl('div', 'stats-section');
+  section.appendChild(makeEl('div', 'stats-section-title', 'READING ACTIVITY'));
+
+  // Window: today back HEAT_DAYS-1, extended left to the preceding Sunday so
+  // every column is a full Sun-Sat week.
+  const pages     = dailyPages();
+  const end       = windowEnd();
+  const start     = new Date(end.getTime() - (HEAT_DAYS - 1) * DAY_MS);
+  const gridStart = new Date(start.getTime() - start.getUTCDay() * DAY_MS);
+  const weeks     = Math.ceil((Math.round((end - gridStart) / DAY_MS) + 1) / 7);
+
+  // Emptiness is a property of the window, not of the whole history — sessions
+  // that all predate it would otherwise render as a full grid of idle squares.
+  const startKey = dayKey(start);
+  const endKey   = dayKey(end);
+  if (!Object.keys(pages).some(k => k >= startKey && k <= endKey && pages[k] > 0)) {
+    section.appendChild(makeEl('div', 'stats-empty', '> No reading sessions in the past year'));
+    return section;
+  }
+
+  const layout = makeEl('div', 'heat-layout');
+  layout.appendChild(makeEl('div', 'heat-corner'));
+  layout.appendChild(buildMonthLabels(gridStart, weeks));
+  layout.appendChild(buildDayLabels());
+  layout.appendChild(buildHeatCells(gridStart, weeks, start, end, pages));
+
+  const scroll = makeEl('div', 'heat-scroll');
+  scroll.appendChild(layout);
+  section.appendChild(scroll);
+
+  const legend = buildHeatLegend();
+  section.appendChild(legend);
+
+  return section;
+}
+
 function buildGenreRatings() {
   const section = makeEl('div', 'stats-section');
   section.appendChild(makeEl('div', 'stats-section-title', 'AVG RATING BY GENRE'));
@@ -189,6 +338,7 @@ export function openStatsPanel() {
   content.appendChild(buildSummary());
   content.appendChild(buildBarChart('PAGES READ / MONTH', pagesPerMonth(), 'pages'));
   content.appendChild(buildBarChart('BOOKS FINISHED / MONTH', booksPerMonth(), 'books'));
+  content.appendChild(buildHeatmap());
   content.appendChild(buildGenreRatings());
   content.appendChild(buildTopCategories());
 
