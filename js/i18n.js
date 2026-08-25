@@ -26,6 +26,7 @@ const T = {
 
   // Toolbar buttons
   btn_lists:      ['LISTS',      'СПИСКИ',     'LISTAS',      'СПИСКИ',     'LISTEN',           'LISTY'],
+  btn_stats:      ['STATS',      'СТАТИСТИКА', 'ESTADÍSTICAS','СТАТИСТИКА', 'STATISTIK',        'STATYSTYKI'],
   btn_recommend:  ['⚡ RECOMMEND','⚡ РЕКОМЕНДАЦІЇ','⚡ RECOMENDAR','⚡ РЕКОМЕНДАЦИИ','⚡ EMPFEHLEN','⚡ POLECAJ'],
   btn_add_book:   ['> ADD BOOK', '> ДОДАТИ КНИГУ','> AÑADIR LIBRO','> ДОБАВИТЬ КНИГУ','> BUCH HINZUFÜGEN','> DODAJ KSIĄŻKĘ'],
 
