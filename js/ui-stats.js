@@ -6,6 +6,11 @@ let _triggerEl = null;
 
 const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 
+const DAY_MS         = 86400000;
+const HEAT_DAYS      = 365;  // rolling window, today inclusive
+const HEAT_TIERS     = 4;    // tier 0 is "no activity"; 1..4 are the shaded steps
+const HEAT_PER_TIER  = 15;   // pages per step — 1-15 → t1, 16-30 → t2, … 46+ → t4
+
 // ── Data helpers ──────────────────────────────────────────────────────────────
 function allBooks()      { return Object.values(state.booksData); }
 function completed()     { return allBooks().filter(b => b.status === 'completed'); }
@@ -22,6 +27,26 @@ function pagesPerMonth() {
     map[m] = (map[m] || 0) + (s.pages || 0);
   }
   return map;
+}
+
+// Session dates are written as UTC day keys (see ui-streak.js), so the grid is
+// built on UTC boundaries too — otherwise a late-evening session in a negative
+// UTC offset would land on the wrong square.
+function utcDayKey(d) { return d.toISOString().slice(0, 10); }
+
+function dailyPages() {
+  const map = {};
+  for (const s of allSessions()) {
+    const d = String(s.date || '').slice(0, 10); // "2025-03-14"
+    if (d.length < 10) continue;
+    map[d] = (map[d] || 0) + (s.pages || 0);
+  }
+  return map;
+}
+
+function heatTier(pages) {
+  if (!pages) return 0;
+  return Math.min(HEAT_TIERS, Math.floor((pages - 1) / HEAT_PER_TIER) + 1);
 }
 
 function booksPerMonth() {
@@ -127,6 +152,86 @@ function buildBarChart(title, dataMap, unit) {
   return section;
 }
 
+function buildHeatmap() {
+  const section = makeEl('div', 'stats-section');
+  section.appendChild(makeEl('div', 'stats-section-title', 'READING ACTIVITY'));
+
+  const pages = dailyPages();
+  if (!Object.keys(pages).length) {
+    section.appendChild(makeEl('div', 'stats-empty', '> No reading sessions logged yet'));
+    return section;
+  }
+
+  // Window: today back HEAT_DAYS-1, extended left to the preceding Sunday so
+  // every column is a full Sun-Sat week.
+  const end       = new Date();
+  end.setUTCHours(0, 0, 0, 0);
+  const start     = new Date(end.getTime() - (HEAT_DAYS - 1) * DAY_MS);
+  const gridStart = new Date(start.getTime() - start.getUTCDay() * DAY_MS);
+  const weeks     = Math.ceil((Math.round((end - gridStart) / DAY_MS) + 1) / 7);
+
+  const layout = makeEl('div', 'heat-layout');
+  layout.appendChild(makeEl('div', 'heat-corner'));
+
+  // Month labels, one per column where the month turns over. A label's glyphs are
+  // ~2.5 columns wide while its grid box is only one, so labels closer than
+  // MIN_LABEL_COLS would collide — that also drops the leading partial month,
+  // whose stub column sits right next to the next month's label.
+  const MIN_LABEL_COLS = 3;
+  const months = makeEl('div', 'heat-months');
+  months.style.gridTemplateColumns = `repeat(${weeks}, var(--heat-cell))`;
+  let lastMonth = new Date(gridStart).getUTCMonth();
+  let lastLabelCol = -MIN_LABEL_COLS;
+  for (let w = 1; w < weeks; w++) {
+    const m = new Date(gridStart.getTime() + w * 7 * DAY_MS).getUTCMonth();
+    if (m === lastMonth) continue;
+    lastMonth = m;
+    if (w - lastLabelCol < MIN_LABEL_COLS) continue;
+    const lbl = makeEl('div', 'heat-month-lbl', MONTHS[m]);
+    lbl.style.gridColumn = String(w + 1);
+    months.appendChild(lbl);
+    lastLabelCol = w;
+  }
+  layout.appendChild(months);
+
+  // Day-of-week labels — alternating rows only, as GitHub does.
+  const days = makeEl('div', 'heat-days');
+  for (const [row, txt] of [[1, 'MON'], [3, 'WED'], [5, 'FRI']]) {
+    const lbl = makeEl('div', 'heat-day-lbl', txt);
+    lbl.style.gridRow = String(row + 1);
+    days.appendChild(lbl);
+  }
+  layout.appendChild(days);
+
+  // Cells in chronological order; grid-auto-flow:column fills each week downward.
+  const grid = makeEl('div', 'heat-grid');
+  for (let i = 0; i < weeks * 7; i++) {
+    const d = new Date(gridStart.getTime() + i * DAY_MS);
+    if (d < start || d > end) {
+      grid.appendChild(makeEl('div', 'heat-cell heat-pad'));
+      continue;
+    }
+    const key  = utcDayKey(d);
+    const p    = pages[key] || 0;
+    const cell = makeEl('div', `heat-cell heat-t${heatTier(p)}`);
+    cell.title = p ? `${key}: ${p} pages` : `${key}: no sessions`;
+    grid.appendChild(cell);
+  }
+  layout.appendChild(grid);
+
+  const scroll = makeEl('div', 'heat-scroll');
+  scroll.appendChild(layout);
+  section.appendChild(scroll);
+
+  const legend = makeEl('div', 'heat-legend');
+  legend.appendChild(makeEl('span', 'heat-legend-lbl', 'LESS'));
+  for (let t = 0; t <= HEAT_TIERS; t++) legend.appendChild(makeEl('span', `heat-cell heat-t${t}`));
+  legend.appendChild(makeEl('span', 'heat-legend-lbl', 'MORE'));
+  section.appendChild(legend);
+
+  return section;
+}
+
 function buildGenreRatings() {
   const section = makeEl('div', 'stats-section');
   section.appendChild(makeEl('div', 'stats-section-title', 'AVG RATING BY GENRE'));
@@ -189,6 +294,7 @@ export function openStatsPanel() {
   content.appendChild(buildSummary());
   content.appendChild(buildBarChart('PAGES READ / MONTH', pagesPerMonth(), 'pages'));
   content.appendChild(buildBarChart('BOOKS FINISHED / MONTH', booksPerMonth(), 'books'));
+  content.appendChild(buildHeatmap());
   content.appendChild(buildGenreRatings());
   content.appendChild(buildTopCategories());
 

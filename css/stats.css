@@ -224,6 +224,103 @@
   white-space: nowrap;
 }
 
+/* ── Activity heatmap ── */
+/* 53 week-columns must fit the panel's ~584px content box: at 8px cells with
+   2px gaps that's 528px, plus a 22px day-label gutter. .heat-scroll carries its
+   own overflow so an off-budget viewport scrolls instead of clipping — the
+   container above is overflow-x: hidden. */
+.heat-layout {
+  --heat-cell: 8px;
+  --heat-gap: 2px;
+  display: grid;
+  grid-template-columns: 22px auto;
+  gap: 4px;
+  width: max-content;
+}
+
+.heat-scroll {
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.heat-corner { grid-column: 1; grid-row: 1; }
+
+.heat-months {
+  grid-column: 2;
+  grid-row: 1;
+  display: grid;
+  gap: var(--heat-gap);
+}
+
+.heat-month-lbl {
+  font-family: 'Orbitron', monospace;
+  font-size: 7px;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.heat-days {
+  grid-column: 1;
+  grid-row: 2;
+  display: grid;
+  grid-template-rows: repeat(7, var(--heat-cell));
+  gap: var(--heat-gap);
+}
+
+.heat-day-lbl {
+  font-family: 'Orbitron', monospace;
+  font-size: 6px;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+  line-height: var(--heat-cell);
+  white-space: nowrap;
+}
+
+.heat-grid {
+  grid-column: 2;
+  grid-row: 2;
+  display: grid;
+  grid-template-rows: repeat(7, var(--heat-cell));
+  grid-auto-flow: column;
+  grid-auto-columns: var(--heat-cell);
+  gap: var(--heat-gap);
+}
+
+.heat-cell {
+  width: var(--heat-cell);
+  height: var(--heat-cell);
+  border-radius: 2px;
+  cursor: default;
+}
+
+.heat-pad { visibility: hidden; }
+
+/* Stepped intensity — discrete tiers, not a continuous ramp. */
+.heat-t0 { background: rgba(245, 158, 11, 0.07); box-shadow: inset 0 0 0 1px rgba(245, 158, 11, 0.1); }
+.heat-t1 { background: rgba(245, 158, 11, 0.28); }
+.heat-t2 { background: rgba(245, 158, 11, 0.5); }
+.heat-t3 { background: rgba(245, 158, 11, 0.74); }
+.heat-t4 { background: var(--neon-orange); box-shadow: 0 0 5px rgba(245, 158, 11, 0.55); }
+
+.heat-legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--heat-gap, 2px);
+  --heat-cell: 8px;
+}
+
+.heat-legend-lbl {
+  font-family: 'Orbitron', monospace;
+  font-size: 6px;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+}
+
+.heat-legend-lbl:first-child { margin-right: 4px; }
+.heat-legend-lbl:last-child  { margin-left: 4px; }
+
 /* ── Stats toolbar button ── */
 .stats-btn {
   background: transparent;
@@ -249,4 +346,5 @@
 @media (max-width: 600px) {
   .stats-summary-grid { grid-template-columns: repeat(2, 1fr); }
   .stats-genre-row    { grid-template-columns: 90px 1fr 60px; }
+  .heat-layout        { --heat-cell: 7px; }
 }
