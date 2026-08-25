@@ -110,16 +110,27 @@ function initApp() {
     }
   });
 
-  document.getElementById('export-btn')?.addEventListener('click', exportBooks);
-  document.getElementById('export-csv-btn')?.addEventListener('click', exportBooksCSV);
-  document.getElementById('import-input')?.addEventListener('change', e => {
-    importBooks(e.target.files[0]);
+  // Format picker doubles as the trigger; snaps back to its "EXPORT" label so
+  // it never reads as a persistent setting.
+  document.getElementById('export-select')?.addEventListener('change', e => {
+    const fmt = e.target.value;
     e.target.value = '';
+    if (fmt === 'json') exportBooks();
+    else if (fmt === 'csv') exportBooksCSV();
   });
-  document.getElementById('goodreads-input')?.addEventListener('change', async e => {
+  // One import control: the file already says which kind it is, so routing on
+  // its extension beats making the reader pick the matching button. A .csv that
+  // is not a Goodreads export fails on its own header check with a clear error.
+  document.getElementById('import-input')?.addEventListener('change', async e => {
     const file = e.target.files[0];
     e.target.value = '';
     if (!file) return;
+
+    if (!file.name.toLowerCase().endsWith('.csv')) {
+      importBooks(file);
+      return;
+    }
+
     const { showToast } = await import('./ui-feedback.js');
     showToast('> IMPORTING FROM GOODREADS...', 'info');
     const { imported, skipped, error } = await importGoodreads(file);
@@ -134,14 +145,12 @@ function initApp() {
   initBulk();
 
   // Language switcher
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      setLanguage(btn.dataset.lang);
-      document.documentElement.lang = btn.dataset.lang;
-      applyI18n();
-      updateSelectBtn();
-      renderBooks();
-    });
+  document.getElementById('lang-select')?.addEventListener('change', e => {
+    setLanguage(e.target.value);
+    document.documentElement.lang = e.target.value;
+    applyI18n();
+    updateSelectBtn();
+    renderBooks();
   });
 }
 

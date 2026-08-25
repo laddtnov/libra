@@ -63,7 +63,6 @@ const T = {
   discover_add:       ['+ ADD',               '+ ДОДАТИ',           '+ AÑADIR',            '+ ДОБАВИТЬ',         '+ HINZUFÜGEN',             '+ DODAJ'],
 
   // Recommendations panel
-  recs_title:           ['>_ GENRE ANALYSIS',  '>_ АНАЛІЗ ЖАНРІВ',   '>_ ANÁLISIS DE GÉNEROS','>_ АНАЛИЗ ЖАНРОВ',  '>_ GENRE-ANALYSE',         '>_ ANALIZA GATUNKÓW'],
   recs_genre_profile:   ['>> GENRE PROFILE',   '>> ЖАНРОВИЙ ПРОФІЛЬ','>> PERFIL DE GÉNEROS', '>> ЖАНРОВЫЙ ПРОФИЛЬ','>> GENRE-PROFIL',          '>> PROFIL GATUNKOWY'],
   recs_recommended:     ['>> RECOMMENDED READS','>> РЕКОМЕНДОВАНІ КНИГИ','>> LECTURAS RECOMENDADAS','>> РЕКОМЕНДОВАННЫЕ КНИГИ','>> EMPFOHLENE BÜCHER','>> POLECANE LEKTURY'],
   recs_no_genre:        ['> No genre data — using popular genres.','> Немає даних — використовую популярні жанри.','> Sin datos — usando géneros populares.','> Нет данных — использую популярные жанры.','> Keine Daten — nutze beliebte Genres.','> Brak danych — używam popularnych gatunków.'],
@@ -100,10 +99,6 @@ const T = {
   bulk_deleted_toast:   ['{n} books deleted',  '{n} книг видалено',  '{n} libros eliminados', '{n} книг удалено',  '{n} Bücher gelöscht',      '{n} książek usunięto'],
 
   // Lists panel
-  lists_title:          ['>_ READING LISTS',   '>_ СПИСКИ ЧИТАННЯ',  '>_ LISTAS DE LECTURA','>_ СПИСКИ ЧТЕНИЯ',   '>_ LESELISTEN',            '>_ LISTY LEKTUR'],
-  lists_create:         ['> CREATE',            '> СТВОРИТИ',         '> CREAR',             '> СОЗДАТЬ',          '> ERSTELLEN',              '> UTWÓRZ'],
-  active_list_viewing:  ['VIEWING:',            'СПИСОК:',            'LISTA:',              'СПИСОК:',            'LISTE:',                   'LISTA:'],
-  active_list_clear:    ['✕ CLEAR',             '✕ ОЧИСТИТИ',         '✕ LIMPIAR',           '✕ СБРОСИТЬ',         '✕ LEEREN',                 '✕ WYCZYŚĆ'],
 
   // Form modal — headings
   form_new_record:      ['INITIALIZE NEW BOOK RECORD',   'ІНІЦІАЛІЗАЦІЯ НОВОГО ЗАПИСУ',  'INICIALIZAR NUEVO REGISTRO',  'ИНИЦИАЛИЗАЦИЯ НОВОГО ЗАПИСИ', 'NEUEN BUCHEINTRAG ERSTELLEN',   'INICJALIZUJ NOWY REKORD'],
@@ -180,7 +175,8 @@ const T = {
 
   // Backup buttons
   btn_export:         ['↓ EXPORT',            '↓ ЕКСПОРТ',            '↓ EXPORTAR',           '↓ ЭКСПОРТ',            '↓ EXPORTIEREN',             '↓ EKSPORT'],
-  btn_export_csv:     ['↓ CSV',               '↓ CSV',                '↓ CSV',                '↓ CSV',                '↓ CSV',                     '↓ CSV'],
+  btn_export_json:    ['JSON',                'JSON',                 'JSON',                 'JSON',                 'JSON',                      'JSON'],
+  btn_export_csv:     ['CSV',                 'CSV',                  'CSV',                  'CSV',                  'CSV',                       'CSV'],
   btn_import:         ['↑ IMPORT',            '↑ ІМПОРТ',             '↑ IMPORTAR',           '↑ ИМПОРТ',             '↑ IMPORTIEREN',             '↑ IMPORT'],
   export_success:     ['ARCHIVE EXPORTED',    'АРХІВ ЕКСПОРТОВАНО',   'ARCHIVO EXPORTADO',    'АРХИВ ЭКСПОРТИРОВАН',  'ARCHIV EXPORTIERT',         'ARCHIWUM WYEKSPORTOWANE'],
   import_success:     ['{n} RECORDS IMPORTED','{n} ЗАПИСІВ ІМПОРТОВАНО','{n} REGISTROS IMPORTADOS','{n} ЗАПИСЕЙ ИМПОРТИРОВАНО','{n} EINTRÄGE IMPORTIERT','{n} REKORDÓW ZAIMPORTOWANYCH'],
@@ -190,7 +186,6 @@ const T = {
   // Toast notifications
   toast_saved:          ['RECORD SAVED',                 'ЗАПИС ЗБЕРЕЖЕНО',              'REGISTRO GUARDADO',           'ЗАПИСЬ СОХРАНЕНА',             'EINTRAG GESPEICHERT',           'REKORD ZAPISANY'],
   toast_updated:        ['RECORD UPDATED',               'ЗАПИС ОНОВЛЕНО',               'REGISTRO ACTUALIZADO',        'ЗАПИСЬ ОБНОВЛЕНА',             'EINTRAG AKTUALISIERT',          'REKORD ZAKTUALIZOWANY'],
-  toast_deleted:        ['RECORD DELETED',               'ЗАПИС ВИДАЛЕНО',               'REGISTRO ELIMINADO',          'ЗАПИСЬ УДАЛЕНА',               'EINTRAG GELÖSCHT',              'REKORD USUNIĘTY'],
 };
 /* eslint-enable no-multi-spaces */
 
@@ -208,7 +203,6 @@ export function setLanguage(lang) {
   localStorage.setItem('cyberpunk-lang', lang);
 }
 
-export function getLang() { return currentLang; }
 
 export function t(key) {
   const idx = LANGS.indexOf(currentLang);
@@ -231,7 +225,6 @@ export function applyI18n() {
     if (key) opt.textContent = t(key);
   });
 
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.lang === currentLang);
-  });
+  const langSelect = document.getElementById('lang-select');
+  if (langSelect) langSelect.value = currentLang;
 }
