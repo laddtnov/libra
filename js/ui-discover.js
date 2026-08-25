@@ -1,4 +1,4 @@
-import { debounce, cleanText, toPositiveInt } from './state.js';
+import { cleanText, toPositiveInt } from './state.js';
 import { openFormModal } from './ui-form-modal.js';
 import { applyBookFromAPI } from './ui-search.js';
 import { t } from './i18n.js';
@@ -324,5 +324,3 @@ export function clearDiscover() {
 }
 
 export function isDiscoverActive() { return discoverActive; }
-
-export const debouncedFetch = debounce(fetchDiscover, 550);

@@ -4,7 +4,7 @@ import { showBookDetails, closeModal, configureDetailHandlers } from './ui-detai
 import { renderBooks, setFilter, configureRenderHandlers, updateStats } from './ui-render.js';
 import { openListsPanel, closeListsPanel, initListsPanel } from './ui-lists.js';
 import { openRecsPanel, closeRecsPanel, initRecsPanel } from './ui-recommendations.js';
-import { clearDiscover, debouncedFetch, closePreviewModal } from './ui-discover.js';
+import { clearDiscover, fetchDiscover, closePreviewModal } from './ui-discover.js';
 import { exportBooks, exportBooksCSV, importBooks } from './ui-backup.js';
 import { initI18n, setLanguage, applyI18n } from './i18n.js';
 import { initGoal, renderGoal } from './ui-goal.js';
@@ -69,17 +69,18 @@ function initApp() {
     });
   });
 
-  // Search bar → web discover
+  // Search bar → your own library. The web is opt-in from the empty state,
+  // so typing never navigates away from the shelf you already own.
   const searchInput = document.getElementById('search-input');
   searchInput?.addEventListener('input', e => {
-    const q = e.target.value.trim();
-    if (q) {
-      debouncedFetch(q);
-    } else {
-      clearDiscover();
-      state.searchQuery = '';
-      renderBooks();
-    }
+    state.searchQuery = e.target.value.trim();
+    clearDiscover();
+    renderBooks();
+  });
+
+  // Delegated so it survives every re-render of the grid.
+  document.getElementById('books-grid')?.addEventListener('click', e => {
+    if (e.target.closest('#search-web-btn') && state.searchQuery) fetchDiscover(state.searchQuery);
   });
 
   document.getElementById('sort-select')?.addEventListener('change', e => {

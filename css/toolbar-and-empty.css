@@ -243,6 +243,28 @@
   font-size: 0.9rem;
 }
 
+/* Offered only when a search found nothing on your own shelf. */
+.search-web-btn {
+  margin-top: 22px;
+  background: transparent;
+  border: 1px solid rgba(0, 242, 255, 0.35);
+  color: var(--neon-cyan);
+  font-family: 'Orbitron', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 11px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.search-web-btn:hover {
+  background: rgba(0, 242, 255, 0.08);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 14px rgba(0, 242, 255, 0.25);
+}
+
 /* ── Theme toggle ── */
 .theme-toggle-btn {
   background: transparent;
