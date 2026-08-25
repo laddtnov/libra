@@ -33,9 +33,44 @@ function toggleTheme() {
   applyTheme(current === 'dark' ? 'light' : 'dark');
 }
 
+function initDataMenu() {
+  const toggle = document.getElementById('data-menu-btn');
+  const panel = document.getElementById('data-menu-panel');
+  if (!toggle || !panel) return;
+
+  const close = ({ returnFocus = false } = {}) => {
+    panel.hidden = true;
+    toggle.setAttribute('aria-expanded', 'false');
+    if (returnFocus) toggle.focus();
+  };
+
+  toggle.addEventListener('click', () => {
+    const willOpen = panel.hidden;
+    panel.hidden = !willOpen;
+    toggle.setAttribute('aria-expanded', String(willOpen));
+    if (willOpen) panel.querySelector('button')?.focus();
+  });
+
+  panel.addEventListener('click', event => {
+    if (event.target.closest('button')) close();
+  });
+
+  document.addEventListener('click', event => {
+    if (!panel.hidden && !event.target.closest('.data-menu')) close();
+  });
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !panel.hidden) {
+      event.stopPropagation();
+      close({ returnFocus: true });
+    }
+  });
+}
+
 function initApp() {
   initTheme();
   document.getElementById('theme-toggle-btn')?.addEventListener('click', toggleTheme);
+  initDataMenu();
 
   initI18n();
   document.documentElement.lang = localStorage.getItem('cyberpunk-lang') || 'en';
@@ -111,6 +146,8 @@ function initApp() {
 
   document.getElementById('export-btn')?.addEventListener('click', exportBooks);
   document.getElementById('export-csv-btn')?.addEventListener('click', exportBooksCSV);
+  document.getElementById('import-btn')?.addEventListener('click', () => document.getElementById('import-input')?.click());
+  document.getElementById('goodreads-btn')?.addEventListener('click', () => document.getElementById('goodreads-input')?.click());
   document.getElementById('import-input')?.addEventListener('change', e => {
     importBooks(e.target.files[0]);
     e.target.value = '';

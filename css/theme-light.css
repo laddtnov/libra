@@ -218,7 +218,8 @@
 }
 
 /* ── Goodreads import button hover ── */
-[data-theme="light"] .goodreads-btn:hover {
+[data-theme="light"] .goodreads-btn:hover,
+[data-theme="light"] .goodreads-btn:focus-visible {
   background: rgba(99,188,80,0.08);
 }
 

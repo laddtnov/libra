@@ -28,6 +28,7 @@ const T = {
   btn_lists:      ['LISTS',      'СПИСКИ',     'LISTAS',      'СПИСКИ',     'LISTEN',           'LISTY'],
   btn_recommend:  ['⚡ RECOMMEND','⚡ РЕКОМЕНДАЦІЇ','⚡ RECOMENDAR','⚡ РЕКОМЕНДАЦИИ','⚡ EMPFEHLEN','⚡ POLECAJ'],
   btn_add_book:   ['> ADD BOOK', '> ДОДАТИ КНИГУ','> AÑADIR LIBRO','> ДОБАВИТЬ КНИГУ','> BUCH HINZUFÜGEN','> DODAJ KSIĄŻKĘ'],
+  btn_data:       ['↕ DATA', '> ДАНІ', '↕ DATOS', '> ДАННЫЕ', '↕ DATEN', '↕ DANE'],
 
   // Search
   search_placeholder: ['Search archive...','Пошук в архіві...','Buscar en archivo...','Поиск в архиве...','Archiv durchsuchen...','Szukaj w archiwum...'],
@@ -178,9 +179,10 @@ const T = {
   avail_note:  ['External links — prices and availability vary.','Зовнішні посилання — ціни та наявність можуть відрізнятись.','Enlaces externos — los precios y la disponibilidad varían.','Внешние ссылки — цены и наличие могут отличаться.','Externe Links — Preise und Verfügbarkeit variieren.','Linki zewnętrzne — ceny i dostępność mogą się różnić.'],
 
   // Backup buttons
-  btn_export:         ['↓ EXPORT',            '↓ ЕКСПОРТ',            '↓ EXPORTAR',           '↓ ЭКСПОРТ',            '↓ EXPORTIEREN',             '↓ EKSPORT'],
-  btn_export_csv:     ['↓ CSV',               '↓ CSV',                '↓ CSV',                '↓ CSV',                '↓ CSV',                     '↓ CSV'],
-  btn_import:         ['↑ IMPORT',            '↑ ІМПОРТ',             '↑ IMPORTAR',           '↑ ИМПОРТ',             '↑ IMPORTIEREN',             '↑ IMPORT'],
+  btn_export:         ['↓ EXPORT JSON',       '↓ ЕКСПОРТ JSON',       '↓ EXPORTAR JSON',      '↓ ЭКСПОРТ JSON',       '↓ JSON EXPORTIEREN',        '↓ EKSPORT JSON'],
+  btn_export_csv:     ['↓ EXPORT CSV',        '↓ ЕКСПОРТ CSV',        '↓ EXPORTAR CSV',       '↓ ЭКСПОРТ CSV',        '↓ CSV EXPORTIEREN',         '↓ EKSPORT CSV'],
+  btn_import:         ['↑ IMPORT JSON',       '↑ ІМПОРТ JSON',        '↑ IMPORTAR JSON',      '↑ ИМПОРТ JSON',        '↑ JSON IMPORTIEREN',        '↑ IMPORT JSON'],
+  btn_import_goodreads: ['⊕ IMPORT GOODREADS CSV', '⊕ ІМПОРТ GOODREADS CSV', '⊕ IMPORTAR GOODREADS CSV', '⊕ ИМПОРТ GOODREADS CSV', '⊕ GOODREADS CSV IMPORTIEREN', '⊕ IMPORT GOODREADS CSV'],
   export_success:     ['ARCHIVE EXPORTED',    'АРХІВ ЕКСПОРТОВАНО',   'ARCHIVO EXPORTADO',    'АРХИВ ЭКСПОРТИРОВАН',  'ARCHIV EXPORTIERT',         'ARCHIWUM WYEKSPORTOWANE'],
   import_success:     ['{n} RECORDS IMPORTED','{n} ЗАПИСІВ ІМПОРТОВАНО','{n} REGISTROS IMPORTADOS','{n} ЗАПИСЕЙ ИМПОРТИРОВАНО','{n} EINTRÄGE IMPORTIERT','{n} REKORDÓW ZAIMPORTOWANYCH'],
   import_invalid:     ['INVALID FILE FORMAT', 'НЕВІРНИЙ ФОРМАТ ФАЙЛУ','FORMATO INVÁLIDO',     'НЕВЕРНЫЙ ФОРМАТ ФАЙЛА','UNGÜLTIGES DATEIFORMAT',    'NIEPRAWIDŁOWY FORMAT'],
