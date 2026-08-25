@@ -230,11 +230,17 @@ export function renderBooks() {
   renderBulkBar();
 
   if (!entries.length) {
+    // With a query active, the shelf coming up empty is the moment to offer the
+    // web — app-ui.js owns the click, so ui-render never has to import discover.
+    const webBtn = state.searchQuery
+      ? `<button class="search-web-btn" id="search-web-btn">&gt; ${t('search_web')}</button>`
+      : '';
     grid.innerHTML = `
       <div class="no-results">
         <div class="no-results-icon">📭</div>
         <div class="no-results-text">${t('no_records')}</div>
         <div class="no-results-sub">${t('no_records_sub')}</div>
+        ${webBtn}
       </div>`;
     return;
   }
