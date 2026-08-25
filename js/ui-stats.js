@@ -29,10 +29,23 @@ function pagesPerMonth() {
   return map;
 }
 
-// Session dates are written as UTC day keys (see ui-streak.js), so the grid is
-// built on UTC boundaries too — otherwise a late-evening session in a negative
-// UTC offset would land on the wrong square.
-function utcDayKey(d) { return d.toISOString().slice(0, 10); }
+// Session dates are bare YYYY-MM-DD calendar dates: ui-sessions.js stores the
+// value of a date picker, prefilled with the UTC date. The grid is built on UTC
+// midnights so its own arithmetic never drifts across DST; dayKey() is how a
+// grid date becomes a lookup key for that stored string.
+function dayKey(d) { return d.toISOString().slice(0, 10); }
+
+// "Today" is two different calendar dates either side of UTC midnight, and the
+// picker lets a reader store either one. Take whichever is later so a session
+// logged as "today" is always inside the window rather than one square past its
+// right edge.
+function windowEnd() {
+  const now      = new Date();
+  const utcToday = new Date(now);
+  utcToday.setUTCHours(0, 0, 0, 0);
+  const localToday = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
+  return localToday > utcToday ? localToday : utcToday;
+}
 
 function dailyPages() {
   const map = {};
@@ -156,40 +169,57 @@ function buildHeatmap() {
   const section = makeEl('div', 'stats-section');
   section.appendChild(makeEl('div', 'stats-section-title', 'READING ACTIVITY'));
 
-  const pages = dailyPages();
-  if (!Object.keys(pages).length) {
-    section.appendChild(makeEl('div', 'stats-empty', '> No reading sessions logged yet'));
-    return section;
-  }
-
   // Window: today back HEAT_DAYS-1, extended left to the preceding Sunday so
   // every column is a full Sun-Sat week.
-  const end       = new Date();
-  end.setUTCHours(0, 0, 0, 0);
+  const pages     = dailyPages();
+  const end       = windowEnd();
   const start     = new Date(end.getTime() - (HEAT_DAYS - 1) * DAY_MS);
   const gridStart = new Date(start.getTime() - start.getUTCDay() * DAY_MS);
   const weeks     = Math.ceil((Math.round((end - gridStart) / DAY_MS) + 1) / 7);
 
+  // Emptiness is a property of the window, not of the whole history — sessions
+  // that all predate it would otherwise render as a full grid of idle squares.
+  const startKey = dayKey(start);
+  const endKey   = dayKey(end);
+  if (!Object.keys(pages).some(k => k >= startKey && k <= endKey && pages[k] > 0)) {
+    section.appendChild(makeEl('div', 'stats-empty', '> No reading sessions in the past year'));
+    return section;
+  }
+
   const layout = makeEl('div', 'heat-layout');
   layout.appendChild(makeEl('div', 'heat-corner'));
 
-  // Month labels, one per column where the month turns over. A label's glyphs are
-  // ~2.5 columns wide while its grid box is only one, so labels closer than
-  // MIN_LABEL_COLS would collide — that also drops the leading partial month,
-  // whose stub column sits right next to the next month's label.
+  // Month labels, one per column where the month turns over. A label's glyphs
+  // are ~2.5 columns wide while its grid box is only one, so labels closer than
+  // MIN_LABEL_COLS would collide.
   const MIN_LABEL_COLS = 3;
-  const months = makeEl('div', 'heat-months');
+  const monthAt = w => new Date(gridStart.getTime() + w * 7 * DAY_MS).getUTCMonth();
+  const months  = makeEl('div', 'heat-months');
   months.style.gridTemplateColumns = `repeat(${weeks}, var(--heat-cell))`;
-  let lastMonth = new Date(gridStart).getUTCMonth();
-  let lastLabelCol = -MIN_LABEL_COLS;
-  for (let w = 1; w < weeks; w++) {
-    const m = new Date(gridStart.getTime() + w * 7 * DAY_MS).getUTCMonth();
-    if (m === lastMonth) continue;
-    lastMonth = m;
-    if (w - lastLabelCol < MIN_LABEL_COLS) continue;
+
+  const addLabel = (m, w) => {
     const lbl = makeEl('div', 'heat-month-lbl', MONTHS[m]);
     lbl.style.gridColumn = String(w + 1);
     months.appendChild(lbl);
+  };
+
+  // The leading month gets a label only when it owns enough columns to carry
+  // one. gridStart is the Sunday on or before the window's first day, so that
+  // month can be anything from a one-column stub to five full columns — always
+  // labelling it would collide with the next month, never labelling it leaves
+  // the year's first weeks unidentified.
+  let lastMonth    = monthAt(0);
+  let firstTurn    = weeks;
+  for (let w = 1; w < weeks; w++) { if (monthAt(w) !== lastMonth) { firstTurn = w; break; } }
+  let lastLabelCol = -Infinity;
+  if (firstTurn >= MIN_LABEL_COLS) { addLabel(lastMonth, 0); lastLabelCol = 0; }
+
+  for (let w = 1; w < weeks; w++) {
+    const m = monthAt(w);
+    if (m === lastMonth) continue;
+    lastMonth = m;
+    if (w - lastLabelCol < MIN_LABEL_COLS) continue;
+    addLabel(m, w);
     lastLabelCol = w;
   }
   layout.appendChild(months);
@@ -211,7 +241,7 @@ function buildHeatmap() {
       grid.appendChild(makeEl('div', 'heat-cell heat-pad'));
       continue;
     }
-    const key  = utcDayKey(d);
+    const key  = dayKey(d);
     const p    = pages[key] || 0;
     const cell = makeEl('div', `heat-cell heat-t${heatTier(p)}`);
     cell.title = p ? `${key}: ${p} pages` : `${key}: no sessions`;
