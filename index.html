@@ -32,12 +32,14 @@
         <h1 class="glitch" data-text="LIBRA">LIBRA</h1>
         <p class="tagline">&gt;_ Digital library v2.0</p>
         <div class="lang-switcher">
-          <button class="lang-btn active" data-lang="en">EN</button>
-          <button class="lang-btn" data-lang="uk">UA</button>
-          <button class="lang-btn" data-lang="es">ES</button>
-          <button class="lang-btn" data-lang="ru">RU</button>
-          <button class="lang-btn" data-lang="de">DE</button>
-          <button class="lang-btn" data-lang="pl">PL</button>
+          <select class="lang-select" id="lang-select" aria-label="Language">
+            <option value="en">EN</option>
+            <option value="uk">UA</option>
+            <option value="es">ES</option>
+            <option value="ru">RU</option>
+            <option value="de">DE</option>
+            <option value="pl">PL</option>
+          </select>
           <button id="auth-badge" data-state="signed-out" title="Sign in to sync across devices">[ SIGN IN ]</button>
           <button id="logout-btn" class="logout-btn" style="display:none">[ LOG OUT ]</button>
         </div>
@@ -184,15 +186,14 @@
       <a class="support-btn" href="https://buymeacoffee.com/laddtnov" target="_blank" rel="noopener noreferrer" aria-label="Support on Buy Me a Coffee">♥ SUPPORT</a>
       <button class="add-book-btn" id="add-book-btn" data-i18n="btn_add_book">&gt; ADD BOOK</button>
       <div class="backup-btns">
-        <button class="backup-btn export-btn" id="export-btn" data-i18n="btn_export">↓ EXPORT</button>
-        <button class="backup-btn export-btn" id="export-csv-btn" data-i18n="btn_export_csv">↓ CSV</button>
-        <label class="backup-btn import-btn" id="import-label">
+        <select class="backup-btn export-select" id="export-select" aria-label="Export library">
+          <option value="" data-i18n="btn_export">↓ EXPORT</option>
+          <option value="json" data-i18n="btn_export_json">JSON</option>
+          <option value="csv" data-i18n="btn_export_csv">CSV</option>
+        </select>
+        <label class="backup-btn import-btn" id="import-label" title="Import a Libra backup (.json) or a Goodreads export (.csv)">
           <span data-i18n="btn_import">↑ IMPORT</span>
-          <input type="file" id="import-input" accept=".json" style="display:none">
-        </label>
-        <label class="backup-btn goodreads-btn" id="goodreads-label" title="Import from Goodreads CSV export">
-          <span>⊕ GOODREADS</span>
-          <input type="file" id="goodreads-input" accept=".csv" style="display:none">
+          <input type="file" id="import-input" accept=".json,.csv" style="display:none">
         </label>
       </div>
       <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Toggle light/dark theme">☀</button>

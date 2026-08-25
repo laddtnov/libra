@@ -323,4 +323,3 @@ export function clearDiscover() {
   if (grid) grid.style.display = '';
 }
 
-export function isDiscoverActive() { return discoverActive; }

@@ -33,20 +33,32 @@
   box-shadow: 0 0 12px rgba(0, 242, 255, 0.18);
 }
 
+/* Export format picker — inherits .backup-btn, adds its own caret since it is
+   a <select> sitting in a row of buttons and labels. */
+.export-select {
+  appearance: none;
+  padding-right: 26px;
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+                    linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position: calc(100% - 14px) center, calc(100% - 10px) center;
+  background-size: 4px 4px, 4px 4px;
+  background-repeat: no-repeat;
+}
+
+.export-select:focus {
+  border-color: var(--neon-cyan);
+  color: var(--neon-cyan);
+  outline: none;
+}
+
+.export-select option {
+  background: var(--dark-card);
+  color: var(--text-primary);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.9rem;
+}
+
 .import-btn {
   cursor: pointer;
-}
-
-.goodreads-btn {
-  cursor: pointer;
-  border-color: rgba(99, 188, 80, 0.4);
-  color: rgba(99, 188, 80, 0.7);
-}
-
-.goodreads-btn:hover {
-  border-color: #63bc50;
-  color: #63bc50;
-  background: #0f1410;
-  box-shadow: 0 0 12px rgba(99, 188, 80, 0.2);
 }
 

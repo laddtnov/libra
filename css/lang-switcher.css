@@ -11,12 +11,13 @@
   margin-top: 12px;
 }
 
-.lang-btn {
-  padding: 4px 9px;
+.lang-select {
+  appearance: none;
+  padding: 4px 22px 4px 9px;
   background: transparent;
   border: 1px solid rgba(0, 242, 255, 0.3);
   border-radius: 4px;
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--neon-cyan);
   font-family: 'Orbitron', monospace;
   font-size: 0.58rem;
   font-weight: 700;
@@ -24,16 +25,25 @@
   cursor: pointer;
   transition: all 0.2s ease;
   text-transform: uppercase;
+  /* Caret drawn in the control itself — .lang-switcher is a shared flex row,
+     so a positioned ::after would need a wrapper element just for this. */
+  background-image: linear-gradient(45deg, transparent 50%, var(--neon-cyan) 50%),
+                    linear-gradient(135deg, var(--neon-cyan) 50%, transparent 50%);
+  background-position: calc(100% - 12px) center, calc(100% - 8px) center;
+  background-size: 4px 4px, 4px 4px;
+  background-repeat: no-repeat;
 }
 
-.lang-btn:hover {
-  border-color: rgba(0, 242, 255, 0.5);
-  color: var(--neon-cyan);
-}
-
-.lang-btn.active {
+.lang-select:hover,
+.lang-select:focus {
   border-color: var(--neon-cyan);
-  color: var(--neon-cyan);
-  background: rgba(0, 242, 255, 0.08);
-  text-shadow: 0 0 6px rgba(0, 242, 255, 0.5);
+  outline: none;
+  box-shadow: 0 0 8px rgba(0, 242, 255, 0.25);
+}
+
+.lang-select option {
+  background: var(--dark-card);
+  color: var(--text-primary);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 0.9rem;
 }

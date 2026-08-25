@@ -37,10 +37,6 @@ export function toggleBookInList(listId, bookId) {
   saveLists();
 }
 
-export function getBookLists(bookId) {
-  return Object.values(state.lists).filter(l => l.bookIds.includes(bookId));
-}
-
 export function removeBookFromAllLists(bookId) {
   for (const list of Object.values(state.lists)) {
     const idx = list.bookIds.indexOf(bookId);
