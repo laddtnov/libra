@@ -58,3 +58,19 @@ export function focusFirst(container) {
     container.focus();
   }
 }
+
+// Cover images used inline onerror handlers, which the CSP (script-src 'self',
+// no unsafe-inline) has always blocked — the fallbacks never ran in production.
+// One delegated listener replaces them. Capture phase: error does not bubble.
+export function initCoverFallbacks() {
+  document.addEventListener('error', event => {
+    const img = event.target;
+    if (!(img instanceof HTMLImageElement) || !img.dataset.coverFallback) return;
+
+    if (img.dataset.coverFallback === 'swap') {
+      const placeholder = img.nextElementSibling;
+      if (placeholder) placeholder.hidden = false;
+    }
+    img.remove();
+  }, true);
+}

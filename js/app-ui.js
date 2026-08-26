@@ -1,4 +1,4 @@
-import { state, saveBooks } from './state.js';
+import { state, saveBooks, normalizeBooks } from './state.js';
 import { openFormModal, closeFormModal } from './ui-form-modal.js';
 import { showBookDetails, closeModal, configureDetailHandlers } from './ui-detail-modal.js';
 import { renderBooks, setFilter, configureRenderHandlers, updateStats } from './ui-render.js';
@@ -13,9 +13,21 @@ import { openStatsPanel, closeStatsPanel, initStatsPanel } from './ui-stats.js';
 import { importGoodreads } from './ui-goodreads.js';
 import { initBulk, updateSelectBtn } from './ui-bulk.js';
 import { toggleSound } from './ui-feedback.js';
+import { initCoverFallbacks } from './ui-utils.js';
 
 configureRenderHandlers({ openDetails: showBookDetails });
 configureDetailHandlers({ openFormModal });
+
+// The cloud row is written by other devices, so it is untrusted input like any
+// imported file — same normalizer, same guarantees.
+function mergeCloudBooks(cloudBooks) {
+  const safeBooks = normalizeBooks(cloudBooks);
+  if (!Object.keys(safeBooks).length) return;
+  Object.assign(state.booksData, safeBooks);
+  localStorage.setItem('cyberpunk-books', JSON.stringify(state.booksData));
+  renderBooks();
+  updateStats();
+}
 
 function initTheme() {
   const saved = localStorage.getItem('cyberpunk-theme') || 'dark';
@@ -36,6 +48,7 @@ function toggleTheme() {
 
 function initApp() {
   initTheme();
+  initCoverFallbacks();
   document.getElementById('theme-toggle-btn')?.addEventListener('click', toggleTheme);
 
   initI18n();
@@ -184,12 +197,7 @@ async function initSync() {
         pullBooksFromCloud(),
         pullSettingsFromCloud(),
       ]);
-      if (cloudBooks && typeof cloudBooks === 'object') {
-        Object.assign(state.booksData, cloudBooks);
-        localStorage.setItem('cyberpunk-books', JSON.stringify(state.booksData));
-        renderBooks();
-        updateStats();
-      }
+      mergeCloudBooks(cloudBooks);
       if (cloudSettings) { applySettings(cloudSettings); renderGoal(); }
     }
 
@@ -211,12 +219,7 @@ async function initSync() {
           pullBooksFromCloud(),
           pullSettingsFromCloud(),
         ]);
-        if (cloudBooks && typeof cloudBooks === 'object') {
-          Object.assign(state.booksData, cloudBooks);
-          localStorage.setItem('cyberpunk-books', JSON.stringify(state.booksData));
-          renderBooks();
-          updateStats();
-        }
+        mergeCloudBooks(cloudBooks);
         if (cloudSettings) { applySettings(cloudSettings); renderGoal(); }
         saveBooks();
         pushSettingsToCloud(buildSettings()).catch(() => {});
@@ -232,12 +235,7 @@ async function syncFromCloud() {
     const { pullBooksFromCloud, pullSettingsFromCloud, getCurrentUser } = await import('./auth.js');
     if (!getCurrentUser()) return;
     const [cloudBooks, cloudSettings] = await Promise.all([pullBooksFromCloud(), pullSettingsFromCloud()]);
-    if (cloudBooks && typeof cloudBooks === 'object') {
-      Object.assign(state.booksData, cloudBooks);
-      localStorage.setItem('cyberpunk-books', JSON.stringify(state.booksData));
-      renderBooks();
-      updateStats();
-    }
+    mergeCloudBooks(cloudBooks);
     const { applySettings } = await import('./auth.js');
     if (cloudSettings) { applySettings(cloudSettings); renderGoal(); }
   } catch { /* offline or not signed in */ }
