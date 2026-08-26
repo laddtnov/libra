@@ -45,7 +45,9 @@
   width: 80px;
   height: 112px;
   flex-shrink: 0;
-  background: rgba(0, 242, 255, 0.06);
+  /* Opaque so the glyph's contrast is checkable: this is what 6% cyan
+     composites to over the modal ground, and it reads 14.4:1 with #9df3ff. */
+  background: #09181b;
   border: 2px solid rgba(0, 242, 255, 0.28);
   display: flex;
   align-items: center;

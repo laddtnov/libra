@@ -144,7 +144,9 @@
 [data-theme="light"] .stats-btn:hover {
   color: #0369a1;
   border-color: #0369a1;
-  background: rgba(3, 105, 161, 0.08);
+  /* Opaque: what 8% of the ink composites to over the light page, and it
+     pins the ratio with #0369a1 at a checkable 4.95:1. */
+  background: #e2ecf3;
   box-shadow: 0 0 14px rgba(3, 105, 161, 0.2);
 }
 
