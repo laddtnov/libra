@@ -59,7 +59,6 @@ dialog {
   --neon-purple: #9d00ff;
   --neon-green: #10b981;
   --neon-orange: #f59e0b;
-  --dark-bg: #0a0a0c;
   --dark-card: #151518;
   --dark-card-hover: #1a1a1e;
   --text-primary: #e0e0e0;
@@ -67,7 +66,6 @@ dialog {
 }
 
 [data-theme="light"] {
-  --dark-bg: #f5f7fa;
   --dark-card: #ffffff;
   --dark-card-hover: #f0f2f8;
   --text-primary: #1a1a2e;

@@ -14,7 +14,7 @@
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
 ![PWA](https://img.shields.io/badge/PWA-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
-![Version](https://img.shields.io/badge/Version-0.5.1-00f2ff?style=for-the-badge)
+![Version](https://img.shields.io/badge/Version-0.5.2-00f2ff?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
@@ -87,7 +87,7 @@ A personal reading tracker with a full cyberpunk neon UI — glitch title, statu
 ### Auth
 - Email + password sign up / sign in
 - Forgot password → reset link via email (cyberpunk-styled email template)
-- Settings sync across devices (goal, API key, streak, display name)
+- Settings sync across devices (reading goal, per-genre goals, streak, display name)
 
 ### Goodreads Import
 - Upload your Goodreads CSV export
@@ -128,6 +128,8 @@ Then open `index.html` — no build step needed for the frontend.
 2. Run all migrations in order in the Supabase SQL Editor:
    - `db/002_user_books.sql`
    - `db/003_user_settings.sql`
+   - `db/005_rls_audit.sql`
+   - `db/006_drop_push_subscriptions.sql` (only if you ran `004`, which is retired)
 3. Fill in `js/config.js` with your project URL and anon key
 4. Click **[ SIGN IN ]** in the header → create an account or log in
 
@@ -160,7 +162,8 @@ Then open `index.html` — no build step needed for the frontend.
 - **Supabase Row Level Security** — RLS enabled on all tables; users can only read/write their own rows (`auth.uid() = user_id`)
 - **Input sanitization** — all user-supplied and cloud-pulled data normalized through `escHtml()` and typed sanitizers before rendering
 - **No secrets in source** — Supabase credentials fetched at runtime from `/api/config`; anon key only (RLS enforces access)
-- **XSS-safe DOM writes** — all `innerHTML` callsites guard with `escHtml()`; `onerror` handlers use pre-rendered DOM nodes, no string interpolation
+- **XSS-safe DOM writes** — all `innerHTML` callsites guard with `escHtml()`; no inline `<script>` or `on*=` handlers anywhere, enforced by a CI check
+- **Untrusted books normalized at the boundary** — JSON backups, Goodreads CSVs and the cloud row all pass through the same typed normalizer, which caps lengths and drops hostile keys
 
 ---
 
@@ -173,6 +176,34 @@ Then open `index.html` — no build step needed for the frontend.
 ---
 
 ## 📜 Changelog
+
+### v0.5.2 — Three things that were quietly broken in production
+
+Everything here is a fix. The theme of the release is that a strict Content Security Policy had been silently disabling features since it landed, and nobody could see it locally — `npx serve` sends no CSP header, so the app behaved correctly in development and lost functionality in production.
+
+**Fixed — silently broken in production**
+- **The service worker was never registered.** Its registration lived in an inline `<script>`, which `script-src 'self'` blocks. Libra was not actually installable or offline-capable on the live site, and every service-worker cache bump was inert there ([#77](https://github.com/laddtnov/libra/pull/77))
+- **Password-reset links opened the normal app.** The `?reset=1` detector was inline too, so the flag it sets never reached `ui-auth.js` and the "set new password" screen never appeared ([#77](https://github.com/laddtnov/libra/pull/77))
+- **The detail modal collapsed to ~178px on phones** — under half the screen. It centred with `left: 50%` and no width, so an auto-width fixed element could only shrink into the right half of the viewport ([#75](https://github.com/laddtnov/libra/pull/75))
+- **Cover-image fallbacks never ran.** They were inline `onerror=` handlers, also CSP-blocked, so a missing cover left a broken-image icon. One of the two was doubly broken: it moved a `hidden` placeholder into place without unhiding it ([#75](https://github.com/laddtnov/libra/pull/75))
+- **The reading timer bled between books.** Opening a second book while a timer ran left the old interval ticking into the new book's display ([#75](https://github.com/laddtnov/libra/pull/75))
+
+**Security**
+- **Imported books are now validated.** A JSON backup, a Goodreads CSV, and the cloud row all went into render state through a bare `Object.assign` — no type checks, no length caps, and a `__proto__` key in an imported file replaced the prototype of the book store. The normalizer and reserved-key guard already existed in `state.js`; these three paths simply never called them ([#76](https://github.com/laddtnov/libra/pull/76))
+- **Closed an unescaped attribute sink** in the edit form, where `pages` and `currentPage` were interpolated into `value="…"` without escaping — the sink that the unvalidated import above could reach ([#76](https://github.com/laddtnov/libra/pull/76))
+- Added `X-Content-Type-Options`, `Referrer-Policy` and `Permissions-Policy`; `base-uri` and `form-action` locked to `'none'`; `escHtml` now escapes `'`; imports capped at 10MB ([#76](https://github.com/laddtnov/libra/pull/76))
+
+**Changed**
+- The sound toggle reads `♪ SOUND ON` / `♪ SOUND OFF` and drops its `aria-label`, so its accessible name is its visible label (WCAG 2.5.3) ([#75](https://github.com/laddtnov/libra/pull/75))
+- The header tagline lost its stale `v2.0` and gained translations — it was the last header string hardcoded in English ([#74](https://github.com/laddtnov/libra/pull/74))
+- `package.json` matches the release tags instead of claiming `1.0.0` ([#73](https://github.com/laddtnov/libra/pull/73))
+
+**Removed**
+- ~50 lines of duplicated modal CSS, dead timer styles, and a STOP button that did exactly what PAUSE did ([#75](https://github.com/laddtnov/libra/pull/75))
+- Stale light-theme rules for elements that no longer exist, two dead element ids, an unreferenced CSS custom property, and seven `export` keywords with no consumer outside their own module
+
+**Tooling**
+- CI fails the build on an inline `<script>` or `on*=` handler in `index.html`, so the class of bug behind two of the fixes above cannot come back silently
 
 ### v0.5.1 — Reading heatmap, library search, and a single visual language
 
