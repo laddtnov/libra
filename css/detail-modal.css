@@ -82,41 +82,8 @@
   }
 }
 
-@keyframes terminalBoot {
-  0% {
-    opacity: 0;
-    transform: scale(0.95);
-    filter: blur(5px);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-    filter: blur(0);
-  }
-}
 
-.tooltip-container {
-  position: relative;
-  width: 400px;
-  max-height: 500px;
-  overflow-y: auto;
-  background: #000;
-  border: 3px solid #00ff00;
-  padding: 20px;
-  box-shadow: 
-    0 0 20px rgba(0, 255, 0, 0.5),
-    0 0 40px rgba(0, 255, 0, 0.3),
-    inset 0 0 50px rgba(0, 255, 0, 0.05);
-  font-family: 'Courier New', monospace;
-  color: #00ff00;
-}
-
-@keyframes screenFlicker {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.97; }
-}
-
-/* Scanlines */
+/* Scanlines overlay — the CRT texture behind every terminal modal */
 .scanlines {
   position: absolute;
   top: 0;
@@ -134,86 +101,3 @@
   opacity: 0.5;
   z-index: 10;
 }
-
-
-/* Terminal Container */
-.terminal-container {
-  position: relative;
-  z-index: 5;
-  line-height: 1.6;
-}
-
-/* Terminal Line */
-.terminal-line {
-  font-size: 13px;
-  color: #00ff00;
-  text-shadow: 
-    0 0 5px rgba(0, 255, 0, 0.8),
-    0 0 10px rgba(0, 255, 0, 0.4);
-  margin: 2px 0;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  font-family: 'Courier New', monospace;
-}
-
-/* Cursor */
-.cursor {
-  display: inline-block;
-  background: #00ff00;
-  color: #000;
-  margin-left: 2px;
-}
-
-@keyframes cursorBlink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
-}
-
-/* Scrollbar */
-.tooltip-container::-webkit-scrollbar {
-  width: 8px;
-}
-
-.tooltip-container::-webkit-scrollbar-track {
-  background: #000;
-  border: 1px solid #00ff00;
-}
-
-.tooltip-container::-webkit-scrollbar-thumb {
-  background: #00ff00;
-  border: 1px solid #000;
-}
-
-.tooltip-container::-webkit-scrollbar-thumb:hover {
-  background: #00cc00;
-  box-shadow: 0 0 10px #00ff00;
-}
-
-/* CRT Screen Effect */
-.tooltip-container::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(
-    ellipse at center,
-    transparent 0%,
-    rgba(0, 0, 0, 0.3) 100%
-  );
-  pointer-events: none;
-  z-index: 15;
-}
-
-/* Responsive */
-@media (max-width: 1024px) {
-  h1 { font-size: 3rem; }
-  .books-grid { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .tooltip-container { animation: screenFlicker 0.15s infinite; }
-  .cursor { animation: cursorBlink 0.7s infinite; }
-}
-

@@ -26,13 +26,20 @@ export function playClickSound() {
   }
 }
 
+// Label and on/off state in one place — the detail modal rebuilds this
+// button every time it opens. The colours live in CSS so both themes get a
+// say; inline styles would win over either of them.
+export function renderSoundBtn(btn) {
+  if (!btn) return;
+  btn.textContent = state.soundEnabled ? '♪ ON' : '♪ OFF';
+  btn.classList.toggle('is-off', !state.soundEnabled);
+  btn.setAttribute('aria-pressed', String(state.soundEnabled));
+  btn.setAttribute('aria-label', state.soundEnabled ? 'Sound on' : 'Sound off');
+}
+
 export function toggleSound() {
   state.soundEnabled = !state.soundEnabled;
-  const btn = document.getElementById('sound-toggle');
-  if (btn) {
-    btn.textContent = state.soundEnabled ? '🔊 ON' : '🔇 OFF';
-    btn.style.color = state.soundEnabled ? '#00ff00' : '#444';
-  }
+  renderSoundBtn(document.getElementById('sound-toggle'));
 }
 
 export function showToast(message, type = 'success') {

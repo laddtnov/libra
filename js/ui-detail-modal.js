@@ -1,5 +1,5 @@
 import { state, saveBooks, clamp, toPositiveInt, toNonNegativeInt, escHtml } from './state.js';
-import { playClickSound, toggleSound, showToast } from './ui-feedback.js';
+import { playClickSound, toggleSound, renderSoundBtn, showToast } from './ui-feedback.js';
 import { renderStarsHTML, renderBooks } from './ui-render.js';
 import { toggleBookInList, removeBookFromAllLists, renderListsPanel } from './ui-lists.js';
 import { renderQuotesSection, initQuotesSection } from './ui-quotes.js';
@@ -94,8 +94,7 @@ export function showBookDetails(bookId) {
   const soundBtn = document.createElement('button');
   soundBtn.id = 'sound-toggle';
   soundBtn.className = 'sound-toggle-btn';
-  soundBtn.textContent = state.soundEnabled ? '🔊 ON' : '🔇 OFF';
-  soundBtn.style.color = state.soundEnabled ? '' : '#666';
+  renderSoundBtn(soundBtn);
   soundBtn.onclick = toggleSound;
   soundSlot.appendChild(soundBtn);
 

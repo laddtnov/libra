@@ -29,7 +29,7 @@
 
 .quote-page {
   font-size: 10px;
-  color: #007700;
+  color: rgba(0, 242, 255, 0.62);
   letter-spacing: 1px;
 }
 
@@ -49,7 +49,7 @@
 
 .quotes-empty {
   font-size: 11px;
-  color: #004400;
+  color: rgba(0, 242, 255, 0.62);
   font-style: italic;
   margin-bottom: 8px;
 }
@@ -62,7 +62,7 @@
   min-height: 56px;
   background: #000d00;
   border: 1px solid #003a00;
-  color: #00cc00;
+  color: rgba(0, 242, 255, 0.78);
   font-family: 'Courier New', monospace;
   font-size: 11px;
   padding: 8px;
@@ -94,7 +94,7 @@
   flex-shrink: 0;
   background: #000d00;
   border: 1px solid #003a00;
-  color: #00cc00;
+  color: rgba(0, 242, 255, 0.78);
   font-family: 'Courier New', monospace;
   font-size: 11px;
   padding: 6px 8px;
