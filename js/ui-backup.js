@@ -1,4 +1,4 @@
-import { state, saveBooks } from './state.js';
+import { state, saveBooks, normalizeBooks } from './state.js';
 import { renderBooks, updateStats } from './ui-render.js';
 import { showToast } from './ui-feedback.js';
 import { t } from './i18n.js';
@@ -44,17 +44,30 @@ export function exportBooksCSV() {
   showToast(t('export_success'), 'success');
 }
 
+// A backup file is untrusted input — it may not be one of ours.
+const MAX_IMPORT_BYTES = 10 * 1024 * 1024;
+
 export async function importBooks(file) {
   if (!file) return;
   try {
+    if (file.size > MAX_IMPORT_BYTES) {
+      showToast(t('import_invalid'), 'delete');
+      return;
+    }
     const text = await file.text();
     const parsed = JSON.parse(text);
     if (typeof parsed !== 'object' || Array.isArray(parsed) || !Object.keys(parsed).length) {
       showToast(t('import_invalid'), 'delete');
       return;
     }
-    const count = Object.keys(parsed).length;
-    Object.assign(state.booksData, parsed);
+    // Every field re-typed and length-capped, hostile ids dropped.
+    const safeBooks = normalizeBooks(parsed);
+    const count = Object.keys(safeBooks).length;
+    if (!count) {
+      showToast(t('import_invalid'), 'delete');
+      return;
+    }
+    Object.assign(state.booksData, safeBooks);
     saveBooks();
     updateStats();
     renderBooks();

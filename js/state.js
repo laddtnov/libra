@@ -40,9 +40,12 @@ export function guessCategory(subjects = []) {
   return null;
 }
 
+// Escapes ' as well, so a single-quoted attribute is safe too — every
+// attribute here is double-quoted today, and one that is not should not
+// silently become an injection point.
 export function escHtml(str) {
   return String(str ?? '')
-    .replaceAll('&', '&amp;').replaceAll('"', '&quot;')
+    .replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll("'", '&#39;')
     .replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 }
 
@@ -140,12 +143,14 @@ function normalizeBookRecord(rawBook) {
   return book;
 }
 
-function normalizeBooksCollection(rawBooks) {
-  if (!rawBooks || typeof rawBooks !== 'object' || Array.isArray(rawBooks)) {
-    return structuredClone(DEFAULT_BOOKS);
-  }
+// Books arriving from anywhere that is not this tab's own state — a backup
+// file, a Goodreads CSV, another device's cloud row — must come through here.
+// Object.entries skips inherited keys and sanitizeBookId drops __proto__, so
+// a hostile key cannot reach the target object's prototype.
+export function normalizeBooks(rawBooks) {
+  if (!rawBooks || typeof rawBooks !== 'object' || Array.isArray(rawBooks)) return {};
 
-  const normalized = {};
+  const normalized = { __proto__: null };
   for (const [rawId, rawBook] of Object.entries(rawBooks)) {
     const safeId = sanitizeBookId(rawId);
     if (!safeId) continue;
@@ -153,6 +158,11 @@ function normalizeBooksCollection(rawBooks) {
     if (safeBook) normalized[safeId] = safeBook;
   }
 
+  return Object.fromEntries(Object.entries(normalized));
+}
+
+function normalizeBooksCollection(rawBooks) {
+  const normalized = normalizeBooks(rawBooks);
   return Object.keys(normalized).length ? normalized : structuredClone(DEFAULT_BOOKS);
 }
 
@@ -214,7 +224,13 @@ export const state = {
 };
 
 export function saveBooks() {
-  localStorage.setItem('cyberpunk-books', JSON.stringify(state.booksData));
+  try {
+    localStorage.setItem('cyberpunk-books', JSON.stringify(state.booksData));
+  } catch (error) {
+    // Quota exceeded — the in-memory library still works, so do not take the
+    // app down over it, but the cloud push below is now the only copy.
+    console.warn('Could not persist library to localStorage.', error);
+  }
   // Fire-and-forget cloud sync — doesn't block UI
   import('./auth.js').then(({ pushBooksToCloud }) => {
     pushBooksToCloud(state.booksData).catch(() => {});

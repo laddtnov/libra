@@ -177,7 +177,7 @@ function buildFormHtml(book, isEdit, rv) {
       </div>
       <div class="form-field">
         <label class="terminal-label">&gt; ${t('form_lbl_pages')}</label>
-        <input id="f-pages" class="terminal-input" type="number" min="1" value="${book?.pages || ''}" placeholder="${t('form_ph_pages')}">
+        <input id="f-pages" class="terminal-input" type="number" min="1" value="${escHtml(book?.pages || '')}" placeholder="${t('form_ph_pages')}">
       </div>
       <div class="form-field">
         <label class="terminal-label">&gt; ${t('form_lbl_status')}</label>
@@ -191,7 +191,7 @@ function buildFormHtml(book, isEdit, rv) {
       <div id="reading-fields" style="display:${book?.status === 'reading' ? 'block' : 'none'}">
         <div class="form-field">
           <label class="terminal-label">&gt; ${t('form_lbl_cur_page')}</label>
-          <input id="f-current-page" class="terminal-input" type="number" min="0" value="${book?.currentPage || ''}" placeholder="${t('form_ph_cur_page')}">
+          <input id="f-current-page" class="terminal-input" type="number" min="0" value="${escHtml(book?.currentPage || '')}" placeholder="${t('form_ph_cur_page')}">
         </div>
         <div class="form-field">
           <label class="terminal-label">&gt; ${t('form_lbl_started')}</label>

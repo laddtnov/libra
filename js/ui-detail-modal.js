@@ -113,7 +113,7 @@ export function showBookDetails(bookId) {
 
   const firstLetter = escHtml((book.title || '?').charAt(0).toUpperCase());
   const coverHTML = safeCoverId
-    ? `<img class="detail-cover" src="https://covers.openlibrary.org/b/id/${safeCoverId}-M.jpg" alt="cover" loading="lazy" onerror="this.replaceWith(this.nextElementSibling)">
+    ? `<img class="detail-cover" src="https://covers.openlibrary.org/b/id/${safeCoverId}-M.jpg" alt="cover" loading="lazy" data-cover-fallback="swap">
        <div class="detail-cover-placeholder" hidden>${firstLetter}</div>`
     : `<div class="detail-cover-placeholder">${firstLetter}</div>`;
 

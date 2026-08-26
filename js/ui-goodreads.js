@@ -1,4 +1,4 @@
-import { state, saveBooks } from './state.js';
+import { state, saveBooks, normalizeBooks } from './state.js';
 import { renderBooks, updateStats } from './ui-render.js';
 
 // ── CSV parser (handles quoted fields with commas) ────────────────────────────
@@ -109,15 +109,22 @@ export async function importGoodreads(file) {
     Object.values(state.booksData).map(b => makeId(b.title || '', b.author || ''))
   );
 
-  let imported = 0, skipped = 0;
+  let skipped = 0;
+  const staged = {};
 
   for (const row of rows.slice(1)) {
     const result = buildBook(row, indices, existing);
     if (!result) { skipped++; continue; }
-    state.booksData[result.id] = result.book;
+    staged[result.id] = result.book;
     existing.add(result.id);
-    imported++;
   }
+
+  // A CSV is untrusted input like any other file, so it goes through the same
+  // normalizer as a JSON backup rather than straight into state.
+  const safeBooks = normalizeBooks(staged);
+  const imported = Object.keys(safeBooks).length;
+  skipped += Object.keys(staged).length - imported;
+  Object.assign(state.booksData, safeBooks);
 
   if (imported > 0) { saveBooks(); renderBooks(); updateStats(); }
 
