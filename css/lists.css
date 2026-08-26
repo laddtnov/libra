@@ -53,7 +53,7 @@
 
 .lists-btn {
   border: 2px solid var(--neon-purple);
-  color: var(--neon-purple);
+  color: var(--neon-purple-text);
 }
 
 .lists-btn:hover {
@@ -129,14 +129,14 @@
 .active-list-label {
   font-family: 'Orbitron', monospace;
   font-size: 0.7rem;
-  color: var(--neon-purple);
+  color: var(--neon-purple-text);
   letter-spacing: 1px;
 }
 
 .clear-list-btn {
   background: transparent;
   border: 1px solid rgba(157, 0, 255, 0.4);
-  color: var(--neon-purple);
+  color: var(--neon-purple-text);
   font-family: 'Orbitron', monospace;
   font-size: 0.6rem;
   padding: 4px 10px;
@@ -194,7 +194,7 @@
   font-family: 'Orbitron', monospace;
   font-size: 1rem;
   font-weight: 700;
-  color: var(--neon-purple);
+  color: var(--neon-purple-text);
   text-shadow: 0 0 12px rgba(157, 0, 255, 0.6);
   letter-spacing: 2px;
 }
@@ -237,7 +237,7 @@
 .create-list-submit {
   background: transparent;
   border: 1px solid var(--neon-purple);
-  color: var(--neon-purple);
+  color: var(--neon-purple-text);
   font-family: 'Orbitron', monospace;
   font-size: 0.65rem;
   font-weight: 700;
@@ -307,7 +307,7 @@
 .list-item-count {
   font-family: 'Orbitron', monospace;
   font-size: 0.6rem;
-  color: rgba(157, 0, 255, 0.7);
+  color: rgba(199, 125, 255, 0.85);
   letter-spacing: 1px;
 }
 
@@ -333,7 +333,7 @@
 
 .list-view-btn {
   border: 1px solid rgba(157, 0, 255, 0.4);
-  color: var(--neon-purple);
+  color: var(--neon-purple-text);
 }
 
 .list-view-btn:hover,
@@ -389,14 +389,14 @@
 
 .detail-list-toggle:hover {
   border-color: var(--neon-purple);
-  color: var(--neon-purple);
+  color: var(--neon-purple-text);
   background: rgba(157, 0, 255, 0.12);
 }
 
 .detail-list-toggle.in-list {
   background: rgba(157, 0, 255, 0.18);
   border-color: var(--neon-purple);
-  color: var(--neon-purple);
+  color: var(--neon-purple-text);
   box-shadow: 0 0 8px rgba(157, 0, 255, 0.2);
 }
 
