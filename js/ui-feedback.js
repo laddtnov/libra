@@ -31,10 +31,11 @@ export function playClickSound() {
 // say; inline styles would win over either of them.
 export function renderSoundBtn(btn) {
   if (!btn) return;
-  btn.textContent = state.soundEnabled ? '♪ ON' : '♪ OFF';
+  // The visible text is the accessible name — no aria-label, which would
+  // otherwise have to repeat it verbatim to satisfy WCAG 2.5.3.
+  btn.textContent = state.soundEnabled ? '♪ SOUND ON' : '♪ SOUND OFF';
   btn.classList.toggle('is-off', !state.soundEnabled);
   btn.setAttribute('aria-pressed', String(state.soundEnabled));
-  btn.setAttribute('aria-label', state.soundEnabled ? 'Sound on' : 'Sound off');
 }
 
 export function toggleSound() {
