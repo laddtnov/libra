@@ -32,6 +32,12 @@ jobs:
       - name: Build
         run: npm run build
 
+      # The CSP is script-src 'self' with no unsafe-inline, so an inline
+      # <script> or an on*= handler is dead code in production — it fails
+      # silently in the browser, not here. Catch it at review time instead.
+      - name: No inline scripts (CSP would block them)
+        run: node scripts/check-no-inline-scripts.mjs
+
       - name: Comment on PR (success)
         if: success()
         uses: actions/github-script@v7

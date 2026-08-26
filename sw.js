@@ -1,4 +1,4 @@
-const CACHE = 'libra-v64';
+const CACHE = 'libra-v65';
 
 const ASSETS = [
   '/',
@@ -31,6 +31,8 @@ const ASSETS = [
   '/css/theme-light.css',
   '/css/tags.css',
   '/js/app-ui.js',
+  '/js/recovery-flag.js',
+  '/js/sw-register.js',
   '/js/state.js',
   '/js/default-books.js',
   '/js/ui-render.js',
