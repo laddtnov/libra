@@ -14,7 +14,7 @@
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
 ![PWA](https://img.shields.io/badge/PWA-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
-![Version](https://img.shields.io/badge/Version-0.5.2-00f2ff?style=for-the-badge)
+![Version](https://img.shields.io/badge/Version-0.5.3-00f2ff?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
@@ -176,6 +176,16 @@ Then open `index.html` — no build step needed for the frontend.
 ---
 
 ## 📜 Changelog
+
+### v0.5.3 — Cover art comes back
+
+One PR ([#79](https://github.com/laddtnov/libra/pull/79)), fixing a bug that [v0.5.2](https://github.com/laddtnov/libra/releases/tag/v0.5.2) uncovered rather than caused.
+
+**Fixed**
+- **No book cover loaded on the live site.** The service worker re-issued cross-origin requests through `fetch()`, which turns an `<img>` load into a worker fetch — judged under `connect-src` instead of `img-src`. `connect-src` never listed the cover subdomain, so every cover was refused and the error fallback then removed the element. The worker now leaves cross-origin requests alone, so they keep their original type and `img-src` applies. This surfaced only once 0.5.2 made the service worker actually register
+- **Purple text failed contrast everywhere it appeared**, not just on the TO READ badge a browser audit flagged: `#9d00ff` measured 3.2–3.6:1 on the dark ground across badges, the LISTS button, the lists panel, spine text and list counts. A separate `--neon-purple-text` (`#c77dff`) now carries text while `--neon-purple` keeps borders, glows and the large stat numbers, which clear the 3:1 large-text bar. The badge went 3.22:1 → 6.47:1, and a sweep of every text element on the page returns no failures
+- **Covers reflowed the card grid as they arrived.** Both cover templates now declare `width`/`height`, so the box is reserved before the image loads (CLS)
+- `Permissions-Policy` carried `interest-cohort`, which Chrome removed with FLoC and reported as an unrecognised feature
 
 ### v0.5.2 — Three things that were quietly broken in production
 
