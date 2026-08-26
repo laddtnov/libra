@@ -4,6 +4,9 @@ const LANGS = ['en', 'uk', 'es', 'ru', 'de', 'pl'];
 
 /* eslint-disable no-multi-spaces */
 const T = {
+  // Header
+  app_tagline:    ['>_ Digital library', '>_ Цифрова бібліотека', '>_ Biblioteca digital', '>_ Цифровая библиотека', '>_ Digitale Bibliothek', '>_ Biblioteka cyfrowa'],
+
   // Stat labels
   stat_completed: ['Completed',  'Прочитано',  'Completados', 'Прочитано',  'Gelesen',          'Przeczytane'],
   stat_reading:   ['Reading',    'Читаю',      'Leyendo',     'Читаю',      'Lese',             'Czytam'],
