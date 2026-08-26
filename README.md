@@ -14,6 +14,7 @@
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
 ![PWA](https://img.shields.io/badge/PWA-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+![Version](https://img.shields.io/badge/Version-0.5.1-00f2ff?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
@@ -48,6 +49,7 @@ A personal reading tracker with a full cyberpunk neon UI — glitch title, statu
 - **Pace estimator** — calculates avg pages/day from sessions → estimated finish date
 
 ### Stats Dashboard
+- **Reading activity heatmap** — a rolling 365 days of sessions, GitHub-style, shaded by pages read
 - Pages read per month (bar chart)
 - Books finished per month
 - Average rating by genre
@@ -71,14 +73,16 @@ A personal reading tracker with a full cyberpunk neon UI — glitch title, statu
 - **Pace estimator** — EST. FINISH date shown for reading books
 
 ### Toolbar
-- **Live search** — filters by title/author/category/tags; triggers Open Library web discover
+- **Live search** — filters your own shelf by title/author/category/tags; searching the web is opt-in, offered only when your shelf has no match
 - **Filter buttons** — All / Reading / Done / Queued
 - **Sort dropdown** — Title, Rating, Pages, Date Added
-- **📊 STATS** — full reading statistics dashboard
+- **☑ SELECT** — multi-select mode for bulk tagging, listing, and deleting
+- **STATS** — full reading statistics dashboard
+- **LISTS** — named reading lists
 - **⚡ RECOMMEND** — genre-based book recommendations
 - **♥ SUPPORT** — opens Buy Me a Coffee in a new tab
-- **⊕ GOODREADS** — import your Goodreads CSV export with duplicate detection
-- **Export / Import** — one-click JSON or CSV backup and restore
+- **↓ EXPORT** — one picker for a JSON backup or a CSV export
+- **↑ IMPORT** — one control for both a Libra `.json` backup and a Goodreads `.csv`, routed by file extension
 
 ### Auth
 - Email + password sign up / sign in
@@ -165,6 +169,53 @@ Then open `index.html` — no build step needed for the frontend.
 - **Desktop:** 3–4 column grid
 - **Tablet:** 2 columns
 - **Mobile:** single column, touch-friendly
+
+---
+
+## 📜 Changelog
+
+### v0.5.1 — Reading heatmap, library search, and a single visual language
+
+**Added**
+- **Reading activity heatmap** in the stats panel — a rolling 365 days of sessions, GitHub-style, shaded in four steps by pages read, with month and weekday labels and a legend ([#61](https://github.com/laddtnov/libra/pull/61))
+- **New Libra icon** as a PNG favicon set — 16/32/48 in the tab, 180 for iOS, 192 and 512 for the installed PWA ([#71](https://github.com/laddtnov/libra/pull/71))
+
+**Changed**
+- **Search now searches your library.** Typing filtered nothing and fired an Open Library request instead; it now filters your own shelf by title, author, category, and tags. Searching the web is opt-in, offered only when your shelf has no match ([#63](https://github.com/laddtnov/libra/pull/63))
+- **Toolbar: six controls down to three.** Six language buttons became one picker, EXPORT + CSV became one format picker, and IMPORT + GOODREADS became one file input that routes on the file's extension ([#64](https://github.com/laddtnov/libra/pull/64))
+- **The book detail readout is no longer a green terminal.** It was `#00ff00` on black inside a modal framed in neon cyan; every green step is now the matching cyan step ([#67](https://github.com/laddtnov/libra/pull/67))
+- **STATS and SELECT** now share the geometry of the other toolbar buttons instead of each carrying its own size, border weight, and colour ([#65](https://github.com/laddtnov/libra/pull/65), [#67](https://github.com/laddtnov/libra/pull/67))
+- **Sound toggle** restyled to match the close button opposite it, with `aria-pressed` and an accessible label ([#67](https://github.com/laddtnov/libra/pull/67))
+
+**Fixed**
+- **Heatmap dropped today's reading east of UTC.** The window was derived from UTC while session dates come from `<input type="date">`, which yields a bare local calendar date ([#61](https://github.com/laddtnov/libra/pull/61))
+- **Heatmap showed a year of empty squares** for a library whose only sessions predate the window ([#61](https://github.com/laddtnov/libra/pull/61))
+- **Month labels collided** on the heatmap, rendering as `AUGSEP` ([#61](https://github.com/laddtnov/libra/pull/61))
+- **Unreadable label text.** Several 10px labels in the detail modal sat at contrast ratios near 3:1; they now clear 4.5:1 ([#67](https://github.com/laddtnov/libra/pull/67))
+- **Light theme:** the cyan toolbar buttons were near-invisible on the light ground ([#67](https://github.com/laddtnov/libra/pull/67))
+- **Three contrast rules could not be verified** by static analysis because their backgrounds were translucent; each now declares the colour it was already compositing to ([#68](https://github.com/laddtnov/libra/issues/68), [#69](https://github.com/laddtnov/libra/issues/69), [#70](https://github.com/laddtnov/libra/issues/70))
+- **Service worker cache is cache-first with no revalidation**, so returning visitors kept old stylesheets after a deploy. Bumped on every release that changes assets ([#67](https://github.com/laddtnov/libra/pull/67), [#71](https://github.com/laddtnov/libra/pull/71))
+- **`.gitignore` never ignored `.env.local`** — the pattern read `env.local`, and `.env.*.local` does not cover it ([#71](https://github.com/laddtnov/libra/pull/71))
+
+**Security / CI**
+- The deploy workflow declared no `permissions`, so its token defaulted to write scope; it now runs read-only with a workflow-level default ([#62](https://github.com/laddtnov/libra/pull/62))
+
+**Removed**
+- Three unused exports, six orphaned translation keys across all six languages, and 116 lines of dead CSS — the old typewriter terminal that nothing rendered any more ([#64](https://github.com/laddtnov/libra/pull/64), [#67](https://github.com/laddtnov/libra/pull/67))
+
+### Earlier releases
+
+| Version | Highlights |
+|---|---|
+| [v0.5.0](https://github.com/laddtnov/libra/releases/tag/v0.5.0) | Codebase cleanup, PR-only workflow |
+| [v0.4.3](https://github.com/laddtnov/libra/releases/tag/v0.4.3) | Security hardening — CSP, XSS, CORS |
+| [v0.4.2](https://github.com/laddtnov/libra/releases/tag/v0.4.2) | Bug fixes, PWA offline hardening |
+| [v0.4.1](https://github.com/laddtnov/libra/releases/tag/v0.4.1) | Buy Me a Coffee support button |
+| [v0.4.0](https://github.com/laddtnov/libra/releases/tag/v0.4.0) | Light theme, UX polish |
+| [v0.3.0](https://github.com/laddtnov/libra/releases/tag/v0.3.0) | WCAG 2.1 AA accessibility |
+| [v0.2.0](https://github.com/laddtnov/libra/releases/tag/v0.2.0) | ISBN scanner, AI reading insights |
+
+Full history: [github.com/laddtnov/libra/releases](https://github.com/laddtnov/libra/releases)
 
 ---
 
