@@ -57,6 +57,9 @@ dialog {
   --neon-cyan: #00f2ff;
   --neon-pink: #ff00ff;
   --neon-purple: #9d00ff;
+  /* #9d00ff is only 3.2-3.6:1 on the dark ground — fine for borders,
+     glows and large numbers, too dark for small text. */
+  --neon-purple-text: #c77dff;
   --neon-green: #10b981;
   --neon-orange: #f59e0b;
   --dark-card: #151518;

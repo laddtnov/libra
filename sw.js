@@ -1,4 +1,4 @@
-const CACHE = 'libra-v65';
+const CACHE = 'libra-v66';
 
 const ASSETS = [
   '/',
@@ -91,11 +91,12 @@ globalThis.addEventListener('activate', event => {
 globalThis.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
 
-  // External API calls — network only, fail silently offline
-  if (!event.request.url.startsWith(self.location.origin)) {
-    event.respondWith(fetch(event.request).catch(() => new Response('', { status: 503 })));
-    return;
-  }
+  // Cross-origin: don't touch it. Re-issuing the request from here turns an
+  // <img> load into a worker fetch(), which CSP judges under connect-src
+  // instead of img-src — and connect-src does not list the cover host, so
+  // every cover was blocked. Letting it through unhandled keeps the original
+  // request type, and a failed cover already has an error-event fallback.
+  if (!event.request.url.startsWith(self.location.origin)) return;
 
   // App shell — cache first, fall back to network
   event.respondWith(

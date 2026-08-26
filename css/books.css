@@ -270,7 +270,7 @@
 }
 
 .book-card.to-read .spine-text {
-  color: var(--neon-purple);
+  color: var(--neon-purple-text);
   text-shadow: 0 0 5px var(--neon-purple);
 }
 
@@ -327,7 +327,7 @@
 
 .status-badge.to-read {
   background: rgba(157, 0, 255, 0.1);
-  color: var(--neon-purple);
+  color: var(--neon-purple-text);
   border-color: var(--neon-purple);
 }
 

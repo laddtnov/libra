@@ -156,7 +156,9 @@ function buildCardHTML(book) {
 
   const safeCoverId = toPositiveInt(book.coverId);
   const coverHTML = safeCoverId
-    ? `<img class="card-cover" src="https://covers.openlibrary.org/b/id/${safeCoverId}-S.jpg" alt="" loading="lazy" data-cover-fallback="remove">`
+    // width/height give the box an intrinsic ratio so the card does not
+    // reflow when the cover arrives; CSS still owns the rendered size.
+    ? `<img class="card-cover" src="https://covers.openlibrary.org/b/id/${safeCoverId}-S.jpg" alt="" loading="lazy" width="54" height="80" data-cover-fallback="remove">`
     : '';
 
   const progressHTML = book.status === 'reading'
