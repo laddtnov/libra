@@ -301,17 +301,9 @@
 
   <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
   <!-- Detect password reset redirect before modules load -->
-  <script>
-    if (new URLSearchParams(location.search).get('reset') === '1') {
-      sessionStorage.setItem('libra-recovery', '1');
-    }
-  </script>
+  <script src="js/recovery-flag.js"></script>
   <script src="js/vendor/supabase.min.js"></script>
   <script type="module" src="js/app-ui.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js'));
-    }
-  </script>
+  <script src="js/sw-register.js"></script>
 </body>
 </html>
