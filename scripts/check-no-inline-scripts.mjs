@@ -12,7 +12,7 @@ for (const file of FILES) {
   const html = readFileSync(file, 'utf8');
 
   // A <script> tag carrying a body but no src attribute.
-  for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
+  for (const match of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script\b[^>]*>/gi)) {
     const [, attrs, body] = match;
     if (/\bsrc\s*=/i.test(attrs)) continue;
     if (!body.trim()) continue;
