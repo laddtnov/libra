@@ -114,32 +114,7 @@
    BULK SELECTION
    ==================================== */
 
-.select-mode-btn {
-  background: transparent;
-  border: 2px solid rgba(0, 242, 255, 0.25);
-  color: var(--text-secondary);
-  font-family: 'Orbitron', monospace;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 1px;
-  padding: 10px 15px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.select-mode-btn:hover {
-  border-color: var(--neon-cyan);
-  color: var(--neon-cyan);
-}
-
-.select-mode-btn.active {
-  background: rgba(0, 242, 255, 0.1);
-  border-color: var(--neon-cyan);
-  color: var(--neon-cyan);
-  box-shadow: 0 0 12px rgba(0, 242, 255, 0.2);
-}
+/* SELECT shares the toolbar button family in lists.css */
 
 .bulk-action-bar {
   display: flex;

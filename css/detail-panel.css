@@ -4,7 +4,7 @@
 
 .detail-panel {
   font-family: 'Courier New', monospace;
-  color: #00ff00;
+  color: var(--neon-cyan);
   line-height: 1.6;
   position: relative;
   z-index: 5;
@@ -12,14 +12,14 @@
 
 .detail-prompt {
   font-size: 11px;
-  color: #00aa00;
+  color: rgba(0, 242, 255, 0.62);
   margin-bottom: 8px;
-  text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+  text-shadow: 0 0 5px rgba(0, 242, 255, 0.5);
   letter-spacing: 1px;
 }
 
 .detail-divider {
-  color: #003500;
+  color: rgba(0, 242, 255, 0.22);
   font-size: 12px;
   margin: 10px 0;
   letter-spacing: 0;
@@ -36,22 +36,22 @@
   width: 80px;
   height: 112px;
   object-fit: cover;
-  border: 2px solid #00aa00;
+  border: 2px solid rgba(0, 242, 255, 0.62);
   flex-shrink: 0;
-  box-shadow: 0 0 15px rgba(0, 255, 0, 0.25);
+  box-shadow: 0 0 15px rgba(0, 242, 255, 0.25);
 }
 
 .detail-cover-placeholder {
   width: 80px;
   height: 112px;
   flex-shrink: 0;
-  background: #001a00;
-  border: 2px solid #004400;
+  background: rgba(0, 242, 255, 0.06);
+  border: 2px solid rgba(0, 242, 255, 0.28);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2.2rem;
-  color: #9dff9d;
+  color: #9df3ff;
   font-family: 'Orbitron', sans-serif;
 }
 
@@ -60,9 +60,9 @@
 .detail-title {
   font-family: 'Orbitron', sans-serif;
   font-size: 1rem;
-  color: #00ff00;
+  color: var(--neon-cyan);
   font-weight: 700;
-  text-shadow: 0 0 8px rgba(0, 255, 0, 0.5);
+  text-shadow: 0 0 8px rgba(0, 242, 255, 0.5);
   margin-bottom: 4px;
   line-height: 1.3;
   word-break: break-word;
@@ -70,13 +70,13 @@
 
 .detail-subtitle {
   font-size: 11px;
-  color: #00cc00;
+  color: rgba(0, 242, 255, 0.78);
   margin-bottom: 5px;
 }
 
 .detail-author {
   font-size: 12px;
-  color: #00aa00;
+  color: rgba(0, 242, 255, 0.62);
   margin-bottom: 8px;
 }
 
@@ -89,18 +89,18 @@
   justify-content: space-between;
   font-size: 12px;
   padding: 5px 0;
-  border-bottom: 1px solid #001800;
+  border-bottom: 1px solid rgba(0, 242, 255, 0.12);
   gap: 12px;
 }
 
-.detail-key { color: #00aa00; flex-shrink: 0; }
-.detail-val { color: #00ff00; text-align: right; text-shadow: 0 0 4px rgba(0,255,0,0.3); }
+.detail-key { color: rgba(0, 242, 255, 0.62); flex-shrink: 0; }
+.detail-val { color: var(--neon-cyan); text-align: right; text-shadow: 0 0 4px rgba(0, 242, 255,0.3); }
 
 .detail-section { margin: 14px 0; }
 
 .detail-section-title {
   font-size: 10px;
-  color: #007700;
+  color: rgba(0, 242, 255, 0.62);
   letter-spacing: 2px;
   margin-bottom: 7px;
   text-transform: uppercase;
@@ -108,7 +108,7 @@
 
 .detail-section-body {
   font-size: 12px;
-  color: #00cc00;
+  color: rgba(0, 242, 255, 0.78);
   line-height: 1.75;
 }
 

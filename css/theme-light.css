@@ -133,7 +133,22 @@
 [data-theme="light"] .pace-val   { color: #0369a1; }
 [data-theme="light"] .pace-sub   { color: #6b7280; }
 
-/* ── Modal actions — override hardcoded #00ff00 greens ── */
+/* ── Cyan toolbar buttons — neon cyan is unreadable on a light ground ── */
+[data-theme="light"] .select-mode-btn,
+[data-theme="light"] .stats-btn {
+  color: #0369a1;
+  border-color: rgba(3, 105, 161, 0.4);
+}
+[data-theme="light"] .select-mode-btn:hover,
+[data-theme="light"] .select-mode-btn.active,
+[data-theme="light"] .stats-btn:hover {
+  color: #0369a1;
+  border-color: #0369a1;
+  background: rgba(3, 105, 161, 0.08);
+  box-shadow: 0 0 14px rgba(3, 105, 161, 0.2);
+}
+
+/* ── Modal actions ── */
 [data-theme="light"] .terminal-action-btn {
   color: var(--neon-cyan);
   border-color: rgba(0,242,255,0.4);
