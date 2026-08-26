@@ -12,6 +12,7 @@ import { initStreak } from './ui-streak.js';
 import { openStatsPanel, closeStatsPanel, initStatsPanel } from './ui-stats.js';
 import { importGoodreads } from './ui-goodreads.js';
 import { initBulk, updateSelectBtn } from './ui-bulk.js';
+import { toggleSound } from './ui-feedback.js';
 
 configureRenderHandlers({ openDetails: showBookDetails });
 configureDetailHandlers({ openFormModal });
@@ -47,6 +48,8 @@ function initApp() {
   initStreak();
   initStatsPanel();
   document.getElementById('stats-btn')?.addEventListener('click', openStatsPanel);
+  // The button lives in the detail modal but outlives each open, so bind once.
+  document.getElementById('sound-toggle')?.addEventListener('click', toggleSound);
 
   document.getElementById('add-book-btn')?.addEventListener('click', () => openFormModal());
 

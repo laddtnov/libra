@@ -136,11 +136,6 @@
   transition: color 0.2s ease;
 }
 
-@keyframes timer-pulse {
-  0%,100% { text-shadow: 0 0 18px rgba(0, 255, 136, 0.5); }
-  50%     { text-shadow: 0 0 30px rgba(0, 255, 136, 0.9); }
-}
-
 .timer-btns {
   display: flex;
   gap: 6px;
@@ -174,12 +169,6 @@
 }
 .timer-btn--pause:hover { background: rgba(245, 158, 11, 0.08); border-color: var(--neon-orange); }
 
-.timer-btn--stop {
-  border-color: rgba(0, 242, 255, 0.4);
-  color: #00f2ff;
-}
-.timer-btn--stop:hover { background: rgba(0, 242, 255, 0.08); border-color: #00f2ff; }
-
 .timer-btn--reset {
   border-color: rgba(255, 85, 85, 0.25);
   color: rgba(255, 85, 85, 0.5);
@@ -195,7 +184,6 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .timer-display.running { animation: timer-pulse 1s ease-in-out infinite; }
   .session-date-input.input-error,
   .session-pages-input.input-error { animation: shake 0.35s ease; }
 }

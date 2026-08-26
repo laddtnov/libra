@@ -44,8 +44,8 @@
 }
 
 .terminal-action-btn.cancel-btn {
-  border-color: #555;
-  color: #555;
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--text-secondary);
 }
 
 .terminal-action-btn.cancel-btn:hover {

@@ -12,13 +12,16 @@ function quoteCardHTML(q, i) {
     </div>`;
 }
 
+function listHTML(quotes) {
+  return quotes.length
+    ? quotes.map((q, i) => quoteCardHTML(q, i)).join('')
+    : `<div class="quotes-empty">&gt; ${t('quotes_empty')}</div>`;
+}
+
 function refreshList(bookId) {
   const listEl = document.getElementById('quotes-list');
   if (!listEl) return;
-  const quotes = state.booksData[bookId]?.quotes || [];
-  listEl.innerHTML = quotes.length
-    ? quotes.map((q, i) => quoteCardHTML(q, i)).join('')
-    : `<div class="quotes-empty">&gt; ${t('quotes_empty')}</div>`;
+  listEl.innerHTML = listHTML(state.booksData[bookId]?.quotes || []);
   bindDeleteButtons(bookId);
 }
 
@@ -37,14 +40,11 @@ function bindDeleteButtons(bookId) {
 
 export function renderQuotesSection(bookId) {
   const quotes = state.booksData[bookId]?.quotes || [];
-  const listHTML = quotes.length
-    ? quotes.map((q, i) => quoteCardHTML(q, i)).join('')
-    : `<div class="quotes-empty">&gt; ${t('quotes_empty')}</div>`;
 
   return `
     <div class="detail-section">
       <div class="detail-section-title">&gt;&gt; ${t('quotes_title')}</div>
-      <div id="quotes-list">${listHTML}</div>
+      <div id="quotes-list">${listHTML(quotes)}</div>
       <div class="quotes-add-form">
         <textarea id="q-text" class="quote-textarea" placeholder="${t('quotes_ph_text')}"></textarea>
         <div class="quotes-add-row">
