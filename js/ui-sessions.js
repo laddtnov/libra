@@ -19,7 +19,9 @@ function stopTimer() {
   timerRunning  = false;
 }
 
-function resetTimer() {
+// Also the modal's teardown hook: leaving a timer running past the modal
+// keeps an interval alive with nothing to draw to.
+export function resetTimer() {
   stopTimer();
   timerElapsed = 0;
   updateTimerUI();
@@ -29,13 +31,11 @@ function updateTimerUI() {
   const display = document.getElementById('timer-display');
   const startBtn = document.getElementById('timer-start');
   const pauseBtn = document.getElementById('timer-pause');
-  const stopBtn  = document.getElementById('timer-stop');
   const hint     = document.getElementById('timer-hint');
 
   if (display)  display.textContent = fmtTime(timerElapsed);
   if (startBtn) startBtn.style.display = timerRunning ? 'none' : '';
   if (pauseBtn) pauseBtn.style.display = timerRunning ? '' : 'none';
-  if (stopBtn)  stopBtn.style.display  = timerElapsed > 0 ? '' : 'none';
   if (hint)     hint.textContent = timerElapsed > 0 && !timerRunning
     ? `> ${Math.ceil(timerElapsed / 60)} min logged — add to session below`
     : '';
@@ -117,8 +117,9 @@ function bindDeleteButtons(bookId) {
 export function renderSessionsSection(bookId) {
   const sessions = state.booksData[bookId]?.sessions || [];
   const today    = new Date().toISOString().slice(0, 10);
-  timerElapsed   = 0;
-  timerRunning   = false;
+  // Kill any interval still running from the last book opened — zeroing the
+  // counters without this leaves it ticking into the next book's display.
+  resetTimer();
 
   return `
     <div class="detail-section">
@@ -130,7 +131,6 @@ export function renderSessionsSection(bookId) {
         <div class="timer-btns">
           <button id="timer-start" class="timer-btn timer-btn--start">[ ▶ START ]</button>
           <button id="timer-pause" class="timer-btn timer-btn--pause" style="display:none">[ ⏸ PAUSE ]</button>
-          <button id="timer-stop"  class="timer-btn timer-btn--stop"  style="display:none">[ ■ STOP ]</button>
           <button id="timer-reset" class="timer-btn timer-btn--reset">[ RESET ]</button>
         </div>
         <div id="timer-hint" class="timer-hint"></div>
@@ -152,8 +152,7 @@ export function initSessionsSection(bookId) {
   updateTimerUI();
 
   document.getElementById('timer-start')?.addEventListener('click', () => startTimer());
-  document.getElementById('timer-pause')?.addEventListener('click', () => { stopTimer(); updateTimerUI(); });
-  document.getElementById('timer-stop')?.addEventListener('click', () => {
+  document.getElementById('timer-pause')?.addEventListener('click', () => {
     stopTimer();
     updateTimerUI();
     // Auto-focus pages input so user can log right away

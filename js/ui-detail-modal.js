@@ -1,10 +1,10 @@
 import { state, saveBooks, clamp, toPositiveInt, toNonNegativeInt, escHtml } from './state.js';
-import { playClickSound, toggleSound, renderSoundBtn, showToast } from './ui-feedback.js';
+import { playClickSound, renderSoundBtn, showToast } from './ui-feedback.js';
 import { renderStarsHTML, renderBooks } from './ui-render.js';
 import { toggleBookInList, removeBookFromAllLists, renderListsPanel } from './ui-lists.js';
 import { renderQuotesSection, initQuotesSection } from './ui-quotes.js';
 import { renderNotesSection, initNotesSection } from './ui-notes.js';
-import { renderSessionsSection, initSessionsSection } from './ui-sessions.js';
+import { renderSessionsSection, initSessionsSection, resetTimer } from './ui-sessions.js';
 import { renderAvailabilitySection } from './ui-availability.js';
 import { trapFocus, focusFirst } from './ui-utils.js';
 
@@ -36,9 +36,22 @@ export function configureDetailHandlers({ openFormModal }) {
 export function closeModal() {
   document.getElementById('book-modal').style.display = 'none';
   document.getElementById('modal-overlay').style.display = 'none';
+  resetTimer();
 
   if (_releaseTrap) { _releaseTrap(); _releaseTrap = null; }
   if (_triggerEl) { _triggerEl.focus?.(); _triggerEl = null; }
+}
+
+const ACTIONS_HTML = `
+  <button class="terminal-action-btn edit-btn" id="detail-edit">[ EDIT ]</button>
+  <button class="terminal-action-btn delete-btn" id="detail-delete">[ DELETE ]</button>`;
+
+function bindActions(bookId) {
+  document.getElementById('detail-edit').addEventListener('click', () => {
+    closeModal();
+    onOpenFormModal(bookId);
+  });
+  document.getElementById('detail-delete').addEventListener('click', () => confirmDelete(bookId));
 }
 
 function confirmDelete(bookId) {
@@ -65,14 +78,8 @@ function confirmDelete(bookId) {
   });
 
   document.getElementById('confirm-no').addEventListener('click', () => {
-    actions.innerHTML = `
-      <button class="terminal-action-btn edit-btn" id="detail-edit">[ EDIT ]</button>
-      <button class="terminal-action-btn delete-btn" id="detail-delete">[ DELETE ]</button>`;
-    document.getElementById('detail-edit').addEventListener('click', () => {
-      closeModal();
-      onOpenFormModal(bookId);
-    });
-    document.getElementById('detail-delete').addEventListener('click', () => confirmDelete(bookId));
+    actions.innerHTML = ACTIONS_HTML;
+    bindActions(bookId);
   });
 }
 
@@ -89,14 +96,7 @@ export function showBookDetails(bookId) {
   modal.style.display = 'flex';
   overlay.style.display = 'block';
 
-  const soundSlot = document.getElementById('modal-sound-slot');
-  soundSlot.innerHTML = '';
-  const soundBtn = document.createElement('button');
-  soundBtn.id = 'sound-toggle';
-  soundBtn.className = 'sound-toggle-btn';
-  renderSoundBtn(soundBtn);
-  soundBtn.onclick = toggleSound;
-  soundSlot.appendChild(soundBtn);
+  renderSoundBtn(document.getElementById('sound-toggle'));
 
   const safeCoverId = toPositiveInt(book.coverId);
   const safeTitle = escHtml((book.title || '').toUpperCase());
@@ -184,20 +184,10 @@ export function showBookDetails(bookId) {
         <div class="detail-lists-body" id="detail-lists-body"></div>
       </div>
 
-      <div class="modal-actions" id="detail-actions">
-        <button class="terminal-action-btn edit-btn" id="detail-edit">[ EDIT ]</button>
-        <button class="terminal-action-btn delete-btn" id="detail-delete">[ DELETE ]</button>
-      </div>
+      <div class="modal-actions" id="detail-actions">${ACTIONS_HTML}</div>
     </div>`;
 
-  document.getElementById('detail-edit').addEventListener('click', () => {
-    closeModal();
-    onOpenFormModal(bookId);
-  });
-
-  document.getElementById('detail-delete').addEventListener('click', () => {
-    confirmDelete(bookId);
-  });
+  bindActions(bookId);
 
   initNotesSection(bookId);
   initQuotesSection(bookId);

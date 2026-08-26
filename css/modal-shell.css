@@ -20,12 +20,15 @@
   to { opacity: 1; }
 }
 
+/* Full-viewport flex box, like the panels. Centring with left:50% instead
+   leaves an auto-width dialog only the right half of the screen to shrink
+   into, which capped the modal at ~178px on a phone. */
 #book-modal {
   display: none;
   position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset: 0;
+  align-items: center;
+  justify-content: center;
   z-index: 9999;
   animation: terminalBoot 0.5s ease;
 }
@@ -33,7 +36,7 @@
 @keyframes terminalBoot {
   0% {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.95);
+    transform: scale(0.95);
     filter: blur(10px);
   }
   50% {
@@ -41,7 +44,7 @@
   }
   100% {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    transform: scale(1);
     filter: blur(0);
   }
 }
@@ -49,6 +52,7 @@
 .modal-container {
   position: relative;
   width: 600px;
+  max-width: 95%;
   max-height: 80vh;
   overflow-y: auto;
   background: #000;
@@ -72,6 +76,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
   margin-bottom: 16px;
   position: relative;
   z-index: 20;
