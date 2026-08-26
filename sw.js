@@ -1,4 +1,4 @@
-const CACHE = 'libra-v60';
+const CACHE = 'libra-v61';
 
 const ASSETS = [
   '/',
@@ -58,8 +58,12 @@ const ASSETS = [
   '/js/ui-stats.js',
   '/js/ui-goodreads.js',
   '/js/ui-utils.js',
-  '/assets/icons/icon.svg',
-  '/assets/icons/icon-maskable.svg',
+  '/assets/icons/libra-icon-16.png',
+  '/assets/icons/libra-icon-32.png',
+  '/assets/icons/libra-icon-48.png',
+  '/assets/icons/libra-icon-192.png',
+  '/assets/icons/libra-icon-512.png',
+  '/assets/icons/apple-touch-icon.png',
   '/assets/fonts/orbitron-latin.woff2',
   '/assets/fonts/rajdhani-400-latin.woff2',
   '/assets/fonts/rajdhani-600-latin.woff2',
