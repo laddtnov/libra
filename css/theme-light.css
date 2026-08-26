@@ -185,7 +185,6 @@
 
 /* ── Book card — stars, progress track, checkbox, cover ── */
 [data-theme="light"] .star            { color: rgba(0,0,0,0.12); }
-[data-theme="light"] .progress-bar    { background: rgba(0,0,0,0.1); }
 [data-theme="light"] .card-select-checkbox {
   background: rgba(255,255,255,0.85);
 }
@@ -336,13 +335,6 @@
 }
 [data-theme="light"] .auth-logout-btn:hover {
   background: #fee2e2;
-}
-[data-theme="light"] .auth-email-sent-info {
-  background: rgba(5, 150, 105, 0.06);
-  border-color: rgba(5, 150, 105, 0.25);
-}
-[data-theme="light"] .auth-email-sent-info .auth-hint {
-  color: rgba(5, 150, 105, 0.9);
 }
 [data-theme="light"] .auth-info-grid {
   background: rgba(245, 158, 11, 0.04);

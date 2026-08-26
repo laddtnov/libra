@@ -13,7 +13,7 @@ function genListId(name) {
     .slice(0, 30) + '-' + Date.now().toString(36);
 }
 
-export function createList(name) {
+function createList(name) {
   const clean = cleanText(name, 60).trim();
   if (!clean) return null;
   const id = genListId(clean);
@@ -22,7 +22,7 @@ export function createList(name) {
   return id;
 }
 
-export function deleteList(listId) {
+function deleteList(listId) {
   delete state.lists[listId];
   if (state.activeList === listId) state.activeList = null;
   saveLists();
@@ -45,7 +45,7 @@ export function removeBookFromAllLists(bookId) {
   saveLists();
 }
 
-export function updateActiveListIndicator() {
+function updateActiveListIndicator() {
   const indicator = document.getElementById('active-list-indicator');
   if (!indicator) return;
   if (state.activeList && state.lists[state.activeList]) {

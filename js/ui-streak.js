@@ -32,7 +32,7 @@ export function recordSessionToday() {
   }
 }
 
-export function renderStreak() {
+function renderStreak() {
   const data  = load();
   const today = getTodayStr();
   const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];

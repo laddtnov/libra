@@ -30,7 +30,7 @@ function getStreak() {
 function getOverlay() { return document.getElementById('auth-overlay'); }
 function getContent() { return document.getElementById('auth-content'); }
 
-export function showAuthOverlay(targetState) {
+function showAuthOverlay(targetState) {
   state = targetState ?? (state === S.LOGGED_IN ? S.LOGGED_IN : S.IDLE);
   const overlay = getOverlay();
   if (!overlay) return;

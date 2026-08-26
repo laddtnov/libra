@@ -12,7 +12,7 @@ export function isSelected(id) {
   return state.selectedIds.has(id);
 }
 
-export function toggleSelectMode() {
+function toggleSelectMode() {
   state.selectMode = !state.selectMode;
   state.selectedIds.clear();
   renderBooks();

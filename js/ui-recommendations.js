@@ -238,7 +238,7 @@ async function loadGenreRecs(container, genresToFetch, genreCount) {
 
 // ── Main render ────────────────────────────────────────────────────────────────
 
-export async function renderRecsPanel() {
+async function renderRecsPanel() {
   const content = document.getElementById('recs-content');
   if (!content) return;
 
