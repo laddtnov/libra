@@ -63,14 +63,24 @@ export function focusFirst(container) {
 // no unsafe-inline) has always blocked — the fallbacks never ran in production.
 // One delegated listener replaces them. Capture phase: error does not bubble.
 export function initCoverFallbacks() {
-  document.addEventListener('error', event => {
-    const img = event.target;
-    if (!(img instanceof HTMLImageElement) || !img.dataset.coverFallback) return;
+  document.addEventListener('error', event => applyCoverFallback(event.target), true);
 
-    if (img.dataset.coverFallback === 'swap') {
-      const placeholder = img.nextElementSibling;
-      if (placeholder) placeholder.hidden = false;
-    }
-    img.remove();
+  // A cover Open Library does not have is answered with a 1x1 GIF and HTTP 200,
+  // not a 404 — no error event fires, so the image "loads" and renders as a
+  // blank stretched pixel. Treat that sentinel as a failed load so those books
+  // get the same placeholder as a book with no cover id at all.
+  document.addEventListener('load', event => {
+    const img = event.target;
+    if (img instanceof HTMLImageElement && img.naturalWidth <= 1) applyCoverFallback(img);
   }, true);
+}
+
+function applyCoverFallback(img) {
+  if (!(img instanceof HTMLImageElement) || !img.dataset.coverFallback) return;
+
+  if (img.dataset.coverFallback === 'swap') {
+    const placeholder = img.nextElementSibling;
+    if (placeholder) placeholder.hidden = false;
+  }
+  img.remove();
 }

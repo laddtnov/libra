@@ -154,12 +154,19 @@ function buildCardHTML(book) {
       <div class="meta-item"><span class="meta-label">${t('meta_pages')}:</span><span class="meta-value">${safePages || '?'}</span></div>`;
   }
 
+  // The cover lives inside the spine rather than beside it: two side-by-side
+  // vertical strips read as two thumbnails for the same book. With a cover the
+  // spine shows it; without one — or when the request fails — it falls back to
+  // the vertical title, which is the placeholder this card already had.
   const safeCoverId = toPositiveInt(book.coverId);
-  const coverHTML = safeCoverId
-    // width/height give the box an intrinsic ratio so the card does not
-    // reflow when the cover arrives; CSS still owns the rendered size.
-    ? `<img class="card-cover" src="https://covers.openlibrary.org/b/id/${safeCoverId}-S.jpg" alt="" loading="lazy" width="54" height="80" data-cover-fallback="remove">`
-    : '';
+  const spineFace = safeCoverId
+    // -M, not -S: the spine is narrow but as tall as the whole card, so the
+    // 40px-wide -S thumbnail upscaled into a visible blur. The cover is out of
+    // flow inside a fixed-width spine, so its size no longer affects layout —
+    // width/height just declare the real intrinsic ratio.
+    ? `<img class="card-cover" src="https://covers.openlibrary.org/b/id/${safeCoverId}-M.jpg" alt="" loading="lazy" width="180" height="280" data-cover-fallback="swap">
+       <div class="spine-text" hidden>${spineTitle}</div>`
+    : `<div class="spine-text">${spineTitle}</div>`;
 
   const progressHTML = book.status === 'reading'
     ? `<div class="progress-ring-wrap">
@@ -179,9 +186,8 @@ function buildCardHTML(book) {
   return `
     <div class="book-spine">
       <div class="spine-light"></div>
-      <div class="spine-text">${spineTitle}</div>
+      ${spineFace}
     </div>
-    ${coverHTML}
     <div class="book-body">
       <div class="book-header">
         <div class="status-badge ${statusClass}">${statusBadge}</div>
