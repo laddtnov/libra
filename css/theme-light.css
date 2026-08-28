@@ -466,6 +466,9 @@
 [data-theme="light"] .reminder-book {
   color: #1a1a2e;
 }
+[data-theme="light"] .reminder-progress {
+  color: #0369a1;
+}
 [data-theme="light"] .reminder-meta {
   color: #0369a1;
 }

@@ -180,6 +180,8 @@
   border-bottom: none;
 }
 
+/* The title is the only part allowed to shrink; the numbers beside it stay
+   whole, since a truncated progress figure is worse than a truncated title. */
 .reminder-book {
   font-family: 'Courier New', monospace;
   font-size: 11px;
@@ -187,12 +189,24 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.reminder-progress {
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  color: rgba(0, 242, 255, 0.75);
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .reminder-meta {
   font-family: 'Courier New', monospace;
   font-size: 9px;
-  color: rgba(0, 242, 255, 0.5);
+  /* 0.5 alpha measured 4.08:1 at this size — under the 4.5:1 floor. */
+  color: rgba(0, 242, 255, 0.62);
   white-space: nowrap;
   flex-shrink: 0;
 }
