@@ -3,7 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Libra — Cyberpunk Reading Tracker</title>
+  <!-- The installed app's name on iOS comes from apple-mobile-web-app-title, and
+       falls back to <title> when that is absent — which is why the home-screen
+       icon read "Libra — Cyberpunk Reading Tracker" while manifest.json said
+       "Libra". Both now say the same short name. -->
+  <title>Libra</title>
+  <meta name="apple-mobile-web-app-title" content="Libra">
   <meta name="description" content="Libra — a personal reading tracker with a cyberpunk neon UI. Track, discover, and organise your books.">
   <meta property="og:title" content="Libra">
   <meta property="og:description" content="Libra — a personal reading tracker with a cyberpunk neon UI. Track, discover, and organise your books.">
