@@ -26,6 +26,36 @@ A personal reading tracker with a full cyberpunk neon UI — glitch title, statu
 
 ---
 
+## 📸 Screenshots
+
+<div align="center">
+
+![Dashboard and library](assets/screenshots/desktop.png)
+
+*Stats, reading goal with per-genre targets, continue-reading strip, streak badge, and the library grid — cover art fills each card's spine.*
+
+</div>
+
+<table>
+<tr>
+<td width="50%"><img src="assets/screenshots/terminal.png" alt="Book detail terminal"></td>
+<td width="50%"><img src="assets/screenshots/stats.png" alt="Reading stats dashboard"></td>
+</tr>
+<tr>
+<td align="center"><em>Book detail — a terminal readout with pace estimate, tags, and journal</em></td>
+<td align="center"><em>Stats — pages per month, books finished, 365-day activity heatmap</em></td>
+</tr>
+</table>
+
+<div align="center">
+<img src="assets/screenshots/mobile.png" alt="Mobile library view" width="320">
+
+*Responsive down to 375px*
+
+</div>
+
+---
+
 ## ✨ Features
 
 ### Core

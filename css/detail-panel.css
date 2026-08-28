@@ -57,6 +57,13 @@
   font-family: 'Orbitron', sans-serif;
 }
 
+/* The placeholder ships with the `hidden` attribute when a cover exists, and
+   `display: flex` above outranks the user agent's `[hidden] { display: none }`
+   — so a book whose cover loaded rendered the cover AND an empty box beside
+   it. This stayed invisible while covers were blocked by CSP, because then the
+   image was removed and the placeholder was meant to show. */
+.detail-cover-placeholder[hidden] { display: none; }
+
 .detail-hero-text { flex: 1; min-width: 0; }
 
 .detail-title {
