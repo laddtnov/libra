@@ -14,7 +14,7 @@
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
 ![PWA](https://img.shields.io/badge/PWA-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
-![Version](https://img.shields.io/badge/Version-0.5.3-00f2ff?style=for-the-badge)
+![Version](https://img.shields.io/badge/Version-0.5.4-00f2ff?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
@@ -42,6 +42,7 @@ A personal reading tracker with a full cyberpunk neon UI — glitch title, statu
 - **Per-genre goals** — e.g. "Read 5 Fantasy books this year" with mini progress bars
 - **Reading streaks** — consecutive days with sessions logged; flame badge with hover animation
 - **Milestone toasts** — fire at 7, 14, 30, 60, 100-day streaks
+- **Continue reading** — your three most recently touched books, each with its page count and how long since you last opened it; click one to jump straight into it
 
 ### Reading Timer & Sessions
 - **Reading timer** — start/pause/stop timer in session log; elapsed minutes saved with session
@@ -59,7 +60,7 @@ A personal reading tracker with a full cyberpunk neon UI — glitch title, statu
 ### Book Cards
 - **Status-colored spines** — orange for Reading, green for Completed, purple for Queued
 - **Progress ring** — animated SVG ring on Reading cards, driven by session log
-- **Cover thumbnails** — pulled from Open Library when available
+- **Cover art on the spine** — pulled from Open Library and filling the full card height; books without a cover fall back to the vertical title
 - **3D tilt effect** — cards tilt on mouse move with spring-back
 - **Star ratings** — gold stars with hover pulse
 - **Custom tags** — cyan chips displayed on cards
@@ -176,6 +177,20 @@ Then open `index.html` — no build step needed for the frontend.
 ---
 
 ## 📜 Changelog
+
+### v0.5.4 — Continue reading, and one cover per book
+
+Two PRs. The first shipped the last item on the roadmap; the second fixed what the roadmap never covered — how a cover actually looks on a card.
+
+**Added**
+- **Continue reading.** The dashboard surfaces your three most recently touched books, freshest first, each with where you are in it (`210 / 664 · 32%`) and when you last opened it. Clicking a row opens that book. The widget was already ~80% built and behaved backwards: it filtered to books untouched for three days or more and sorted most-neglected-first, so it nagged about what you had abandoned and disappeared entirely whenever you had been reading. Now it answers "what do I pick up next?" ([#81](https://github.com/laddtnov/libra/pull/81))
+
+**Fixed**
+- **Every book with a cover showed two thumbnails.** The card rendered the spine and the cover as two sibling columns — two narrow vertical strips for one book. The cover now lives inside the spine, so there is one strip whether or not a cover exists ([#82](https://github.com/laddtnov/libra/pull/82))
+- **The cover was not filling its column,** which is what made the doubling obvious. `align-self: stretch` stopped working the moment [v0.5.3](https://github.com/laddtnov/libra/releases/tag/v0.5.3) added `width`/`height` attributes for CLS — a presentational height is not `auto`, so stretch became a no-op and the cover rendered as an 80px chip pinned to the top of the card ([#82](https://github.com/laddtnov/libra/pull/82))
+- **Covers were visibly blurry.** The spine is narrow but as tall as the whole card, so the 40px-wide `-S` thumbnail was upscaled several times over. Switched to `-M` ([#82](https://github.com/laddtnov/libra/pull/82))
+- **A book Open Library has no cover for rendered a blank stretched pixel.** Those requests are answered with a 1x1 GIF and HTTP 200, not a 404, so no `error` event fired and the fallback never ran. A `naturalWidth` of 1 or less now counts as a failed load: grid cards fall back to the spine title, and the detail modal to its letter placeholder — which also fixes the empty cover box those books showed in the modal ([#82](https://github.com/laddtnov/libra/pull/82))
+- **The installed app was named "Libra — Cyberpunk Reading Tracker".** `manifest.json` already said `Libra`, but iOS reads `apple-mobile-web-app-title` and falls back to `<title>` when it is absent; neither was set to the short name ([#82](https://github.com/laddtnov/libra/pull/82))
 
 ### v0.5.3 — Cover art comes back
 
