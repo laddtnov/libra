@@ -83,6 +83,7 @@ const T = {
   reminders_title:      ['>> PICK UP WHERE YOU LEFT OFF', '>> ПОВЕРНІТЬСЯ ДО ЧИТАННЯ', '>> CONTINÚA TU LECTURA', '>> ВЕРНИТЕСЬ К ЧТЕНИЮ', '>> WEITERLESEN', '>> WRÓĆ DO CZYTANIA'],
   reminders_last_read:  ['> Last read',        '> Останній раз читали', '> Última lectura', '> Последнее чтение', '> Zuletzt gelesen',        '> Ostatnio czytane'],
   reminders_not_started:['> Not started yet',  '> Ще не почато',     '> Aún sin empezar',   '> Ещё не начато',    '> Noch nicht begonnen',    '> Jeszcze nie zaczęto'],
+  reminders_today:      ['> Read today',       '> Читали сьогодні',  '> Leído hoy',         '> Читали сегодня',   '> Heute gelesen',          '> Czytane dzisiaj'],
   reminders_days_ago_sg:['day ago',            'день тому',          'día',                 'день назад',         'Tag her',                  'dzień temu'],
   reminders_days_ago_pl:['days ago',           'днів тому',          'días',                'дней назад',         'Tagen her',                'dni temu'],
 
