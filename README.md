@@ -14,7 +14,7 @@
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
 ![PWA](https://img.shields.io/badge/PWA-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
-![Version](https://img.shields.io/badge/Version-0.5.4-00f2ff?style=for-the-badge)
+![Version](https://img.shields.io/badge/Version-0.5.5-00f2ff?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
@@ -207,6 +207,21 @@ Then open `index.html` — no build step needed for the frontend.
 ---
 
 ## 📜 Changelog
+
+### v0.5.5 — Cover art actually loads
+
+The headline fix started as a request to replace the stale screenshots. Taking them is what exposed it.
+
+**Fixed**
+- **Most book covers were blocked in production.** `covers.openlibrary.org` 302-redirects to `archive.org`, and CSP checks *every* URL in a redirect chain against `img-src` — not just the one the page requested. `archive.org` was not listed, so only the minority of covers Open Library serves directly ever loaded. That is why some books had art and most did not: it looked like patchy Open Library data rather than a bug here. `img-src` now lists both hops. Measured 8/8 covers loading with them and 2/8 without, same page and same ids ([#84](https://github.com/laddtnov/libra/pull/84))
+- **The detail modal drew two thumbnails.** Its placeholder ships with the `hidden` attribute when a cover exists, but `.detail-cover-placeholder` sets `display: flex`, which outranks the browser's own `[hidden] { display: none }` — so a book whose cover loaded rendered the cover *and* an empty box beside it. It stayed invisible while covers were blocked, because then the image was removed and the placeholder was meant to show; fixing the CSP exposed it. Same class as the card fix in [v0.5.4](https://github.com/laddtnov/libra/releases/tag/v0.5.4), in the one place that release did not reach ([#84](https://github.com/laddtnov/libra/pull/84))
+- **Stats sections ran into each other.** `#stats-content` had no styling at all, so its six sections were plain block children with a 0px gap and each title landed flush against the chart above it — worst under the bar charts, whose month labels sit at the very bottom edge of their box
+
+**Changed**
+- Screenshots refreshed. The two at the repo root dated from May, before the icon, the unified button styling, the heatmap, continue reading and the cover spines. Replaced with four 2x captures under `assets/screenshots/` — desktop, book detail, stats and mobile — at roughly a third of the bytes the old pair alone took. `og:image` and `twitter:image` follow the new path ([#84](https://github.com/laddtnov/libra/pull/84))
+
+**Known trade-off**
+- `archive.org` hosts user-uploaded content, so `img-src` now trusts a host this project does not control. The alternative is proxying covers through our own origin, which means an image endpoint and a cache — not worth it for a thumbnail. Recorded as a deliberate call, not an oversight
 
 ### v0.5.4 — Continue reading, and one cover per book
 

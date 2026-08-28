@@ -87,6 +87,18 @@
 }
 
 /* ── Sections ── */
+
+/* Sections were plain block children with nothing between them, so each title
+   landed flush against the chart above it — most visibly under the bar charts,
+   whose month labels sit at the very bottom edge of their box. The gap is
+   wider than the 14px inside a section, so a section break reads as the
+   larger one. */
+#stats-content {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
 .stats-section {
   display: flex;
   flex-direction: column;
