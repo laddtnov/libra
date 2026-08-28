@@ -1,6 +1,6 @@
 {
   "name": "libra",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "private": true,
   "scripts": {
     "build": "echo 'Static site — no build step required'"
