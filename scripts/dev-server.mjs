@@ -124,10 +124,10 @@ const server = createServer(async (req, res) => {
 });
 
 server.listen(PORT, () => {
-  const csp = productionHeaders.find(([k]) => k === 'Content-Security-Policy');
+  const hasCsp = productionHeaders.some(([k]) => k === 'Content-Security-Policy');
   console.log(`Libra dev server  http://localhost:${PORT}`);
   console.log(`Sending ${productionHeaders.length} production headers from vercel.json`);
-  if (!csp) {
+  if (!hasCsp) {
     console.warn('[dev] No Content-Security-Policy found in vercel.json — local will not match production.');
   }
 });
