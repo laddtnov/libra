@@ -105,6 +105,24 @@ export function anchorPageBaseline(book) {
   book.pageBaseline = Math.max(0, (Number(book.currentPage) || 0) - sessionPages(book));
 }
 
+// Recomputes where the reader is from the baseline plus everything logged since.
+// Lives here rather than in ui-sessions.js because it is book-model logic with
+// no DOM in it — which also makes it reachable from a test.
+export function syncProgress(book) {
+  const total = (Number(book.pageBaseline) || 0) + sessionPages(book);
+  book.currentPage = book.pages ? Math.min(total, book.pages) : total;
+  book.progress = book.pages ? Math.min(Math.round((total / book.pages) * 100), 100) : 0;
+}
+
+// The edit form owns only the fields it renders, so saving replaced the record
+// and dropped the rest. Anything the form cannot edit is carried across here.
+export function carryOverUneditedFields(book, previous) {
+  if (!previous) return book;
+  if (previous.sessions?.length) book.sessions = previous.sessions;
+  if (previous.quotes?.length) book.quotes = previous.quotes;
+  return book;
+}
+
 function applyStatusFields(book, { status, pages, currentPage, pageBaseline, started, completed }) {
   if (status === 'reading') {
     book.currentPage = pages ? clamp(currentPage, 0, pages) : currentPage;

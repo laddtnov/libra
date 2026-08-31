@@ -149,7 +149,26 @@ cp js/config.example.js js/config.js
 # fill in your Supabase URL and anon key
 ```
 
-Then open `index.html` — no build step needed for the frontend.
+Start the dev server:
+```bash
+npm run dev     # http://localhost:3847
+```
+
+**Use `npm run dev`, not a generic static server.** It reads the headers out of
+`vercel.json` and sends them locally, so the Content Security Policy you develop
+against is the one production enforces. A plain static server sends no CSP at
+all, which has hidden four separate production-only bugs: the service worker
+never registered, password-reset links opened the normal app, cover-image
+fallbacks never ran, and most book covers were refused. Every one of them worked
+perfectly in local development.
+
+Run the tests:
+```bash
+npm test
+```
+
+No build step and no dependencies — the dev server and the test runner are both
+plain Node.
 
 ---
 
