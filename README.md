@@ -14,7 +14,7 @@
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
 ![PWA](https://img.shields.io/badge/PWA-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
-![Version](https://img.shields.io/badge/Version-0.5.5-00f2ff?style=for-the-badge)
+![Version](https://img.shields.io/badge/Version-0.5.6-00f2ff?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
@@ -207,6 +207,19 @@ Then open `index.html` — no build step needed for the frontend.
 ---
 
 ## 📜 Changelog
+
+### v0.5.6 — Your reading position, and your session log, both survive
+
+One reported bug, and a worse one found while verifying the fix. Both cost data.
+
+**Fixed**
+- **Logging a session threw away where you actually were.** A 10-page session on a book you were 260 pages into showed you at page 10. `syncProgress` set `currentPage` to the sum of the session log alone, but the log records pages read *per sitting* — a delta, not a position. That only holds if you logged every session from page 1, so any book with earlier progress had it overwritten: from the add form, a Goodreads import, or cloud sync. Progress is now `pageBaseline + session total`, where the baseline is the page you were on when logging began. It is derived on the first session as `currentPage - pages already logged`, so a book tracked purely by sessions anchors at 0 and behaves exactly as before — no migration, no change to existing data ([#86](https://github.com/laddtnov/libra/pull/86))
+- **Editing a book destroyed its session log and its quotes.** Saving the form replaced the whole record, and the payload it built never carried `sessions` or `quotes`. Opening a book's edit form and pressing UPDATE RECORD *without changing anything* took it from a full reading history to none. Fields the form does not render are now carried across, and the page field re-anchors the baseline, since what you just typed wins ([#86](https://github.com/laddtnov/libra/pull/86))
+- **The baseline would not have survived a sync.** `normalizeBookRecord` is a whitelist and runs on every import and cloud sync, so a new field it did not list would be silently reset to 0 and bring the bug back on the next device. It is carried through explicitly — as `null` rather than `0` when absent, because `0` claims "started logging from page 1" for every imported book ([#86](https://github.com/laddtnov/libra/pull/86))
+- A session that overshot the last page could read `440/400`. `currentPage` is now clamped to the book's page count, matching what the normalizer already did ([#86](https://github.com/laddtnov/libra/pull/86))
+
+**Not repaired by this release**
+- Neither fix undoes damage already done. A book showing a suspiciously low page was overwritten by the old behaviour — correct it once in the edit form and it will hold from then on. Session logs destroyed by an earlier form edit are gone
 
 ### v0.5.5 — Cover art actually loads
 
