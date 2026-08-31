@@ -1,4 +1,4 @@
-import { state, saveBooks, escHtml, toPositiveInt, sessionPages, anchorPageBaseline } from './state.js';
+import { state, saveBooks, escHtml, toPositiveInt, anchorPageBaseline, syncProgress } from './state.js';
 import { renderBooks, updateStats } from './ui-render.js';
 import { t } from './i18n.js';
 
@@ -53,15 +53,6 @@ function startTimer() {
 }
 
 // ── Session helpers ───────────────────────────────────────────────────────────
-function syncProgress(book) {
-  // Sessions are a delta on top of the baseline, not the whole story. Summing
-  // them alone overwrote the page of any book that had progress before its
-  // first session — from the add form, an import, or cloud sync.
-  const total = (Number(book.pageBaseline) || 0) + sessionPages(book);
-  book.currentPage = book.pages ? Math.min(total, book.pages) : total;
-  book.progress = book.pages ? Math.min(Math.round((total / book.pages) * 100), 100) : 0;
-}
-
 function fmtDuration(mins) {
   if (!mins || mins < 1) return '';
   return mins >= 60

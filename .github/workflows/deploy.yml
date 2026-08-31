@@ -32,6 +32,11 @@ jobs:
       - name: Build
         run: npm run build
 
+      # Reading-progress and record-integrity. Both bugs these cover shipped to
+      # production and destroyed user data before anyone noticed.
+      - name: Tests
+        run: npm test
+
       # The CSP is script-src 'self' with no unsafe-inline, so an inline
       # <script> or an on*= handler is dead code in production — it fails
       # silently in the browser, not here. Catch it at review time instead.

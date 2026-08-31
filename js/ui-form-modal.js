@@ -1,4 +1,4 @@
-import { state, saveBooks, debounce, escHtml, anchorPageBaseline } from './state.js';
+import { state, saveBooks, debounce, escHtml, anchorPageBaseline, carryOverUneditedFields } from './state.js';
 import { searchOpenLibrary } from './ui-search.js';
 import { renderBooks } from './ui-render.js';
 import { showToast } from './ui-feedback.js';
@@ -120,11 +120,8 @@ function saveBook() {
 
   // The form owns only the fields it renders, but saving replaced the whole
   // record — so editing a book silently destroyed its session log and quotes,
-  // even when nothing on the form was changed. Carry across what the form
-  // cannot edit.
-  const previous = isEdit ? state.booksData[state.editingBookId] : null;
-  if (previous?.sessions?.length) book.sessions = previous.sessions;
-  if (previous?.quotes?.length) book.quotes = previous.quotes;
+  // even when nothing on the form was changed.
+  carryOverUneditedFields(book, isEdit ? state.booksData[state.editingBookId] : null);
 
   // The page field is what the reader just told us, so it wins: re-anchor the
   // baseline to it and let the session log go on counting up from there.
