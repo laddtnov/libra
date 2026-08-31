@@ -90,10 +90,29 @@ function applyOptionalBookFields(book, { subtitle, pages, rating, coverId, synop
   if (synopsis) book.synopsis = synopsis;
 }
 
-function applyStatusFields(book, { status, pages, currentPage, started, completed }) {
+// A session records pages read in one sitting, so the log is a running delta —
+// the page you are on is that total added to wherever you already were when you
+// started logging. `pageBaseline` is that anchor. Without it, a book you were
+// 260 pages into jumped back to page 10 the moment you logged a 10-page session.
+export function sessionPages(book) {
+  return (book?.sessions || []).reduce((sum, s) => sum + (Number(s.pages) || 0), 0);
+}
+
+// Re-anchors the baseline to the book's current page. Call whenever the page is
+// set from outside the session log — a manual edit, or the first session on a
+// book that already had progress.
+export function anchorPageBaseline(book) {
+  book.pageBaseline = Math.max(0, (Number(book.currentPage) || 0) - sessionPages(book));
+}
+
+function applyStatusFields(book, { status, pages, currentPage, pageBaseline, started, completed }) {
   if (status === 'reading') {
     book.currentPage = pages ? clamp(currentPage, 0, pages) : currentPage;
     book.progress = pages ? clamp(Math.round((book.currentPage / pages) * 100), 0, 100) : 0;
+    // Carried through the whitelist deliberately: this normalizer runs on every
+    // import and cloud sync, so a dropped baseline would silently reset to 0 and
+    // bring the bug back on the next device.
+    if (pageBaseline !== null) book.pageBaseline = pages ? clamp(pageBaseline, 0, pages) : pageBaseline;
     if (started) book.started = started;
   }
 
@@ -114,6 +133,12 @@ function normalizeBookRecord(rawBook) {
   const rating = toPositiveInt(rawBook.rating);
   const coverId = toPositiveInt(rawBook.coverId);
   const currentPage = toNonNegativeInt(rawBook.currentPage, 0);
+  // null, not 0: a book that has never had a baseline must stay unanchored so
+  // the first session can derive one from its existing page. Storing 0 here
+  // would claim "started logging from page 1" for every imported book.
+  const pageBaseline = rawBook.pageBaseline === undefined || rawBook.pageBaseline === null
+    ? null
+    : toNonNegativeInt(rawBook.pageBaseline, 0);
 
   const book = {
     title,
@@ -133,7 +158,7 @@ function normalizeBookRecord(rawBook) {
   const synopsis = cleanText(rawBook.synopsis, 2400);
 
   applyOptionalBookFields(book, { subtitle, pages, rating, coverId, synopsis });
-  applyStatusFields(book, { status, pages, currentPage, started, completed });
+  applyStatusFields(book, { status, pages, currentPage, pageBaseline, started, completed });
 
   if (Array.isArray(rawBook.tags)) {
     const tags = rawBook.tags.map(t => cleanText(String(t), 30).toLowerCase()).filter(Boolean).slice(0, 20);

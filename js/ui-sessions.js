@@ -1,4 +1,4 @@
-import { state, saveBooks, escHtml, toPositiveInt } from './state.js';
+import { state, saveBooks, escHtml, toPositiveInt, sessionPages, anchorPageBaseline } from './state.js';
 import { renderBooks, updateStats } from './ui-render.js';
 import { t } from './i18n.js';
 
@@ -54,8 +54,11 @@ function startTimer() {
 
 // ── Session helpers ───────────────────────────────────────────────────────────
 function syncProgress(book) {
-  const total = (book.sessions || []).reduce((sum, s) => sum + s.pages, 0);
-  book.currentPage = total;
+  // Sessions are a delta on top of the baseline, not the whole story. Summing
+  // them alone overwrote the page of any book that had progress before its
+  // first session — from the add form, an import, or cloud sync.
+  const total = (Number(book.pageBaseline) || 0) + sessionPages(book);
+  book.currentPage = book.pages ? Math.min(total, book.pages) : total;
   book.progress = book.pages ? Math.min(Math.round((total / book.pages) * 100), 100) : 0;
 }
 
@@ -180,6 +183,11 @@ export function initSessionsSection(bookId) {
     const book = state.booksData[bookId];
     if (!book) return;
     if (!book.sessions) book.sessions = [];
+
+    // Anchor before the push, while currentPage still reflects where the reader
+    // was without this session. A book already at page 260 anchors at 260, so
+    // logging 10 pages reads 270 rather than 10.
+    if (!Number.isFinite(book.pageBaseline)) anchorPageBaseline(book);
 
     // Attach timer duration if timer was used
     const duration = timerElapsed > 0 ? Math.ceil(timerElapsed / 60) : undefined;
