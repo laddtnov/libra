@@ -14,7 +14,7 @@
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
 ![PWA](https://img.shields.io/badge/PWA-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
-![Version](https://img.shields.io/badge/Version-0.5.6-00f2ff?style=for-the-badge)
+![Version](https://img.shields.io/badge/Version-0.5.7-00f2ff?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
@@ -226,6 +226,26 @@ plain Node.
 ---
 
 ## 📜 Changelog
+
+### v0.5.7 — Security audit, and a dev server that tells the truth
+
+A security audit of the codebase, plus the tooling built just before it. Both audit findings were reproduced against running code before being patched.
+
+**Security**
+- **Password-reset tokens stayed in the URL.** The reset link lands on `/?reset=1#access_token=…&refresh_token=…`, and nothing removed the fragment after consuming it — supabase-js only strips the `code` query parameter, which is the PKCE path, and this client sets `flowType: 'implicit'`. The tokens therefore sat in the address bar and in browser history, which survives logout and syncs across devices; a `refresh_token` keeps minting access tokens until revoked. Reproduced on production, then cleared in a `finally` so a token that failed to apply is removed too ([#89](https://github.com/laddtnov/libra/pull/89))
+- **The dev server published the whole repository to the local network.** `server.listen(PORT)` with no host binds every interface, and the served root is the repository — so `.env` and `.git` were readable by anyone on the same Wi-Fi. Confirmed by fetching `.env` over the LAN address. It now binds `127.0.0.1` and refuses any path with a dot-prefixed segment ([#89](https://github.com/laddtnov/libra/pull/89))
+- **A committed-credential check now runs in CI.** `js/config.js` is listed in `.gitignore` but was committed before that rule existed, so git still tracks it and the ignore entry does nothing — it has already been filled in and committed twice. The file cannot be untracked, because `js/supabase.js` imports it and a 404 on an ES module import takes down the module graph, so its contents are guarded instead ([#89](https://github.com/laddtnov/libra/pull/89))
+
+**Added**
+- **`npm run dev` sends production's headers.** A plain static server sends no Content Security Policy, which is why four separate bugs worked perfectly in local development and were dead on the live site — the service worker never registered, password-reset links opened the normal app, cover fallbacks never ran, and most covers were refused. The dev server reads the headers out of `vercel.json` at startup, so they cannot drift ([#88](https://github.com/laddtnov/libra/pull/88))
+- **`npm test` — 17 cases on `node:test`, no framework and no dependency.** Covers the reading-progress and record-integrity logic behind the 0.5.6 data-loss bugs, and the two dev-server exposure properties above. Each was confirmed to fail against the code it guards ([#88](https://github.com/laddtnov/libra/pull/88), [#89](https://github.com/laddtnov/libra/pull/89))
+
+**Reviewed and unchanged**
+- Row Level Security on `user_books` restricts both `USING` and `WITH CHECK` to `auth.uid()`; no `eval`, `new Function`, `document.write` or `insertAdjacentHTML` anywhere; Open Library is a public wiki, so its titles and authors are attacker-editable, and every path renders them through `textContent` or validates them first; the security workflow uses `pull_request` rather than `pull_request_target`, so fork PRs cannot reach repository secrets
+
+**Known and deliberate**
+- `flowType: 'implicit'` rather than PKCE. The fix above removes the leak it created, but PKCE never puts tokens in the URL at all; switching needs a real reset-email round trip to verify
+- 6-character password minimum, and `js/vendor/supabase.min.js` pinned at 2.105.4 with no SRI or update path
 
 ### v0.5.6 — Your reading position, and your session log, both survive
 
