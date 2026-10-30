@@ -30,14 +30,30 @@ export async function updatePassword(newPassword) {
   return error;
 }
 
+// Strips the tokens a recovery link carries in the URL fragment. supabase-js
+// only clears the `code` query parameter, which is the PKCE path — under
+// flowType 'implicit' nothing removes the hash, so access_token and the
+// long-lived refresh_token sat in the address bar and in browser history for
+// anyone who later opened that entry. Called whether or not the session was
+// established: a token that failed to apply is still a token worth removing.
+function stripAuthFragment() {
+  if (!globalThis.location.hash) return;
+  const { pathname, search } = globalThis.location;
+  globalThis.history?.replaceState?.(globalThis.history.state, '', `${pathname}${search}`);
+}
+
 // Establish recovery session from hash tokens (needed when user is already signed in)
 export async function establishRecoverySession() {
   const hash  = new URLSearchParams(globalThis.location.hash.replace('#', ''));
   const at    = hash.get('access_token');
   const rt    = hash.get('refresh_token');
   if (!at || !rt) return false;
-  const { error } = await supabase.auth.setSession({ access_token: at, refresh_token: rt });
-  return !error;
+  try {
+    const { error } = await supabase.auth.setSession({ access_token: at, refresh_token: rt });
+    return !error;
+  } finally {
+    stripAuthFragment();
+  }
 }
 
 // ── Email + password auth ─────────────────────────────────────────────────────

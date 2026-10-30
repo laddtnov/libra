@@ -6,7 +6,8 @@
     "dev": "node scripts/dev-server.mjs",
     "test": "node --test tests/*.test.mjs",
     "build": "echo 'Static site — no build step required'",
-    "check:inline": "node scripts/check-no-inline-scripts.mjs"
+    "check:inline": "node scripts/check-no-inline-scripts.mjs",
+    "check:secrets": "node scripts/check-no-committed-secrets.mjs"
   },
   "type": "module"
 }

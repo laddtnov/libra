@@ -19,6 +19,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const PORT = Number(process.env.PORT) || 3847;
+const HOST = '127.0.0.1';
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',
@@ -82,6 +83,11 @@ async function resolveFile(urlPath) {
     return null;
   }
 
+  // The served root is the repository, which holds .env and .git alongside the
+  // site. Traversal containment is not enough on its own — these paths are
+  // inside ROOT and were being served. Nothing the site loads is a dotfile.
+  if (relative.split(/[/\\]/).some(segment => segment.startsWith('.'))) return null;
+
   try {
     const info = await stat(candidate);
     if (info.isDirectory()) {
@@ -123,9 +129,12 @@ const server = createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => {
+// Loopback only. listen(PORT) alone binds every interface, which put the whole
+// repository — .env and .git included — on the local network for anyone sharing
+// a coffee-shop or conference Wi-Fi. A dev server has no business off-machine.
+server.listen(PORT, HOST, () => {
   const hasCsp = productionHeaders.some(([k]) => k === 'Content-Security-Policy');
-  console.log(`Libra dev server  http://localhost:${PORT}`);
+  console.log(`Libra dev server  http://${HOST}:${PORT}  (loopback only)`);
   console.log(`Sending ${productionHeaders.length} production headers from vercel.json`);
   if (!hasCsp) {
     console.warn('[dev] No Content-Security-Policy found in vercel.json — local will not match production.');
