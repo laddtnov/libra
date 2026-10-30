@@ -17,7 +17,9 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 
-const PLACEHOLDER = /^(|your_supabase_project_url|your_supabase_anon_key)$/;
+// Optional group rather than an empty alternative: an empty value is the
+// committed state, the two names are what config.example.js ships.
+const PLACEHOLDER = /^(?:your_supabase_project_url|your_supabase_anon_key)?$/;
 
 // Credential shapes, not a generic entropy check: a JWT, Supabase's newer
 // publishable/secret key prefixes, and any http(s) project URL.
@@ -45,10 +47,14 @@ for (const [, name, value] of config.matchAll(/export const (\w+)\s*=\s*'([^']*)
 
 // 2. No credential-shaped string anywhere in the tracked front-end or config.
 const scan = ['js/config.js', 'js/config.example.js', 'vercel.json', '.env.example'];
-for (const rel of scan) {
-  let text;
-  try { text = await readFile(new URL(`../${rel}`, import.meta.url), 'utf8'); }
-  catch { continue; }
+const scanned = await Promise.all(scan.map(rel =>
+  readFile(new URL(`../${rel}`, import.meta.url), 'utf8')
+    .then(text => ({ rel, text }), () => null)   // a file that is absent is not a failure
+));
+
+for (const entry of scanned) {
+  if (!entry) continue;
+  const { rel, text } = entry;
   for (const { name, re } of SECRET_SHAPES) {
     // .env.example documents the service_role key by name; that is a label, not a key.
     if (rel === '.env.example' && name === 'service_role key') continue;
